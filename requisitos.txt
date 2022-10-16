@@ -1,0 +1,68 @@
+Entidades:
+- Administrador
+- Campeonato
+- Nome Campeonato
+- Circuito
+- Nome Circuito
+- Distancia
+- Lancos da pista
+- Numero do Lanco
+- Dificuldade
+- Possivel
+- Impossivel
+- Dificil
+- Numero de Voltas
+- Numero de curvas
+- Numero de Chicanes
+- Numero de Retas 
+- Carro
+- C1
+- C2
+- GT
+- SC
+- Motor
+- Motor Eletrico
+- Motor Combustao
+- Potencia
+- Fiabilidade
+- Cilindrada
+- Afinacao mecanica
+- Numero de voltas realizadas
+- Piloto
+- Marca
+- Modelo
+- PAC
+
+- Nome do Piloto
+- Nivel de Pericia
+- Criterio
+- SVA
+- CTS
+
+- Jogador
+- Sessao
+
+- Situacao meterologica
+- Tempo Seco
+- Chuva
+
+-Pneus
+- Estado
+- Macio
+- Duro
+- Chuva
+-Modo do Motor
+- Conservador
+- Normal
+- Agressivo
+
+- Posicoes
+
+- Simulacao
+
+- Resultado
+- Pontuacao
+- Pontuacao Local
+- Pontuacao Global
+
+- Ranking
