@@ -2,23 +2,7 @@ Atores:
   Administrador
   Jogador
 
-
-
 Use Cases:
-
-  Autenticação(Jogador, Administrador) 
-  Adicionar um Campeonato(Administrador)
-  Adicionar um Circuito(Administrador)
-  Adicionar um Piloto(Administrador)
-  Adicionar um Carro(Administrador)
-  Consulta de Campeonatos(Jogador, Administrador)
-  Consulta de Circuitos do Campeonato(Jogador, Administrador)
-
-  Criação de Sessão(Jogador)
-  Inscrição de Sessão(Jogador)
-  Alteração de Afinação do Carro(Jogador)
-  Escolha da configuração do Carro(Jogador)
-
 
 Expecificações Use Cases:
 
@@ -217,5 +201,47 @@ Fluxo-Exceção(password fornecida já era a password do utilizador(Passo 2)):
   2- Sistema verifica que password do utilizador era igual à fornecida
 
 
+Use Case: Visualizar Tabela Classificativa da Sessão
+Descrição: Ator decide visualizar o ranking da sessão
+Cenario:
+Pré-Condição: O Sistema deve-se encontrar com uma sessão criada, nao estando em nenhuma simulação de uma corrida
+Pós-condição: Sistema terá fornecido ranking
+Fluxo-Normal:
+  1- Ator fornece intenção de visualizar a tabela classificativa da sessão
+  2- Sistema fornece tabela com os varios jogadores da sessão com respetivas posições e pontuação atual
 
+Use Case: Retomar Corrida
+Descrição: Ator decide retomar a simulação da corrida
+Cenario:
+Pré-Condição: O Sistema deve-se encontrar com uma sessão criada, estando neste momento a simular uma das corridas estando a corrida em pausa
+Pós-condição: Simulação da corrida retomada, havendo a partir daí evolução da mesma
+Fluxo-Normal:
+  1- Ator fornece intenção de retomar a corrida
+  2- Sistema retoma a corrida
 
+Use Case: Pausar Corrida
+Descrição: Ator decide pausar a simulação da corrida
+Cenario:
+Pré-Condição: O Sistema deve-se encontrar com uma sessão criada, estando neste momento a simular uma das corridas estando a corrida em andamento
+Pós-condição: Simulação da corrida pausada, não havendo qualquer evolução da mesma
+Fluxo-Normal:
+  1- Ator fornece intenção de pausar a corrida
+  2- Sistema pausa a corrida
+
+Use Case: Visualização de Histórico
+Descrição: Ator decide visualizar o seu histórico de participações
+Cenario:
+Pré-Condição: Ator deve estar autenticado como jogador, não devendo encontrar-se em nenhuma sessão de campeonato
+Pós-condição: Sistema terá fornecido o ranking
+Fluxo-Normal:
+  1- Ator fornece intenção de visualizar o seu historico
+  2- Sistema fornece histórico do utilizador, constiuída por sessões e o respetivo campeonato, corridas e as posiçoes e tempo na mesma e por fim o piloto e carro utilizado
+
+Use Case: Visualizar Ranking Global
+Descrição: Ator decide visualizar o ranking global
+Cenario:
+Pré-Condição: O Ator deve estar autenticado 
+Pós-condição: Sistema terá fornecido ranking global
+Fluxo-Normal:
+  1- Ator fornece intenção de visualizar o ranking global
+  2- Sistema fornece tabela com os varios jogadores, constituído por o seu username e pontuação global
