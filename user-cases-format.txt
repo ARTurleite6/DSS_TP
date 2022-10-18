@@ -95,7 +95,7 @@ Fluxo-Normal:
   2- Sistema valida nova password
   3- Sistema altera a password do ator
 
-Fluxo-Exceção(password fornecida já era a password do utilizador(Passo 2)):
+Fluxo-Exceção[password fornecida já era a password do utilizador](Passo 2):
   2- Sistema verifica que password do utilizador era igual à fornecida informando o Ator
 —> Se não for acrescentar muita complexidade, podiam colocar aqui uma validação da password (p.ex: mínimo de caracteres: e se o utilizador colocar uma password vazia?)
 Fluxo-Exceção(password inválida(vazia ou caracteres nao satisfeitos)(Passo 2)):
@@ -140,7 +140,6 @@ Fluxo Normal:
   4- Jogador escolhe piloto
   5- Sistema valida inscrição do jogador e adiciona o mesmo ao campeonato
 
-
 Use Case: Jogar Campeonato
 Descrição: Jogador decide jogar campeonato
 Cenário: Jogar
@@ -152,14 +151,13 @@ Fluxo-Normal:
   3- Sistema apresenta condições da corrida, circuito e situação meteorológica
   4- <<include>> Configuração do Carro para Corrida
   5- Jogador espera que todos os jogadores do lobby configurem o carro
-  6- Jogador inicia corrida 
-  7- Sistema inicia simulação da corrida
-  8- No Final da simulação, sistema apresenta resultado da corrida
-  9- Sistema soma a pontuação de cada jogador na corrida à sua pontuação no Campeonato
-  10- Para cada circuito restante, repetir Passos(7-13)
-  11- No Final do Campeonato sistema apresenta classificação final para as diferentes categorias
-  12- Sistema adiciona pontuação do jogador no campeonato ao seu ranking global 
-  13- Sistema adiciona participação ao histórico do jogador
+  6- Sistema inicia simulação da corrida
+  7- No Final da simulação, sistema apresenta resultado da corrida
+  8- Sistema soma a pontuação de cada jogador na corrida à sua pontuação no Campeonato
+  9- Para cada circuito restante, repetir Passos(7-13)
+  10- No Final do Campeonato sistema apresenta classificação final para as diferentes categorias
+  11- Sistema adiciona pontuação do jogador no campeonato ao seu ranking global 
+  12- Sistema adiciona participação ao histórico do jogador
 Fluxo-Alternativo[Jogador não se encontra autenticado mas tem conta e deseja receber pontuação](Passo 12):
   12.1- Sistema verifica que utilizador nao se encontra autenticado e pergunta se utilizador tem conta
   12.2- Jogador diz que sim
@@ -169,6 +167,34 @@ Fluxo-Alternativo[Jogador nao se encontra autenticado e nao tem conta](Passo 12)
   12.1- Sistema verifica que utilizador nao se encontra autenticado e pergunta se utilizador tem conta
   12.2- Jogador diz que nao
 
+Use Case: Adicionar um Veículo
+Descrição: Ator decide adicionar um carro ao jogo
+Cenário: Carros
+Pré-Condição: Ator deve estar autenticado no sistema e ser um Administrador
+Pós-Condição: Carro adicionado ao sistema
+Fluxo-Normal:
+  1- Ator introduz decide a categoria, marca, modelo do carro e cilindrada, potencia do motor a combustão e o PAC
+  2- Sistema adiciona o carro ao sistema
+Fluxo-Alternativo(Carro é hibrido(Passo 2)): —> Qual dos campos que estão no Passo 1 determina que o carro é híbrido. Podes dizer isso aqui, para ficar mais claro.
+  2.1- Ator escolhe a potência do motor elétrico
+—> Fiquei com uma dúvida (por ja não fazer use cases ha muito tempo). Sendo este fluxo alternativo referente no Passo 1, o Passo 1 é feito e só depois vem para aqui ou este Fluxo alternativo substitui por completo o Passo 1? Se substituir, não se pode regressar ao Passo 2, sem que os campos do Passo 1 estejam preenchidos. Faz algum sentido isto?
+  2.2- Sistema adiciona o carro à lista
 
-
+Use Case: Configuração de Carro para Corrida
+Descrição: Ator decide efetuar a configuração do carro que vai usar
+Cenário: Jogar.Configuar Corridas
+Pré-Condição: Campeonato iniciado, com corrida escolhida
+Pós-Condição: Ator pronto a iniciar corrida, com o carro devidamente configurado a seu dispor
+Fluxo-Normal:
+  1- Sistema avisa ator que deve escolher um motor e os pneus do veículo
+  2- Sistema fornece os possíveis modos de motor 
+  3- Ator escolhe um modo de motor
+  4- Sistema guarda modo de motor
+  2- Sistema fornece tipos de pneus possíveis
+  6- Ator escolhe tipo de pneus
+  7- Sistema guarda sua escolha
+Fluxo-Alternativo(Ator possui carro dos tipos C1 ou C2, pretende alterar afinação e ainda nao realizou o maximo de afinaçoes permitidas- Passo 0):
+  0.1- Ator decide valor para a afinação do carro
+  0.2- Sistema efetua mudança
+  0.3- Regressa a 1
 
