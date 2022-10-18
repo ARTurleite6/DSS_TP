@@ -1,0 +1,130 @@
+Use Case: Adicionar Campeonato
+Cenário: Camponatos
+Pré-Condição: Utilizador deve estar autenticado como administrador
+Pós-Condição: Campeonato adicionado ao sistema
+Fluxo-Normal:
+  1- Administrador fornece o nome do Campeonato
+  2- Sistema valida o nome do Capeonato
+  3- Sistema apresenta lista de Circuitos
+  4- Administrador seleciona os circuitos que deseja
+  5- Sistema adiciona campeonato à lista de campeonatos disponíveis
+Fluxo-Exceção(1)(Nome do Circuito já existe(Passo 2)):
+  2- Sistema verifica que o nome de campeonato já existe
+  3- Sistema informa utilizador da já existencia desse nome
+
+
+Use Case: Adicionar um novo Circuito
+Descrição: Administrador decide adicionar um novo circuito no sistema
+Cenário: Circuitos
+Pré-Condição: Utilizador deve estar autenticado como Administrador
+Pos-Condição: Circuito adicionado à lista de circuitos
+Fluxo Normal:
+  1- Adminstrador fornece o nome do circuito a adicionar
+  2- Sistema verifica que nenhum circuito existe com o nome fornecido
+  3- Adminstrador fornece distancia, curvas e chicanes do circuito
+  4- Sistema calcula o número de retas do circuito
+  5- Sistema fornece lista de retas e curvas do circuito, para que seja introduzida a dificuldade
+  6- Utilizador fornece para cada reta e curva a dificuldade desejada
+  7- Utilizador diz por quantas voltas o circuito será constituído
+  8- Sistema adiciona circuito à lista de circuitos
+Fluxo Exceção(Nome do circuito já existe(Passo 2)):
+  2- Sistema verifica que nome do circuito informando o ator 
+
+Use Case: Adicionar novo piloto
+Descrição: Adminstrador decide adicionar um novo piloto ao sistema
+Cenário: Pilotos
+Pré-Condição: Utilizador deve estar autenticado com Administrador
+Pós-Condição: Piloto adicionado ao sistema
+Fluxo-Normal:
+  1- Adminstrador fornece o nome do piloto a adicionar
+  2- Sistema verifica que nenhum piloto existe com o nome fornecido
+  3- Sistema pede ao utilizador para inserir os níveis de perícia(CTS e SVA)
+  4- Adminstrador fornece valores para o CTS e SVA
+  5- Sistema adiciona piloto ao sistema
+Fluxo Exceção 1(Nome do piloto já existe(Passo 2)):
+  2- Sistema verifica que nome do piloto que ator forneceu já existeUse Case: Adicionar um Veículo
+
+Use Case: Adicionar Carro
+Descrição: Administrador decide adicionar um carro ao jogo
+Cenário: Carros
+Pré-Condição: Utilizador deve estar autenticado no sistema como Administrador
+Pós-Condição: Carro adicionado ao sistema
+Fluxo-Normal:
+  1- Administrador introduz a categoria, marca, modelo do carro e cilindrada, potencia do motor a combustão e o PAC
+  2- Sistema adiciona o carro ao sistema
+Fluxo-Alternativo(Carro é hibrido(Passo 2)): 
+  2.1- Administrador introduz a potência do motor elétrico
+  2.2- Sistema adiciona o carro à lista de carros disponíveis
+
+
+Use Case: Autenticar
+Descrição: Utilizador decide fazer login no sistema
+Cenário: Todos
+Pré-Condição: Nenhum utilizador deve estar autenticado
+Pós-Condição: Utilizador estará autenticado no sistema
+  Fluxo Normal:
+    1- Utilizador fornece os dados(username e password)
+    2- Sistema verifica que os dados estão corretos
+    3- Sistema efetua o login do utilizador
+  Fluxo Exceção[dados inválidos](Passo 2):
+    2- Sistema avisa ator de que inseriu dados inválidos 
+
+Use Case: Consulta de Campeonatos
+Descrição: Administrador consulta a lista de campeonatos
+Cenário: Todos
+Pré-Condição: Administrador deve estar autenticado 
+Pós-Condição: Lista de campeonatos apresentada
+  Fluxo Normal:
+    1- Sistema apresenta lista de campeonatos
+    
+Use Case: Visualizar Ranking Global
+Descrição: Jogador visualiza o ranking global do sistema
+Cenario:
+Pré-Condição: O Jogador deve estar autenticado 
+Pós-condição: Sistema terá fornecido o ranking global
+Fluxo-Normal:
+  1- Sistema fornece tabela com o username e pontuação global para cada um dos jogadores.
+
+Use Case: Alterar Password
+Descrição: Ator decide alterar o seu password
+Cenario:
+Pré-Condição: Ator deve estar autenticado no sistema
+Pós-condição: Ator terá a sua password alterada
+Fluxo-Normal:
+  1- Ator fornece nova password
+  2- Sistema valida nova password
+  3- Sistema altera a password do ator
+
+Fluxo-Exceção(password fornecida já era a password do utilizador(Passo 2)):
+  2- Sistema verifica que password do utilizador era igual à fornecida informando o Ator
+—> Se não for acrescentar muita complexidade, podiam colocar aqui uma validação da password (p.ex: mínimo de caracteres: e se o utilizador colocar uma password vazia?)
+Fluxo-Exceção(password inválida(vazia ou caracteres nao satisfeitos)(Passo 2)):
+  2- Sistema informa que password nova não é valida
+
+Use Case: Terminar Sessão
+Descrição: Ator termina sessão no sistema
+Cenario:
+Pré-Condição: Ator deve estar autenticado no sistema e sistema não está a simular campeonatos
+Pós-condição: Nenhum ator estará autenticado no sistema
+Fluxo-Normal:
+  1- Sistema faz o log out do utilizador
+
+Use Case: Visualização de Histórico
+Descrição: Ator decide visualizar o seu histórico de participações
+Cenario:
+Pré-Condição: Ator deve estar autenticado como jogador, não devendo estar a jogar nenhum campeonato
+Pós-condição: Sistema terá fornecido o ranking
+Fluxo-Normal:
+  1- Ator fornece intenção de visualizar o seu historico
+  2- Sistema apresenta o histórico do utilizador: sessões e respetivo campeonato, corridas, posições, tempo decorrido e ainda qual o piloto e carro utilizados.
+
+Use Case: Jogar Campeonato 
+Descrição: Jogador joga um campeonato
+Cenario:
+Pré-Condição: Jogador deve estar autenticado no sistema e sistema não está a simular campeonatos
+Pós-condição: 
+Fluxo-Normal:
+
+
+
+

@@ -51,9 +51,10 @@ Fluxo-Normal:
   2- Sistema verifica que nenhum piloto existe com o nome fornecido
   3- Sistema pede ao utilizador para inserir niveis de perícia(CTS e SVA)
   4- Ator fornece valores para o CTS e SVA
-  5- Sistema adiciona piloto ao sistema
+  5- Sistema valida valores fornecidos e adiciona o piloto ao sistema
 Fluxo Exceção 1(Nome do piloto já existe(Passo 2)):
   2- Sistema verifica que nome do piloto que ator forneceu já existe
+Fluxo Exceção 2(Valor de CTS e/ou SVA inválidos(Passo))
 
 Use Case: Autenticação
 Descrição: Ator decide realizar a autenticação da sua conta
@@ -74,38 +75,36 @@ Pós-Condição: Carro adicionado ao sistema
 Fluxo-Normal:
   1- Ator decide a categoria, marca, modelo do carro e cilindrada, potencia do motor a combustão e o PAC
   2- Sistema adiciona o carro ao sistema
-Fluxo-Alternativo(Carro é hibrido(Passo 1)):
+Fluxo-Alternativo(Ator indicou uma categoria sem ser o SC e deseja que Carro seja hibrido(Passo 1)):
   1.1- Ator escolhe a potência do motor elétrico
   1.2- Regressa a 2
   
-
-Use Case: Inscrição em Sessão
-Descrição: Ator decide inscrever-se numa sessão para jogar
+Use Case: Inscrição em Lobby
+Descrição: Ator decide inscrever-se num lobby para jogar
 Cenário: Jogar.Configurar Campeonato
-Pré-Condição: Sessão já deve estar criada
-Pós-Condição: Ator encontra-se inscrito na sessão com piloto e carro escolhido
+Pré-Condição: Lobby já deve estar criada e ainda não se deve encontrar ativo
+Pós-Condição: Ator encontra-se inscrito no lobby com piloto e carro escolhido, podendo jogar
 Fluxo-Normal:
   1- Sistema fornece lista de carros 
   2- Ator escolhe um carro
   3- Sistema fornece lista de pilotos 
   4- Ator escolhe um piloto
+  5- Sistema regista jogador no lobby com carro e piloto
 
-
-Use Case: Criar Sessão
-Descrição: Ator decide criar uma sessão 
+Use Case: Criar Lobby
+Descrição: Autor decide criar uma lobby 
 Cenário: Jogar.Configurar Campeonato
-Pré-Condição: Ator deve estar autenticado na app como jogador
-Pós-Condição: Sistema cria uma sessão em que o jogador se encontra inscrito
+Pré-Condição: Autor deve estar autenticado na app como jogador
+Pós-Condição: Sistema cria uma lobby, aberto para inscrições de jogadores
 Fluxo-Normal:
-  1- Sistema fornece lista de campeonatos ativos
-  2- Ator escolhe e avalia campeonato
-  3- Sistema cria Sessão de jogo
-
+  1- Sistema apresenta lista de campeonatos ativos
+  2- Autor avalia e escolhe o campeonato requerido
+  3- Sistema cria lobby de jogo
 
 Use Case: Configuração de Veículo
 Descrição: Ator decide efetuar a configuração do carro que vai usar
 Cenário: Jogar.Configuar Corridas
-Pré-Condição: Sessão de jogo iniciado, com corrida escolhida
+Pré-Condição: Lobby(Campeonato) de jogo iniciado, com corrida escolhida
 Pós-Condição: Ator pronto a iniciar corrida com o carro configurado a seu dispor
 Fluxo-Normal:
   1- Sistema avisa ator que deve escolher motor e pneus do veículo
@@ -115,10 +114,10 @@ Fluxo-Normal:
   2- Sistema fornece tipos de pneus possíveis
   6- Ator escolhe tipo de pneus
   7- Sistema guarda sua escolha
-
+  8- Sistema regista configuração do veículo do ator para a corrida a realizar
 Fluxo-Alternativo(Ator possui carro dos tipos C1 ou C2, pretende alterar afinação e ainda nao realizou o maximo de afinaçoes permitidas- Passo 0):
-  0.1- Ator decide valor para a afinção do carro
-  0.2- Sistema efetua mudança
+  0.1- Ator decide valor para a afinação do carro
+  0.2- Sistema efetua mudança e regista uma afinação feita por parte do ator
   0.3- Regressa a 1
 
 Use Case: Desativar Campeonato
