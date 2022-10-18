@@ -118,12 +118,56 @@ Fluxo-Normal:
   1- Ator fornece intenção de visualizar o seu historico
   2- Sistema apresenta o histórico do utilizador: sessões e respetivo campeonato, corridas, posições, tempo decorrido e ainda qual o piloto e carro utilizados.
 
-Use Case: Jogar Campeonato 
-Descrição: Jogador joga um campeonato
-Cenario:
-Pré-Condição: Jogador deve estar autenticado no sistema e sistema não está a simular campeonatos
-Pós-condição: 
+Use Case: Criar Lobby
+Descrição: Utilizador cria lobby para jogar campeonato
+Cenario: Jogar
+Pré-Condição: Ator deve estar autenticado como jogador, não devendo estar a jogar nenhum campeonato
+Pós-condição: Sistema terá criado lobby relativo a um campeonato aberto para inscrições
 Fluxo-Normal:
+  1- Sistema apresenta lista de campeonatos disponíveis
+  2- Jogador escolhe campeonato
+  3- Sistema cria lobby para o campeonato
+
+Use Case: Inscrição em Campeonato
+Descrição: Jogador inscreve-se num campeonato
+Cenario: Jogar
+Pré-Condição: Sistema deve ter um lobby de campeonato aberto
+Pós-condição: Sistema adiciona jogador ao campeonato com carro e piloto escolhidos
+Fluxo Normal:
+  1- Sistema apresenta lista de carros disponíveis
+  2- Jogador escolhe carro
+  3- Sistema apresenta lista de pilotos disponíveis
+  4- Jogador escolhe piloto
+  5- Sistema valida inscrição do jogador e adiciona o mesmo ao campeonato
+
+
+Use Case: Jogar Campeonato
+Descrição: Jogador decide jogar campeonato
+Cenário: Jogar
+Pré-Condição: Sistema nao se encontra a executar nenhum campeonato, tendo neste momento um lobby criado
+Pós-Condição: Campeonato terá decorrido atribuindo pontuação a cada jogador autenticado
+Fluxo-Normal:
+  1- <<include>> Inscrição em Campeonato
+  2- Jogador espera que todos os jogadores se inscrevam
+  3- Sistema apresenta condições da corrida, circuito e situação meteorológica
+  4- <<include>> Configuração do Carro para Corrida
+  5- Jogador espera que todos os jogadores do lobby configurem o carro
+  6- Jogador inicia corrida 
+  7- Sistema inicia simulação da corrida
+  8- No Final da simulação, sistema apresenta resultado da corrida
+  9- Sistema soma a pontuação de cada jogador na corrida à sua pontuação no Campeonato
+  10- Para cada circuito restante, repetir Passos(7-13)
+  11- No Final do Campeonato sistema apresenta classificação final para as diferentes categorias
+  12- Sistema adiciona pontuação do jogador no campeonato ao seu ranking global 
+  13- Sistema adiciona participação ao histórico do jogador
+Fluxo-Alternativo[Jogador não se encontra autenticado mas tem conta e deseja receber pontuação](Passo 12):
+  12.1- Sistema verifica que utilizador nao se encontra autenticado e pergunta se utilizador tem conta
+  12.2- Jogador diz que sim
+  12.3- <<include>> Autenticação
+  12.4- Regressa ao Passo 12
+Fluxo-Alternativo[Jogador nao se encontra autenticado e nao tem conta](Passo 12):
+  12.1- Sistema verifica que utilizador nao se encontra autenticado e pergunta se utilizador tem conta
+  12.2- Jogador diz que nao
 
 
 
