@@ -57,18 +57,6 @@ Fluxo-Alternativo(Carro é hibrido(Passo 2)):
   2.1- Administrador introduz a potência do motor elétrico
   2.2- Sistema adiciona o carro à lista de carros disponíveis
 
-Use Case: Autenticar
-Descrição: Utilizador decide fazer login no sistema
-Cenário: Todos
-Pré-Condição: Nenhum utilizador deve estar autenticado
-Pós-Condição: Utilizador estará autenticado no sistema
-  Fluxo Normal:
-    1- Utilizador fornece os dados(username e password)
-    2- Sistema verifica que os dados estão corretos
-    3- Sistema efetua o login do utilizador
-  Fluxo Exceção[dados inválidos](Passo 2):
-    2- Sistema avisa ator de que inseriu dados inválidos 
-
 Use Case: Consulta de Campeonatos
 Descrição: Administrador consulta a lista de campeonatos
 Cenário: Todos
@@ -86,7 +74,7 @@ Fluxo-Normal:
   1- Sistema fornece tabela com o username e pontuação global para cada um dos jogadores.
 
 Use Case: Alterar Password
-Descrição: Ator decide alterar o seu password
+Descrição: Ator decide alterar a sua password
 Cenario:
 Pré-Condição: Ator deve estar autenticado no sistema
 Pós-condição: Ator terá a sua password alterada
@@ -94,10 +82,8 @@ Fluxo-Normal:
   1- Ator fornece nova password
   2- Sistema valida nova password
   3- Sistema altera a password do ator
-
 Fluxo-Exceção[password fornecida já era a password do utilizador](Passo 2):
   2- Sistema verifica que password do utilizador era igual à fornecida informando o Ator
-—> Se não for acrescentar muita complexidade, podiam colocar aqui uma validação da password (p.ex: mínimo de caracteres: e se o utilizador colocar uma password vazia?)
 Fluxo-Exceção(password inválida(vazia ou caracteres não satisfeitos)(Passo 2)):
   2- Sistema informa que password nova não é valida
 
@@ -140,32 +126,30 @@ Fluxo Normal:
   4- Jogador escolhe piloto
   5- Sistema valida inscrição do jogador e adiciona o mesmo ao campeonato
 
-Use Case: Jogar Campeonato
-Descrição: Jogador decide jogar campeonato
-Cenário: Jogar
-Pré-Condição: Sistema não se encontra a executar nenhum campeonato, tendo neste momento um lobby criado
-Pós-Condição: Campeonato terá decorrido atribuindo pontuação a cada jogador autenticado
-Fluxo-Normal:
-  1- <<include>> Inscrição em Campeonato
-  2- Jogador espera que todos os jogadores se inscrevam
-  3- Sistema apresenta condições da corrida, circuito e situação meteorológica
-  4- <<include>> Configuração do Carro para Corrida
-  5- Jogador espera que todos os jogadores do lobby configurem o carro
-  6- Sistema inicia simulação da corrida
-  7- No Final da simulação, sistema apresenta resultado da corrida
-  8- Sistema soma a pontuação de cada jogador na corrida à sua pontuação no Campeonato
-  9- Para cada circuito restante, repetir Passos(7-13)
-  10- No Final do Campeonato sistema apresenta classificação final para as diferentes categorias
-  11- Sistema adiciona pontuação do jogador no campeonato ao seu ranking global 
-  12- Sistema adiciona participação ao histórico do jogador
-Fluxo-Alternativo[Jogador não se encontra autenticado mas tem conta e deseja receber pontuação](Passo 12):
-  12.1- Sistema verifica que utilizador não se encontra autenticado e pergunta se utilizador tem conta
-  12.2- Jogador diz que sim
-  12.3- <<include>> Autenticação
-  12.4- Regressa ao Passo 12
-Fluxo-Alternativo[Jogador não se encontra autenticado e não tem conta](Passo 12):
-  12.1- Sistema verifica que utilizador não se encontra autenticado e pergunta se utilizador tem conta
-  12.2- Jogador diz que não
+Use Case: Começar Campeonato
+Descrição: Jogador começa campeonato
+Cenario: Jogar
+Pré-Condição: Sistema deve ter um lobby de campeonato criado
+Pós-Condição: Sistema começa campeonato
+Fluxo Normal:
+  1- Jogador decide começar campeonato
+  2- Sistema inicia o campeonato, fechando o lobby
+
+Use Case: Jogar Corrida
+Descrição: Jogador joga corrida
+Cenario: Jogar
+Pré-Condição: Sistema tem um campeonato a correr
+Pós-Condição: Sistema terá simulado corrida atualizando tabela classificativa do lobby
+Fluxo Normal:
+  1- Jogador decide começar corrida
+  2- Sistema calcula circuito da corrida e situação meteorológica
+  3- <<include>>Configuração de Carro para Corrida
+  4- Quando todos jogadores do lobby fizerem a sua configuração, sistema começa corrida
+  5- No fim da corrida, sistema apresenta tabela classificativa
+  6- Sistema adiciona as pontuações de cada jogador na corrida à sua pontuação no lobby
+Fluxo Exceção(1)[Não existe mais nenhum circuito para correr](Passo 2):
+  2.1- Sistema verifica que não existem mais nenhuns circuitos restantes
+  2.2- Sistema informa jogador
 
 Use Case: Configuração de Carro para Corrida
 Descrição: Ator decide efetuar a configuração do carro que vai usar
@@ -185,11 +169,11 @@ Fluxo-Alternativo(Ator possui carro dos tipos C1 ou C2, pretende alterar afinaç
   0.2- Sistema efetua mudança
   0.3- Regressa a 1
 
-Use Case: Criar Conta
-Descrição: Utilizador cria nova conta
+Use Case: Criar Conta de jogador
+Descrição: Jogador cria nova conta
 Cenário:
 Pré-Condição: Nenhum utilizador autenticado no sistema
-Pós-Condição: Sistema terá criado utilizador
+Pós-Condição: Sistema terá criado nova conta para jogador
 Fluxo-Normal:
   1- Utilizador fornece username
   2- Sistema valida username
@@ -197,6 +181,33 @@ Fluxo-Normal:
   4- Sistema valida password
   5- Sistema adiciona o utilizador
 Fluxo-Exceção[username já existente](Passo 2):
-  1- Sistema verifica que username já existe, informando o utilizador
+  1- Sistema verifica que username já existe, informando o jogador
 Fluxo-Exceção[password invalida(p.e vazia)](Passo 4):
-  2- Sistema verifica que password é invalida, informando utilizador
+  2- Sistema verifica que password é invalida, informando o jogador
+
+Use Case: Visualizar tabela classificativa do Lobby
+Descrição: Jogador quer visualizar a tabela classificativa do lobby
+Cenário: Jogar
+Pré-Condição: Sistema deve possuir um campeonato a correr
+Pós-Condição: Sistema apresenta tabela classificativa
+Fluxo-Normal:
+  1- Jogador decide visualizar tabela classificativa
+  2- Sistema apresenta tabela, constituída por varios jogadores(username, posição e posição)
+
+
+//TODO Terminar Campeonato(Dúvida para dar ao stor)
+Use Case: Terminar Campeonato
+Descrição: Jogador decide terminar Campeonato
+Cenário: Jogar
+Pré-Condição: Sistema deve possuir um campeonato a correr
+Pós-Condição: Sistema termina campeonato, atualizando pontuação do ranking global para os jogadores autenticados
+Fluxo Normal:
+  1- Jogador decide terminar campeonato
+  2- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição e posição)
+  7- Sistema adiciona pontuação do campeonato à pontuação do ranking global aos jogadores autenticados
+  8- Sistema termina campeonato
+Fluxo Alternativo(1)[Ainda existem circuitos restantes para jogar](Passo 2):
+  2.1- Sistema verifica que ainda existem circuitos restantes
+  2.2- Sistema avisa jogadores que não irão receber a pontuação do campeonato
+  2.3- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição e posição)
+  2.3- Sistema termina Campeonato
