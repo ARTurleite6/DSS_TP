@@ -38,14 +38,11 @@ Pós-Condição: Piloto adicionado ao sistema
 Fluxo-Normal:
   1- Administrador fornece o nome do piloto a adicionar
   2- Sistema verifica que nenhum piloto existe com o nome fornecido
-  3- Administrador fornece valores para o CTS e SVA
+  3- Administrador fornece valores entre 0 e 1 para o CTS e SVA
   4- Sistema verifica que valores fornecidos são válidos 
   5- Sistema regista piloto
 Fluxo Exceção 1[Nome do piloto já existe](Passo 2):
   2.1- Sistema verifica que nome do piloto que ator forneceu já existe
-  2.2- Sistema termina o processo  
-Fluxo Exceção 2[Valores de CTS e/ou SVA fornecidos não estão entre 0 e 1](Passo 4):
-  2.1- Sistema verifica que valores de CTS e/ou SVA não são válidos
   2.2- Sistema termina o processo  
 
 Use Case: Adicionar C1
@@ -60,7 +57,7 @@ Fluxo Normal:
   4- Ator indica marca, modelo, cilindrada e potência
   5- Sistema verfica que dados são válidos
   6- Ator indica que não é híbrido
-  7- Ator indica PAC
+  7- Ator indica valor entre 0 e 1 para PAC 
   8- Sistema regista carro
 Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
   6.1- Ator indica que carro é híbrido
@@ -83,7 +80,7 @@ Fluxo Normal:
   4- Ator indica marca, modelo, cilindrada e potência
   5- Sistema verfica que dados são válidos
   6- Ator indica que não é híbrido
-  7- Ator indica PAC
+  7- Ator indica valor entre 0 e 1 para PAC
   8- Sistema regista carro
 Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
   6.1- Ator indica que carro é híbrido
@@ -105,7 +102,7 @@ Fluxo Normal:
   4- Ator indica marca, modelo, cilindrada, potência e taxa de deteoração
   5- Sistema verifica que dados são válidos
   6- Ator indica que não é híbrido
-  7- Ator indica PAC
+  7- Ator indica valor entre 0 e 1 para PAC
   8- Sistema regista carro
 Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
   6.1- Ator indica que carro é híbrido
@@ -126,7 +123,7 @@ Fluxo Normal:
   3- Sistema verifica que carro é SC
   4- Ator indica marca, modelo, cilindrada e potência
   5- Sistema verifica que dados são válidos
-  7- Ator indica PAC
+  7- Ator indica valor entre 0 e 1 para PAC
   8- Sistema regista carro
 Fluxo Exceção 1[Cilindrada do carro != 2500](Passo 5)
   5.1- Sistema verifica que cilindrada do carro é menor que
@@ -192,7 +189,7 @@ Fluxo-Normal:
 Use Case: Inscrição em Campeonato
 Descrição: Jogador inscreve-se num campeonato
 Cenario: Jogar
-Pré-Condição: Sistema deve ter um lobby de campeonato aberto
+Pré-Condição: Sistema deve ter um lobby de campeonato aberto que ainda não começou
 Pós-condição: Sistema regista jogador ao campeonato com carro e piloto escolhidos
 Fluxo Normal:
   1- Sistema apresenta lista de carros disponíveis
@@ -211,7 +208,7 @@ Pré-Condição: Sistema deve ter um lobby de campeonato criado
 Pós-Condição: Sistema começa campeonato
 Fluxo Normal:
   1- Jogador decide começar campeonato
-  2- Sistema inicia o campeonato, fechando o lobby
+  2- Sistema inicia o campeonato, fechando o lobby para inscrições
 
 Use Case: Jogar Corrida
 Descrição: Jogador joga corrida
@@ -277,8 +274,6 @@ Fluxo-Normal:
   1- Jogador decide visualizar tabela classificativa
   2- Sistema apresenta tabela, constituída por varios jogadores(username, posição e posição)
 
-
-//TODO Terminar Campeonato(Dúvida para dar ao stor)
 Use Case: Terminar Campeonato
 Descrição: Jogador decide terminar Campeonato
 Cenário: Jogar
