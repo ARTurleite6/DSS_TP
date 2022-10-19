@@ -8,27 +8,27 @@ Fluxo-Normal:
   3- Sistema apresenta lista de Circuitos
   4- Administrador seleciona os circuitos que deseja
   5- Sistema adiciona campeonato à lista de campeonatos disponíveis
-Fluxo-Exceção(1)(Nome do Circuito já existe(Passo 2)):
+Fluxo-Exceção 1[Nome do Campeonato já existe](Passo 2):
   2- Sistema verifica que o nome de campeonato já existe
   3- Sistema informa utilizador da já existência desse nome
 
-
 Use Case: Adicionar um novo Circuito
-Descrição: Administrador decide adicionar um novo circuito no sistema
+Descrição: Administrador adiciona um novo circuito no sistema
 Cenário: Circuitos
-Pré-Condição: Utilizador deve estar autenticado como Administrador
+Pré-Condição: Administrador deve estar autenticado como Administrador
 Pós-Condição: Circuito adicionado à lista de circuitos
 Fluxo Normal:
   1- Administrador fornece o nome do circuito a adicionar
   2- Sistema verifica que nenhum circuito existe com o nome fornecido
-  3- Administrador fornece distancia, curvas e chicanes do circuito
+  3- Administrador fornece distancia e numero de curvas e chicanes do circuito
   4- Sistema calcula o número de retas do circuito
-  5- Sistema fornece lista de retas e curvas do circuito, para que seja introduzida a dificuldade
-  6- Utilizador fornece para cada reta e curva a dificuldade desejada
-  7- Utilizador diz por quantas voltas o circuito será constituído
+  5- Sistema apresenta lista de retas e curvas do circuito, para que seja introduzida a dificuldade
+  6- Administrador fornece para cada reta e curva a dificuldade desejada
+  7- Administrador diz por quantas voltas o circuito será constituído
   8- Sistema adiciona circuito à lista de circuitos
 Fluxo Exceção[Nome do circuito já existe](Passo 2):
-  2- Sistema verifica que nome do circuito informando o ator 
+  2.1- Sistema verifica que nome do circuito já existe
+  2.2- Sistema termina o processo
 
 Use Case: Adicionar novo piloto
 Descrição: Administrador decide adicionar um novo piloto ao sistema
@@ -38,24 +38,99 @@ Pós-Condição: Piloto adicionado ao sistema
 Fluxo-Normal:
   1- Administrador fornece o nome do piloto a adicionar
   2- Sistema verifica que nenhum piloto existe com o nome fornecido
-  3- Sistema pede ao utilizador para inserir os níveis de perícia(CTS e SVA)
-  4- Administrador fornece valores para o CTS e SVA
-  5- Sistema verifica que valores fornecidos são válidos 
-  6- Sistema adiciona piloto ao sistema
-Fluxo Exceção 1(Nome do piloto já existe(Passo 2)):
-  2- Sistema verifica que nome do piloto que ator forneceu já existe
+  3- Administrador fornece valores para o CTS e SVA
+  4- Sistema verifica que valores fornecidos são válidos 
+  5- Sistema regista piloto
+Fluxo Exceção 1[Nome do piloto já existe](Passo 2):
+  2.1- Sistema verifica que nome do piloto que ator forneceu já existe
+  2.2- Sistema termina o processo  
+Fluxo Exceção 2[Valores de CTS e/ou SVA fornecidos não estão entre 0 e 1](Passo 4):
+  2.1- Sistema verifica que valores de CTS e/ou SVA não são válidos
+  2.2- Sistema termina o processo  
 
-Use Case: Adicionar Carro
-Descrição: Administrador decide adicionar um carro ao jogo
+Use Case: Adicionar C1
+Descrição: Ator adiciona Carro C1 ao sistema
 Cenário: Carros
 Pré-Condição: Utilizador deve estar autenticado no sistema como Administrador
-Pós-Condição: Carro adicionado ao sistema
-Fluxo-Normal:
-  1- Administrador introduz a categoria, marca, modelo do carro e cilindrada, potencia do motor a combustão e o PAC
-  2- Sistema adiciona o carro ao sistema
-Fluxo-Alternativo(Carro é hibrido(Passo 2)): 
-  2.1- Administrador introduz a potência do motor elétrico
-  2.2- Sistema adiciona o carro à lista de carros disponíveis
+Pós-Condição: Carro C1 adicionado ao sistema
+Fluxo Normal:
+  1- Sistema apresenta categorias disponíveis
+  2- Administrador escolhe categoria
+  3- Sistema verifica que carro é C1
+  4- Ator indica marca, modelo, cilindrada e potência
+  5- Sistema verfica que dados são válidos
+  6- Ator indica que não é híbrido
+  7- Ator indica PAC
+  8- Sistema regista carro
+Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
+  6.1- Ator indica que carro é híbrido
+  6.2- Ator indica potência do motor elétrico
+  6.3- Regressa a 7
+Fluxo Exceção 1[Cilindrada do carro != 6000](Passo 5)
+  5.1- Sistema verfica que cilindrada não é igual a 6000
+  5.2- Sistema termina processo
+
+
+Use Case: Adicionar C2
+Descrição: Ator adiciona Carro C2 ao sistema
+Cenário: Carros
+Pré-Condição: Utilizador deve estar autenticado no sistema como Administrador
+Pós-Condição: Carro C2 adicionado ao sistema
+Fluxo Normal:
+  1- Sistema apresenta categorias disponíveis
+  2- Administrador escolhe categoria
+  3- Sistema verifica que carro é C2
+  4- Ator indica marca, modelo, cilindrada e potência
+  5- Sistema verfica que dados são válidos
+  6- Ator indica que não é híbrido
+  7- Ator indica PAC
+  8- Sistema regista carro
+Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
+  6.1- Ator indica que carro é híbrido
+  6.2- Ator indica potência do motor elétrico
+  6.3- Regressa a 7
+Fluxo Exceção 1[Cilindrada do carro < 3000 ou > 5000](Passo 5)
+  5.1- Sistema verifica que cilindrada do carro é menor que 3000 ou maior que 5000
+  5.2- Sistema termina processo
+
+Use Case: Adicionar GT
+Descrição: Ator adiciona Carro GT ao sistema
+Cenário: Carros
+Pré-Condição: Utilizador deve estar autenticado no sistema como Administrador
+Pós-Condição: Carro GT adicionado ao sistema
+Fluxo Normal:
+  1- Sistema apresenta categorias disponíveis
+  2- Administrador escolhe categoria
+  3- Sistema verifica que carro é GT
+  4- Ator indica marca, modelo, cilindrada, potência e taxa de deteoração
+  5- Sistema verifica que dados são válidos
+  6- Ator indica que não é híbrido
+  7- Ator indica PAC
+  8- Sistema regista carro
+Fluxo Alternativo 1[Carro é Híbrido](Passo 6)
+  6.1- Ator indica que carro é híbrido
+  6.2- Ator indica potência do motor elétrico
+  6.3- Regressa a 7
+Fluxo Exceção 1[Cilindrada do carro < 2000 ou > 4000](Passo 5)
+  5.1- Sistema verifica que cilindrada do carro é menor que 3000 ou maior que 5000
+  5.2- Sistema termina processo
+
+Use Case: Adicionar SC
+Descrição: Ator adiciona Carro SC ao sistema
+Cenário: Carros
+Pré-Condição: Utilizador deve estar autenticado no sistema como Administrador
+Pós-Condição: Carro SC adicionado ao sistema
+Fluxo Normal:
+  1- Sistema apresenta categorias disponíveis
+  2- Administrador escolhe categoria
+  3- Sistema verifica que carro é SC
+  4- Ator indica marca, modelo, cilindrada e potência
+  5- Sistema verifica que dados são válidos
+  7- Ator indica PAC
+  8- Sistema regista carro
+Fluxo Exceção 1[Cilindrada do carro != 2500](Passo 5)
+  5.1- Sistema verifica que cilindrada do carro é menor que
+  5.2- Sistema termina processo
 
 Use Case: Consulta de Campeonatos
 Descrição: Administrador consulta a lista de campeonatos
@@ -118,13 +193,16 @@ Use Case: Inscrição em Campeonato
 Descrição: Jogador inscreve-se num campeonato
 Cenario: Jogar
 Pré-Condição: Sistema deve ter um lobby de campeonato aberto
-Pós-condição: Sistema adiciona jogador ao campeonato com carro e piloto escolhidos
+Pós-condição: Sistema regista jogador ao campeonato com carro e piloto escolhidos
 Fluxo Normal:
   1- Sistema apresenta lista de carros disponíveis
   2- Jogador escolhe carro
   3- Sistema apresenta lista de pilotos disponíveis
   4- Jogador escolhe piloto
   5- Sistema valida inscrição do jogador e adiciona o mesmo ao campeonato
+Fluxo Exceção 1 [Piloto já foi escolhido por um jogador no lobby](Passo 5)
+  5.1- Sistema verifica que um jogador do mesmo lobby já escolheu o mesmo piloto
+  5.2- Sistema termina processo
 
 Use Case: Começar Campeonato
 Descrição: Jogador começa campeonato
@@ -149,7 +227,7 @@ Fluxo Normal:
   6- Sistema adiciona as pontuações de cada jogador na corrida à sua pontuação no lobby
 Fluxo Exceção(1)[Não existe mais nenhum circuito para correr](Passo 2):
   2.1- Sistema verifica que não existem mais nenhuns circuitos restantes
-  2.2- Sistema informa jogador
+  2.2- Sistema regressa ao lobby
 
 Use Case: Configuração de Carro para Corrida
 Descrição: Ator decide efetuar a configuração do carro que vai usar
@@ -157,33 +235,38 @@ Cenário: Jogar.Configurar Corridas
 Pré-Condição: Campeonato iniciado, com corrida escolhida
 Pós-Condição: Ator pronto a iniciar corrida, com o carro devidamente configurado a seu dispor
 Fluxo-Normal:
-  1- Sistema avisa ator que deve escolher um motor e os pneus do veículo
-  2- Sistema fornece os possíveis modos de motor 
-  3- Ator escolhe um modo de motor
-  4- Sistema guarda modo de motor
-  2- Sistema fornece tipos de pneus possíveis
-  6- Ator escolhe tipo de pneus
-  7- Sistema guarda sua escolha
-Fluxo-Alternativo(Ator possui carro dos tipos C1 ou C2, pretende alterar afinação e ainda não realizou o máximo de afinações permitidas- Passo 0):
-  0.1- Ator decide valor para a afinação do carro
-  0.2- Sistema efetua mudança
-  0.3- Regressa a 1
+  1- Sistema verifica que Ator tem carro C1 ou C2
+  2- Ator diz querer alterar afinação
+  3- Ator indica nova afinação
+  4- Sistema fornece os possíveis modos de motor 
+  5- Ator indica um modo de motor
+  6- Sistema fornece tipos de pneus possíveis
+  7- Ator indica tipo de pneus
+  8- Sistema regista configuração do veículo
+Fluxo Alternativo 1[Ator nao deseja alterar afinação](Passo 2):
+  2.1- Ator diz nao querer alterar afinação
+  2.2- Regressa a 4
+Fluxo Alternativo[Ator não possui carro C1 ou C2] (Passo 1):
+  1.1- Sistema verifica que Ator não possui carro C1 ou C2
+  1.3- Regressa a 4
 
-Use Case: Criar Conta de jogador
-Descrição: Jogador cria nova conta
+Use Case: Criar Conta de Utilizador
+Descrição: Utilizador cria nova conta
 Cenário:
-Pré-Condição: Nenhum utilizador autenticado no sistema
+Pré-Condição: true
 Pós-Condição: Sistema terá criado nova conta para jogador
 Fluxo-Normal:
   1- Utilizador fornece username
   2- Sistema valida username
   3- Utilizador fornece password
   4- Sistema valida password
-  5- Sistema adiciona o utilizador
-Fluxo-Exceção[username já existente](Passo 2):
-  1- Sistema verifica que username já existe, informando o jogador
-Fluxo-Exceção[password invalida(p.e vazia)](Passo 4):
-  2- Sistema verifica que password é invalida, informando o jogador
+  5- Sistema indica tipos de conta disponíveis(Premium ou Normal)
+  6- Utilizador indica o tipo de conta que quer
+  7- Sistema adiciona o utilizador
+Fluxo Exceção[username já existente](Passo 2):
+  2.1- Sistema verifica que username já existe, informando o jogador
+Fluxo Exceção[password invalida(p.e vazia)](Passo 4):
+  2.2- Sistema verifica que password é invalida, informando o jogador
 
 Use Case: Visualizar tabela classificativa do Lobby
 Descrição: Jogador quer visualizar a tabela classificativa do lobby
@@ -203,11 +286,24 @@ Pré-Condição: Sistema deve possuir um campeonato a correr
 Pós-Condição: Sistema termina campeonato, atualizando pontuação do ranking global para os jogadores autenticados
 Fluxo Normal:
   1- Jogador decide terminar campeonato
-  2- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição e posição)
-  7- Sistema adiciona pontuação do campeonato à pontuação do ranking global aos jogadores autenticados
-  8- Sistema termina campeonato
-Fluxo Alternativo(1)[Ainda existem circuitos restantes para jogar](Passo 2):
+  2- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição e pontuação)
+  3- Sistema adiciona pontuação do campeonato de cada jogador à pontuação do ranking global dos jogadores autenticados
+  4- Sistema termina campeonato
+Fluxo Alternativo 1 [Ainda existem circuitos restantes para jogar](Passo 2):
   2.1- Sistema verifica que ainda existem circuitos restantes
   2.2- Sistema avisa jogadores que não irão receber a pontuação do campeonato
-  2.3- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição e posição)
+  2.3- Sistema apresenta tabela classificativa, constituída por varios jogadores(username, posição)
   2.3- Sistema termina Campeonato
+
+Use Case: Autenticação
+Descrição: Ator autentica-se no sistema
+Cenário: todos
+Pré-Condição: true
+Pós-Condição: Utilizador autenticado no sistema
+Fluxo Normal:
+  1- Utilizador indica username e password
+  2- Sistema verifica dados são válidos
+  3- Sistema autentica utilizador
+Fluxo Exceção 1[Dados fornecidos são inválidos(Conta não existe)] (Passo 2):
+  2.1- Sistema verifica que dados inseridos são inválidos
+  2.2- Sistema termina processo
