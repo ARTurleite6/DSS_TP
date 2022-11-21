@@ -1,0 +1,25 @@
+//Simula Carro SD
+public simulaCorrida(premium) : Map<String, Integer> // Corrida
+public getNomePiloto() : String // Carro
+public getDNF() : boolean // Carro
+public setDespiste(despiste : boolean) // Carro
+public dnf(volta : int, chuva : boolean, seccao : GDU) : boolean // Carro
+public setDNF(dnf : boolean) // Carro
+public getDNF() : boolean // Carro
+public despiste(volta : int, chuva : boolean, seccao : GDU) : boolean // Carro
+public getTempo() : int // Carro
+public tempoProxSeccao(chuva : boolean, volta : int) : int // Carro
+public setTempo(tempo : int) // Carro
+private lidaUltrapassagens(carro : int, volta : int, seccao : boolean, premium : boolean) // Corrida
+private atualizaClassificacoes() // Corrida
+private printResultados() : String // Corrida
+
+public startNextRace() : String // RacingManagerLN
+public existeLobbyAtivo() : boolean // CampeonatosFacade
+public startNextRace() : String // CampeonatosFacade
+public lobbyAberto() : boolean // LobbyFacade
+public fechaLobby() // Lobby
+public startNextRace() : String // Lobby
+public addCorredores(carros : Map<String, Carro>)
+public simulaCorrida(premium : boolean) : String
+private atualizaClassificacoes(resultados : Map<String, Integer>) // Lobby
