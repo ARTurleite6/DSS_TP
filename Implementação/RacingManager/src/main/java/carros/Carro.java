@@ -2,7 +2,7 @@ package carros;
 
 import campeonatos.Piloto;
 
-public class Carro {
+public abstract class Carro {
 
     private String modelo;
     private String marca;
@@ -152,4 +152,7 @@ public class Carro {
     public void setModoMotor(ModoMotor modoMotor) {
         this.modoMotor = modoMotor;
     }
+
+    public abstract Carro clone();
+    public abstract String toString();
 }
