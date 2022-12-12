@@ -13,4 +13,14 @@ public class C2 extends Carro implements Afinavel {
     public void setAfinacao(int afinacao) {
         this.afinacao = afinacao;
     }
+
+    @Override
+    public Carro clone() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return null;
+    }
 }

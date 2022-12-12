@@ -21,7 +21,7 @@ public class CarrosDAO implements Map<String, Carro> {
 
     @Override
     public int size() {
-        try (Connection conn = DriverManager.getConnection(ConnectionData.getConnectionString());
+        try (Connection conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
              Statement s = conn.createStatement();
         ) {
             String query = "SELECT COUNT(*) FROM CARRO";
@@ -43,40 +43,19 @@ public class CarrosDAO implements Map<String, Carro> {
 
     @Override
     public boolean containsKey(Object key) {
-        try (Connection conn = DriverManager.getConnection(ConnectionData.getConnectionString());
-             var ps = conn.prepareStatement("SELECT * FROM Carro WHERE Carro.Modelo = ?");
-        ) {
-            ps.setString(1, (String)key);
-            var rs = ps.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        return false;
     }
 
     @Override
     public boolean containsValue(Object value) {
-        Carro c = (Carro)value;
-        var modelo = c.getModelo();
-        try(Connection con = DriverManager.getConnection(ConnectionData.getConnectionString());
-            var ps = con.prepareStatement("SELECT * FROM Carro WHERE Carro.Modelo = ?")
-        ) {
-            ps.setString(1, modelo);
-            var rs = ps.executeQuery();
-            if(rs.next()) {
-            }
-            return false;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return false;
     }
 
     @Override
     public Carro get(Object key) {
         var modelo = (String)key;
         try(
-                var conn = DriverManager.getConnection(ConnectionData.getConnectionString());
+                var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
                 var ps = conn.prepareStatement("SELECT * FROM Carro WHERE modelo = ?");
                 ){
             var rs = ps.executeQuery();
