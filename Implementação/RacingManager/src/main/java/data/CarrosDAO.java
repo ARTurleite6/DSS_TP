@@ -2,33 +2,94 @@ package data;
 
 import carros.Carro;
 
+import java.sql.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 public class CarrosDAO implements Map<String, Carro> {
+
+    private static CarrosDAO dao = null;
+    private CarrosDAO() {
+
+    }
+
+    public static CarrosDAO getInstance() {
+        if(dao == null) dao = new CarrosDAO();
+        return dao;
+    }
+
     @Override
     public int size() {
-        return 0;
+        try (Connection conn = DriverManager.getConnection(ConnectionData.getConnectionString());
+             Statement s = conn.createStatement();
+        ) {
+            String query = "SELECT COUNT(*) FROM CARRO";
+            var result = s.executeQuery(query);
+            if(result.next()){
+                return result.getInt(1);
+            }
+            return 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size() == 0;
     }
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        try (Connection conn = DriverManager.getConnection(ConnectionData.getConnectionString());
+             var ps = conn.prepareStatement("SELECT * FROM Carro WHERE Carro.Modelo = ?");
+        ) {
+            ps.setString(1, (String)key);
+            var rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return false;
+        Carro c = (Carro)value;
+        var modelo = c.getModelo();
+        try(Connection con = DriverManager.getConnection(ConnectionData.getConnectionString());
+            var ps = con.prepareStatement("SELECT * FROM Carro WHERE Carro.Modelo = ?")
+        ) {
+            ps.setString(1, modelo);
+            var rs = ps.executeQuery();
+            if(rs.next()) {
+            }
+            return false;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Carro get(Object key) {
+        var modelo = (String)key;
+        try(
+                var conn = DriverManager.getConnection(ConnectionData.getConnectionString());
+                var ps = conn.prepareStatement("SELECT * FROM Carro WHERE modelo = ?");
+                ){
+            var rs = ps.executeQuery();
+            if(rs.next()) {
+                modelo = rs.getString(1);
+                var marca = rs.getString(2);
+                var cilindrada = rs.getInt(3);
+                var potenciaCombustao = rs.getInt(4);
+                var fiabilidade = rs.getFloat(5);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
