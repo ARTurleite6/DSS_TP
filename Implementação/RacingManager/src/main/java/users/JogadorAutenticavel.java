@@ -11,6 +11,24 @@ public class JogadorAutenticavel implements Autenticavel {
   private boolean autenticado;
   private Set<Integer> lobbiesParticipados;
 
+  public JogadorAutenticavel() {
+    this.username = "";
+    this.password = "";
+    this.pontuacaoGlobal = 0;
+    this.premium = false;
+    this.autenticado = false;
+    this.lobbiesParticipados = new HashSet<>();
+  }
+
+  public JogadorAutenticavel(String username, String password) {
+    this.username = username;
+    this.password = password;
+    this.pontuacaoGlobal = 0;
+    this.premium = false;
+    this.autenticado = false;
+    this.lobbiesParticipados = new HashSet<>();
+  }
+
   public JogadorAutenticavel(String username, String password,
                              boolean autenticado, int pontuacao_global,
                              boolean premium,

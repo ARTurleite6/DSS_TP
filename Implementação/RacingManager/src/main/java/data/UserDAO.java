@@ -93,6 +93,7 @@ public class UserDAO implements Map<String, Autenticavel> {
                                        lobbiesParticipados);
       }
     } catch (SQLException exc) {
+      System.out.println(exc.getMessage());
       throw new RuntimeException();
     }
   }
@@ -111,7 +112,7 @@ public class UserDAO implements Map<String, Autenticavel> {
         var pt1 = conn.prepareStatement(
             "INSERT INTO Utilizador(username, password, autenticado, tipo) VALUES(?, ?, ?, ?)");
         var pt2 =
-            conn.prepareStatement("INSERT INTO ADMINISTRADOR(nome) VALUES(?)");
+            conn.prepareStatement("INSERT INTO ADMINISTRADOR(username) VALUES(?)");
         var pt3 = conn.prepareStatement(
             "INSERT INTO JOGADOR(username, pontuacao_global, premium) VALUES(?, ?, ?)");) {
         var tipo = value.getClass().getSimpleName();
@@ -131,6 +132,7 @@ public class UserDAO implements Map<String, Autenticavel> {
           pt3.setBoolean(3, jogador.isPremium());
           pt3.executeUpdate();
         }
+        conn.commit();
         return null;
       } catch (SQLException e) {
         if (conn != null) {
@@ -223,9 +225,9 @@ public class UserDAO implements Map<String, Autenticavel> {
       pt1.setString(1, (String)key);
       pt2.setString(1, (String)key);
       pt3.setString(1, (String)key);
-      pt1.executeUpdate();
       pt2.executeUpdate();
       pt3.executeUpdate();
+      pt1.executeUpdate();
       return user;
     } catch(SQLException exception) {
       throw new RuntimeException();
@@ -245,9 +247,9 @@ public class UserDAO implements Map<String, Autenticavel> {
             var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
             var st = conn.createStatement();
             ) {
-      st.executeQuery("DELETE FROM Utilizador");
-      st.executeQuery("DELETE FROM Administrador");
-      st.executeQuery("DELETE FROM Jogador");
+      st.executeUpdate("DELETE FROM Administrador");
+      st.executeUpdate("DELETE FROM Jogador");
+      st.executeUpdate("DELETE FROM Utilizador");
     }  catch (SQLException e) {
       throw new RuntimeException();
     }
