@@ -41,9 +41,22 @@ public class JogadorAutenticavel implements Autenticavel {
     this.lobbiesParticipados = new HashSet<>(lobbiesParticipados);
   }
 
+  public JogadorAutenticavel(JogadorAutenticavel jogador) {
+    this.username = jogador.getUsername();
+    this.password = jogador.getPassword();
+    this.autenticado = jogador.estaAutenticado();
+    this.premium = jogador.isPremium();
+    this.pontuacaoGlobal = jogador.getPontuacaoGlobal();
+    this.lobbiesParticipados = jogador.getLobbiesParticipados();
+  }
+
   @Override
   public boolean login(String username, String password) {
     return this.username.equals(username) && this.password.equals(password);
+  }
+
+  public Set<Integer> getLobbiesParticipados() {
+    return new HashSet<>(this.lobbiesParticipados);
   }
 
   @Override
@@ -62,6 +75,10 @@ public class JogadorAutenticavel implements Autenticavel {
   }
 
   @Override
+  public JogadorAutenticavel clone() {
+    return new JogadorAutenticavel(this);
+  }
+  @Override
   public String getUsername() {
     return this.username;
   }
@@ -74,6 +91,14 @@ public class JogadorAutenticavel implements Autenticavel {
   public int getPontuacaoGlobal() { return this.pontuacaoGlobal; }
 
   public boolean isPremium() { return this.premium; }
+
+  public void addPontuacao(int pontuacao, int lobby) {
+    //TODO verificar se já recebeu pontos do lobby
+    if(!this.lobbiesParticipados.contains(lobby)) {
+      this.pontuacaoGlobal += pontuacao;
+      this.lobbiesParticipados.add(lobby);
+    }
+  }
 
   @Override
   public boolean equals(Object o) {

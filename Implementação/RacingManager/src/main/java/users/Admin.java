@@ -23,6 +23,12 @@ public class Admin implements Autenticavel {
         this.autenticado = autenticado;
     }
 
+    public Admin(Admin a) {
+        this.username = a.getUsername();
+        this.password = a.getPassword();
+        this.autenticado = a.estaAutenticado();
+    }
+
     @Override
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
@@ -40,6 +46,11 @@ public class Admin implements Autenticavel {
     @Override
     public void logOut() {
         this.autenticado = false;
+    }
+
+    @Override
+    public Admin clone() {
+        return new Admin(this);
     }
 
     @Override

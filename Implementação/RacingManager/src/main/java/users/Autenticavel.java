@@ -6,4 +6,6 @@ public interface Autenticavel extends Identificavel {
     void setPassword(String password);
     String getPassword();
     void logOut();
+
+    Autenticavel clone();
 }
