@@ -58,7 +58,6 @@ public class JogadorDAO implements Map<String, JogadorAutenticavel> {
             var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
             var st1 = conn.prepareStatement("SELECT * FROM Utilizador WHERE username = ?");
             var st2 = conn.prepareStatement("SELECT * FROM Jogador WHERE username = ?");
-            var st3 = conn.prepareStatement("SELECT lobby FROM JogadorLobby WHERE jogador = ?")
     ){
       st1.setString(1, (String)key);
       var rs1 = st1.executeQuery();
@@ -69,19 +68,12 @@ public class JogadorDAO implements Map<String, JogadorAutenticavel> {
       var rs2 = st2.executeQuery();
       if(!rs2.next()) return null;
 
-      st3.setString(1, (String)key);
-      var rs3 = st3.executeQuery();
-      Set<Integer> lobbies = new TreeSet<>();
-      while(rs3.next()) {
-        lobbies.add(rs3.getInt(1));
-      }
-
       var username = rs1.getString(1);
       var password = rs1.getString(2);
       var autenticado = rs1.getBoolean(3);
       var pontuacaoGlobal = rs2.getInt(2);
       var premium = rs2.getBoolean(3);
-      return new JogadorAutenticavel(username, password, autenticado, pontuacaoGlobal, premium, lobbies);
+      return new JogadorAutenticavel(username, password, autenticado, pontuacaoGlobal, premium);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -169,7 +161,7 @@ public class JogadorDAO implements Map<String, JogadorAutenticavel> {
       var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
       var st = conn.createStatement()
     ){
-      var rs = st.executeQuery("SELECT nome FROM Piloto");
+      var rs = st.executeQuery("SELECT username FROM Jogador");
       var res = new HashSet<String>();
       while(rs.next()) {
         var nome = rs.getString(1);

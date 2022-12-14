@@ -1,8 +1,30 @@
 package carros;
 
+import campeonatos.Piloto;
+
 public class C1 extends Carro implements Afinavel {
 
     private float afinacao;
+
+    public C1() {
+        super();
+        this.afinacao = 0;
+    }
+
+    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float afinacao) {
+        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+        this.afinacao = afinacao;
+    }
+
+    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, int afinacao) {
+        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
+        this.afinacao = afinacao;
+    }
+
+    public C1(C1 c) {
+        super(c);
+        this.afinacao = c.getAfinacao();
+    }
 
     @Override
     public float getAfinacao() {
@@ -16,11 +38,31 @@ public class C1 extends Carro implements Afinavel {
 
     @Override
     public Carro clone() {
-        return null;
+        return new C1(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        C1 c1 = (C1) o;
+
+        return Float.compare(c1.getAfinacao(), getAfinacao()) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getAfinacao() != +0.0f ? Float.floatToIntBits(getAfinacao()) : 0);
+        return result;
     }
 
     @Override
     public String toString() {
-        return null;
+        return "C1{" +
+                "afinacao=" + afinacao +
+                '}';
     }
 }

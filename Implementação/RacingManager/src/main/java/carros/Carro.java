@@ -8,7 +8,7 @@ public abstract class Carro {
     private String marca;
     private int cilindrada;
     private int potenciaCombustao;
-    private int fiabilidade;
+    private float fiabilidade;
     private int estadoPneu;
 
     private TipoPneu tipoPneu;
@@ -37,13 +37,14 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int fiabilidade, int estadoPneu) {
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
         this.modelo = modelo;
         this.marca = marca;
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
         this.fiabilidade = fiabilidade;
-        this.estadoPneu = estadoPneu;
+
+        this.estadoPneu = 100;
         this.tipoPneu = TipoPneu.Macio;
         this.modoMotor = ModoMotor.Base;
         this.piloto = null;
@@ -52,7 +53,7 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu,Piloto piloto, boolean dnf, int tempo, boolean despiste) {
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu,Piloto piloto, boolean dnf, int tempo, boolean despiste) {
         this.modelo = modelo;
         this.marca = marca;
         this.cilindrada = cilindrada;
@@ -96,7 +97,7 @@ public abstract class Carro {
         return potenciaCombustao;
     }
 
-    public int getFiabilidade() {
+    public float getFiabilidade() {
         return fiabilidade;
     }
 
@@ -151,6 +152,44 @@ public abstract class Carro {
 
     public void setModoMotor(ModoMotor modoMotor) {
         this.modoMotor = modoMotor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Carro carro = (Carro) o;
+
+        if (getCilindrada() != carro.getCilindrada()) return false;
+        if (getPotenciaCombustao() != carro.getPotenciaCombustao()) return false;
+        if (Float.compare(carro.getFiabilidade(), getFiabilidade()) != 0) return false;
+        if (getEstadoPneu() != carro.getEstadoPneu()) return false;
+        if (isDnf() != carro.isDnf()) return false;
+        if (getTempo() != carro.getTempo()) return false;
+        if (isDespiste() != carro.isDespiste()) return false;
+        if (!getModelo().equals(carro.getModelo())) return false;
+        if (!getMarca().equals(carro.getMarca())) return false;
+        if (getTipoPneu() != carro.getTipoPneu()) return false;
+        if (getModoMotor() != carro.getModoMotor()) return false;
+        return getPiloto().equals(carro.getPiloto());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getModelo().hashCode();
+        result = 31 * result + getMarca().hashCode();
+        result = 31 * result + getCilindrada();
+        result = 31 * result + getPotenciaCombustao();
+        result = 31 * result + (getFiabilidade() != +0.0f ? Float.floatToIntBits(getFiabilidade()) : 0);
+        result = 31 * result + getEstadoPneu();
+        result = 31 * result + getTipoPneu().hashCode();
+        result = 31 * result + getModoMotor().hashCode();
+        result = 31 * result + getPiloto().hashCode();
+        result = 31 * result + (isDnf() ? 1 : 0);
+        result = 31 * result + getTempo();
+        result = 31 * result + (isDespiste() ? 1 : 0);
+        return result;
     }
 
     public abstract Carro clone();

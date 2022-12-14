@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class UsersFacade implements IGestUsers {
 
     //TODO criar admins DAO
-    private JogadorDAO jogadores;
+    private final JogadorDAO jogadores;
 
     public UsersFacade() {
         this.jogadores = JogadorDAO.getInstance();
