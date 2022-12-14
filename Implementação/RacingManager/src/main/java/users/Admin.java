@@ -31,7 +31,10 @@ public class Admin implements Autenticavel {
 
     @Override
     public boolean login(String username, String password) {
-        return this.username.equals(username) && this.password.equals(password);
+        if(this.username.equals(username) && this.password.equals(password)) {
+            this.autenticado = true;
+        }
+        return false;
     }
     @Override
     public boolean estaAutenticado() {

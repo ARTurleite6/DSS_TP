@@ -2,7 +2,6 @@ package data;
 
 import campeonatos.Piloto;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.AbstractMap;
@@ -29,11 +28,12 @@ public class PilotosDAO implements Map<String, Piloto> {
              DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
          var st = con.createStatement();) {
       var query = "SELECT COUNT(*) FROM Piloto";
-      var rs = st.executeQuery(query);
-      if (rs.next()) {
-        return rs.getInt(1);
+      try(var rs = st.executeQuery(query)) {
+        if (rs.next()) {
+          return rs.getInt(1);
+        }
+        return 0;
       }
-      return 0;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -64,14 +64,15 @@ public class PilotosDAO implements Map<String, Piloto> {
          var ps = conn.prepareStatement(
              "SELECT * FROM Piloto WHERE Piloto.nome = ?");) {
       ps.setString(1, (String)key);
-      var rs = ps.executeQuery();
-      if (rs.next()) {
-        var nome = rs.getString(1);
-        var cts = rs.getInt(2);
-        var sva = rs.getInt(3);
-        return new Piloto(nome, cts, sva);
+      try(var rs = ps.executeQuery()) {
+        if (rs.next()) {
+          var nome = rs.getString(1);
+          var cts = rs.getInt(2);
+          var sva = rs.getInt(3);
+          return new Piloto(nome, cts, sva);
+        }
+        return null;
       }
-      return null;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -155,12 +156,13 @@ public class PilotosDAO implements Map<String, Piloto> {
              DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
          var st = conn.createStatement();) {
       var query = "SELECT Piloto.Nome FROM Piloto";
-      var rs = st.executeQuery(query);
-      var res = new TreeSet<String>();
-      while (rs.next()) {
-        res.add(rs.getString(1));
+      try(var rs = st.executeQuery(query)) {
+        var res = new TreeSet<String>();
+        while (rs.next()) {
+          res.add(rs.getString(1));
+        }
+        return res;
       }
-      return res;
     } catch (SQLException exception) {
       throw new RuntimeException();
     }
@@ -181,7 +183,7 @@ public class PilotosDAO implements Map<String, Piloto> {
     Set<Entry<String, Piloto>> res = new TreeSet<>();
 
     for (var piloto : this.values()) {
-      res.add(new AbstractMap.SimpleEntry<String, Piloto>(piloto.getNome(),
+      res.add(new AbstractMap.SimpleEntry<>(piloto.getNome(),
                                                           piloto));
     }
     return res;

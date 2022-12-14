@@ -46,7 +46,11 @@ public class JogadorAutenticavel implements Autenticavel {
 
   @Override
   public boolean login(String username, String password) {
-    return this.username.equals(username) && this.password.equals(password);
+    if(this.username.equals(username) && this.password.equals(password)) {
+      this.autenticado = true;
+      return true;
+    }
+    return false;
   }
 
   @Override
