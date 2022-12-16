@@ -15,11 +15,11 @@ public class JogadorAutenticavel implements Autenticavel {
     this.autenticado = false;
   }
 
-  public JogadorAutenticavel(String username, String password) {
+  public JogadorAutenticavel(String username, String password, boolean premium) {
     this.username = username;
     this.password = password;
     this.pontuacaoGlobal = 0;
-    this.premium = false;
+    this.premium = premium;
     this.autenticado = false;
   }
 

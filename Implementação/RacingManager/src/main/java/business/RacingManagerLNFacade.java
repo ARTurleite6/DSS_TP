@@ -1,22 +1,27 @@
 package business;
 
 import business.campeonatos.*;
-import business.carros.Carro;
-import business.carros.IGestCarros;
-import business.carros.ModoMotor;
-import business.carros.TipoPneu;
+import business.carros.*;
 import business.exceptions.*;
 import business.users.Autenticavel;
 import business.users.IGestUsers;
+import business.users.JogadorAutenticavel;
+import business.users.UsersFacade;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class RacingManagerLNFacade implements IRacingManagerLNFacade{
-    private IGestCarros carrosFacade;
-    private IGestCampeonatos campeonatosFacade;
-    private IGestUsers usersFacade;
+    private final IGestCarros carrosFacade;
+    private final IGestCampeonatos campeonatosFacade;
+    private final IGestUsers usersFacade;
+
+    public RacingManagerLNFacade() {
+        this.carrosFacade = new CarrosFacade();
+        this.campeonatosFacade = new CampeonatosFacade();
+        this.usersFacade = new UsersFacade();
+    }
 
     @Override
     public Lobby criaLobby(String nomeCampeonato, String username) throws CampeonatoNaoExisteException, CircuitoNaoExisteException, UtilizadorNaoExisteException, CriarLobbySemAutenticacaoException {
@@ -84,92 +89,93 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
 
     @Override
     public String getTabelaClassificativa() {
-        return null;
+        return this.campeonatosFacade.getTabelaClassificativa();
     }
 
     @Override
-    public List<Lobby> getHistoricoParticipacoes(String username) {
-        return null;
+    public List<Lobby> getHistoricoParticipacoes(String username) throws UtilizadorNaoExisteException {
+        if(this.usersFacade.existeJogador(username)) throw new UtilizadorNaoExisteException("Não existe nenhum utilizador com username " + username);
+        return this.campeonatosFacade.getHistoricoParticipacoes(username);
     }
 
     @Override
-    public void addCircuito(String nomeCircuito, float distancia, List<GDU> retas, List<GDU> curvas, List<GDU> chicanes) {
-
+    public void addCircuito(String nomeCircuito, int distancia, List<GDU> retas, List<GDU> curvas, List<GDU> chicanes, int numeroVoltas) throws CircuitoJaExistenteException {
+        this.campeonatosFacade.addCircuito(nomeCircuito, distancia, chicanes, curvas, retas, numeroVoltas);
     }
 
     @Override
     public List<Circuito> getCircuitos() {
-        return null;
+        return this.campeonatosFacade.getCircuitos();
     }
 
     @Override
     public List<String> getCategorias() {
-        return null;
+        return this.carrosFacade.getCategorias();
     }
 
     @Override
-    public void addCarro(Carro carro) {
-
+    public void addCarro(Carro carro) throws CarroJaExisteException {
+        this.carrosFacade.addCarro(carro);
     }
 
     @Override
     public List<Carro> getCarros() {
-        return null;
+        return this.carrosFacade.getCarros();
     }
 
     @Override
     public List<String> getModosMotor() {
-        return null;
+        return this.carrosFacade.getModosMotor();
     }
 
     @Override
     public List<String> getTiposPneus() {
-        return null;
+        return this.carrosFacade.getTipoPneus();
     }
 
     @Override
-    public void addPiloto(String piloto, float cts, float sva) {
-
+    public void addPiloto(String piloto, int cts, int sva) throws PilotoInexistenteException {
+        this.campeonatosFacade.addPiloto(piloto, cts, sva);
     }
 
     @Override
     public List<Piloto> getPilotos() {
-        return null;
+        return this.campeonatosFacade.getPilotos();
     }
 
     @Override
     public String getRankingGlobal() {
-        return null;
+        return this.usersFacade.getRankingGlobal();
     }
 
     @Override
-    public void atualizaPassword(String username, String password) {
-
+    public void atualizaPassword(String username, String password) throws UtilizadorNaoExisteException {
+        this.usersFacade.atualizaPassword(username, password);
     }
 
     @Override
-    public void logout(String username) {
-
+    public void logout(String username) throws UtilizadorNaoExisteException {
+        this.usersFacade.logOut(username);
     }
 
     @Override
     public List<String> getTiposConta() {
-        return null;
+        return this.usersFacade.getTiposConta();
     }
 
     @Override
-    public void registaJogador(String username, String password, boolean premium) {
-
+    public void registaJogador(String username, String password, boolean premium) throws UtilizadorJaExistenteException {
+        this.usersFacade.registaJogador(new JogadorAutenticavel(username, password, premium));
     }
 
     @Override
-    public Autenticavel autenticaUtilizador(String username, String password) {
-        return null;
+    public Autenticavel autenticaUtilizador(String username, String password) throws UtilizadorNaoExisteException {
+        return this.usersFacade.autenticaUtilizador(username, password);
     }
 
     @Override
     public boolean existeUsername(String username) {
-        return false;
+        return this.usersFacade.existeUtilizador(username);
     }
 
     @Override

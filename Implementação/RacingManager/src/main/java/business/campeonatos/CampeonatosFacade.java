@@ -13,7 +13,7 @@ public class CampeonatosFacade implements IGestCampeonatos {
     private Map<String, Circuito> circuitos;
     private Map<String, Piloto> pilotos;
     private Lobby lobbyAtivo;
-    private List<Lobby> lobbies;
+    private Map<Integer, Lobby> lobbies;
 
     @Override
     public boolean existeCircuito(String nomeCircuito) {
@@ -67,7 +67,7 @@ public class CampeonatosFacade implements IGestCampeonatos {
 
     @Override
     public void terminaCampeonato() {
-        this.lobbies.add(this.lobbyAtivo);
+        this.lobbies.put(this.lobbyAtivo.getCodigo(), this.lobbyAtivo);
         this.lobbyAtivo = null;
     }
 
@@ -93,7 +93,7 @@ public class CampeonatosFacade implements IGestCampeonatos {
     @Override
     public List<Lobby> getHistoricoParticipacoes(String username) {
         List<Lobby> lobbies = new ArrayList<>();
-        for(var lobby : this.lobbies) {
+        for(var lobby : this.lobbies.values()) {
             if(lobby.existeJogador(username)) lobbies.add(lobby.clone());
         }
         return lobbies;

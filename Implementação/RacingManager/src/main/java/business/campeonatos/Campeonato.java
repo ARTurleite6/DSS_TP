@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Campeonato {
     private final String nomeCampeonato;
-    private Set<String> circuitos;
+    private final Set<String> circuitos;
 
     public Campeonato() {
         this.nomeCampeonato = "";
