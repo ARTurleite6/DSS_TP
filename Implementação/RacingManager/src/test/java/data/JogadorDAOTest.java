@@ -1,8 +1,8 @@
 package data;
 
+import business.data.JogadorDAO;
 import org.junit.jupiter.api.Test;
-import users.Admin;
-import users.JogadorAutenticavel;
+import business.users.JogadorAutenticavel;
 
 import java.util.Map;
 

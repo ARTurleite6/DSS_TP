@@ -1,6 +1,7 @@
 package data;
 
-import campeonatos.Piloto;
+import business.campeonatos.Piloto;
+import business.data.PilotosDAO;
 
 import static org.junit.jupiter.api.Assertions.*;
 

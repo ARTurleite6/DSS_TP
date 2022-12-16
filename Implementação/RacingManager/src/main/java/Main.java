@@ -1,6 +1,4 @@
-import campeonatos.Piloto;
-import data.ConnectionData;
-import data.PilotosDAO;
+import business.data.ConnectionData;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
