@@ -3,6 +3,9 @@ package business.campeonatos;
 import business.carros.Carro;
 import business.carros.ModoMotor;
 import business.carros.TipoPneu;
+import business.data.CampeonatoDAO;
+import business.data.CircuitoDAO;
+import business.data.PilotosDAO;
 import business.exceptions.*;
 
 import java.util.*;
@@ -14,6 +17,13 @@ public class CampeonatosFacade implements IGestCampeonatos {
     private Map<String, Piloto> pilotos;
     private Lobby lobbyAtivo;
     private Map<Integer, Lobby> lobbies;
+
+    public CampeonatosFacade() {
+        this.campeonatos = CampeonatoDAO.getInstance();
+        this.circuitos = CircuitoDAO.getInstance();
+        this.pilotos = PilotosDAO.getInstance();
+        this.lobbies = new HashMap<>();
+    }
 
     @Override
     public boolean existeCircuito(String nomeCircuito) {

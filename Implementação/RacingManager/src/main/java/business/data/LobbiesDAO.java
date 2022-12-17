@@ -4,12 +4,9 @@ import business.campeonatos.Lobby;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.rmi.ConnectIOException;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -67,10 +64,13 @@ public class LobbiesDAO implements Map<Integer, Lobby> {
                 if(!lRs.next()) return null;
                 var codigo = lRs.getInt(1);
                 var campeonato = lRs.getBoolean(2);
+                pt2.setInt(1, (Integer)key);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        //TODO
+        return null;
     }
 
     @Nullable
