@@ -1,4 +1,4 @@
-package business.data;
+package data;
 
 public class ConnectionData {
 

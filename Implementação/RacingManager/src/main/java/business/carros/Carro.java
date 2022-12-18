@@ -37,6 +37,22 @@ public abstract class Carro {
         this.despiste = false;
     }
 
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao) {
+        this.modelo = modelo;
+        this.marca = marca;
+        this.cilindrada = cilindrada;
+        this.potenciaCombustao = potenciaCombustao;
+        this.fiabilidade = 100;
+
+        this.estadoPneu = 100;
+        this.tipoPneu = TipoPneu.Macio;
+        this.modoMotor = ModoMotor.Base;
+        this.piloto = null;
+        this.dnf = false;
+        this.tempo = 0;
+        this.despiste = false;
+    }
+
     public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
         this.modelo = modelo;
         this.marca = marca;

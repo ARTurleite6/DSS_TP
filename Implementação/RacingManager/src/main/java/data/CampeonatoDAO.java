@@ -1,8 +1,6 @@
-package business.data;
+package data;
 
 import business.campeonatos.Campeonato;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

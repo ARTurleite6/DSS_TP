@@ -63,4 +63,17 @@ public class Campeonato {
         result = 31 * result + getCircuitos().hashCode();
         return result;
     }
+
+    public String imprimeCampeonato() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------");
+        sb.append("\nCampeonato: Nome = ").append(this.nomeCampeonato);
+        var circuitos = this.circuitos;
+        sb.append("\n    Lista de circuitos do campeonato:");
+        for(var circuito : circuitos) {
+            sb.append("\n     ").append(circuito);
+        }
+        sb.append("\n-----------------------------");
+        return sb.toString();
+    }
 }

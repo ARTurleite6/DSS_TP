@@ -1,4 +1,4 @@
-package business.data;
+package data;
 
 import business.campeonatos.Circuito;
 import business.campeonatos.GDU;
@@ -60,7 +60,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
     public Circuito get(Object key) {
         try (var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
              var pt1 = conn.prepareStatement("SELECT nome, distancia, voltas FROM Circuito WHERE nome = ?");
-             var pt2 = conn.prepareStatement("SELECT numero, circuito, dificuldade, tipo ORDER BY numero WHERE circuito = ?")) {
+             var pt2 = conn.prepareStatement("SELECT numero, circuito, dificuldade, tipo FROM Seccao WHERE circuito = ? ORDER BY numero ASC")) {
             pt1.setString(1, (String) key);
             try (var rs = pt1.executeQuery()) {
                 if (!rs.next()) return null;
@@ -115,8 +115,9 @@ public class CircuitoDAO implements Map<String, Circuito> {
                     pt1.setInt(3, value.getNumeroVoltas());
                     pt1.executeUpdate();
                     var retas = value.getRetas();
+                    int numeroSeccao = 0;
                     for(int i = 0; i < retas.size(); ++i) {
-                        pt2.setInt(1, i);
+                        pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, retas.get(i).getDificuldade());
                         pt2.setString(4, "reta");
@@ -124,7 +125,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                     }
                     var curvas = value.getCurvas();
                     for(int i = 0; i < curvas.size(); ++i) {
-                        pt2.setInt(1, i);
+                        pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, curvas.get(i).getDificuldade());
                         pt2.setString(4, "curva");
@@ -132,7 +133,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                     }
                     var chicanes = value.getChicanes();
                     for(int i = 0; i < chicanes.size(); ++i) {
-                        pt2.setInt(1, i);
+                        pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, chicanes.get(i).getDificuldade());
                         pt2.setString(4, "chicane");

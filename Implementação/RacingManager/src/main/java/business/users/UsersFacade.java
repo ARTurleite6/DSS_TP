@@ -1,7 +1,7 @@
 package business.users;
 
-import business.data.AdminDAO;
-import business.data.JogadorDAO;
+import data.AdminDAO;
+import data.JogadorDAO;
 import business.exceptions.UtilizadorJaExistenteException;
 import business.exceptions.UtilizadorNaoExisteException;
 import org.jetbrains.annotations.Contract;
@@ -84,7 +84,7 @@ public class UsersFacade implements IGestUsers {
 
     @Override
     public void registaJogador(@NotNull JogadorAutenticavel jogador) throws UtilizadorJaExistenteException {
-        if(!this.jogadores.containsKey(jogador.getUsername()))
+        if(!this.jogadores.containsKey(jogador.getUsername()) && !this.admins.containsKey(jogador.getUsername()))
             this.jogadores.put(jogador.getUsername(), jogador);
         else throw new UtilizadorJaExistenteException("Jogador já existente");
     }
@@ -93,14 +93,18 @@ public class UsersFacade implements IGestUsers {
     public Autenticavel autenticaUtilizador(String username, String password) throws UtilizadorNaoExisteException {
         var jogador = this.jogadores.get(username);
         var admin = this.admins.get(username);
+        System.out.println("Jogador = " + jogador);
         if(jogador == null && admin == null) throw new UtilizadorNaoExisteException("Não existe utilizador com username " + username);
         if(jogador != null) {
             if(jogador.login(username, password)) {
+                System.out.println(jogador);
                 this.jogadores.put(username, jogador);
                 return jogador;
             }
         } else {
+            System.out.println("Admin = " + admin);
             if(admin.login(username, password)) {
+                System.out.println(admin);
                 this.admins.put(username, admin);
                 return admin;
             }

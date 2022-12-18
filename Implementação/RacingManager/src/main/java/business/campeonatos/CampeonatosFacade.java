@@ -3,9 +3,9 @@ package business.campeonatos;
 import business.carros.Carro;
 import business.carros.ModoMotor;
 import business.carros.TipoPneu;
-import business.data.CampeonatoDAO;
-import business.data.CircuitoDAO;
-import business.data.PilotosDAO;
+import data.CampeonatoDAO;
+import data.CircuitoDAO;
+import data.PilotosDAO;
 import business.exceptions.*;
 
 import java.util.*;

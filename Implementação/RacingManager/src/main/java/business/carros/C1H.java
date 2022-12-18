@@ -10,6 +10,11 @@ public class C1H extends C1 implements Hibrido {
         this.potenciaEletrica = 0;
     }
 
+    public C1H(String modelo, String marca, int cilindrada, int potenciaCombustao, float afinacao, int potenciaEletrica) {
+        super(modelo, marca, cilindrada, potenciaCombustao, afinacao);
+        this.potenciaEletrica = potenciaEletrica;
+    }
+
     public C1H(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float afinacao, int potenciaEletrica) {
         super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao);
         this.potenciaEletrica = potenciaEletrica;

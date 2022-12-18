@@ -2,6 +2,7 @@ package business.carros;
 
 import business.exceptions.CarroInexistenteException;
 import business.exceptions.CarroJaExisteException;
+import data.CarrosDAO;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ public class CarrosFacade implements IGestCarros {
     private Map<String, Carro> carros;
 
     public CarrosFacade() {
-        this.carros = new HashMap<>();
+        this.carros = CarrosDAO.getInstance();
     }
 
     public CarrosFacade(Map<String, Carro> carros) {

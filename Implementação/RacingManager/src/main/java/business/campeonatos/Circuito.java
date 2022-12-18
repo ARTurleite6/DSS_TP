@@ -104,4 +104,29 @@ public class Circuito {
                 ", chicanes=" + chicanes +
                 '}';
     }
+
+    public String imprimeCircuito() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-----------------------------");
+        sb.append("\nCircuito: Nome = " + this.nomeCircuito + ", distancia = " + this.getDistancia() + ", Numero de Voltas = " + this.getNumeroVoltas());
+        var retas = this.retas;
+        var chicanes = this.chicanes;
+        var curvas = this.curvas;
+        sb.append("\n    Retas do Circuito: ");
+        for(int i = 0; i < retas.size(); ++i) {
+            sb.append("\n        Reta " + (i + 1) + ": " + retas.get(i));
+        }
+
+        sb.append("\n    Curvas do Circuito: ");
+        for(int i = 0; i < curvas.size(); ++i) {
+            sb.append("\n        Curva " + (i + 1) + ": " + curvas.get(i));
+        }
+
+        sb.append("\n    Chicanes do Circuito: ");
+        for(int i = 0; i < chicanes.size(); ++i) {
+            sb.append("\n        Chicane " + (i + 1) + ": " + chicanes.get(i));
+        }
+        sb.append("\n-----------------------------");
+        return sb.toString();
+    }
 }

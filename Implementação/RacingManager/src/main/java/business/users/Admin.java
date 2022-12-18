@@ -33,6 +33,7 @@ public class Admin implements Autenticavel {
     public boolean login(String username, String password) {
         if(this.username.equals(username) && this.password.equals(password)) {
             this.autenticado = true;
+            return true;
         }
         return false;
     }

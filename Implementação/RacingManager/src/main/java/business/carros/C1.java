@@ -11,6 +11,11 @@ public class C1 extends Carro implements Afinavel {
         this.afinacao = 0;
     }
 
+    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float afinacao) {
+        super(modelo, marca, cilindrada, potenciaCombustao);
+        this.afinacao = afinacao;
+    }
+
     public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float afinacao) {
         super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
         this.afinacao = afinacao;

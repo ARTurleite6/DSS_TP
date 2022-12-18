@@ -1,7 +1,8 @@
-package business.data;
+package data;
 
 import business.carros.*;
-import carros.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.sql.*;
 import java.util.*;
@@ -55,29 +56,26 @@ public class CarrosDAO implements Map<String, Carro> {
     return carro != null && carro.equals(value);
   }
 
-  private Carro getC1OrC2(PreparedStatement pt1, PreparedStatement pt1h, String modelo,
-    String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
+  private @Nullable Carro getC1OrC2(@NotNull PreparedStatement pt1, PreparedStatement pt1h, String modelo,
+                                    String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
     try {
-      Carro carro = null;
       pt1.setString(1, modelo);
       try(var rs2 = pt1.executeQuery()) {
-        if (rs2.next()) {
+        if(!rs2.next()) return null;
           var afinacao = rs2.getFloat(2);
           var hibrido = rs2.getBoolean(3);
           if (hibrido) {
             pt1h.setString(1, modelo);
             try(var rs3 = pt1h.executeQuery()) {
-              if (rs3.next()) {
-                var potencia_eletrica = rs3.getInt(2);
-                carro = new C1H(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao, potencia_eletrica);
-              } else carro = null;
+              if(!rs3.next()) return null;
+              var potencia_eletrica = rs3.getInt(2);
+              return new C1H(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao, potencia_eletrica);
             }
           } else {
-            carro = new C1(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao);
+            System.out.println("Não é Hibrido");
+            return new C1(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao);
           }
-        } else carro = null;
       }
-      return carro;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -97,51 +95,48 @@ public class CarrosDAO implements Map<String, Carro> {
     var gths = conn.prepareStatement("SELECT * FROM GTH WHERE modelo = ?");
     var scs = conn.prepareStatement("SELECT * FROM SC WHERE modelo = ?");
   ){
+      ps.setString(1, (String)key);
       try(var rs = ps.executeQuery()) {
-        if (rs.next()) {
-          modelo = rs.getString(1);
-          var marca = rs.getString(2);
-          var cilindrada = rs.getInt(3);
-          var potenciaCombustao = rs.getInt(4);
-          var fiabilidade = rs.getInt(5);
-          var tipo = rs.getString(6);
-          Carro carro = null;
+        if(!rs.next()) return null;
+        System.out.println("Carro encontrado");
+        modelo = rs.getString(1);
+        var marca = rs.getString(2);
+        var cilindrada = rs.getInt(3);
+        var potenciaCombustao = rs.getInt(4);
+        var fiabilidade = rs.getInt(5);
+        var tipo = rs.getString(6);
 
-          if (tipo.equals("C1")) {
-            carro = this.getC1OrC2(c1s, c1hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
-          } else if (tipo.equals("C2")) {
-            carro = this.getC1OrC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
-          } else if (tipo.equals("GT")) {
-            gts.setString(1, modelo);
-            try (var gtr = gts.executeQuery()) {
-              if (gtr.next()) {
-                var fatorDesgaste = gtr.getFloat(2);
-                var hibrido = gtr.getBoolean(3);
-                if (hibrido) {
-                  gths.setString(1, modelo);
-                  try(var gthr = gths.executeQuery()) {
-                    if (gthr.next()) {
-                      var potenciaEletrica = gthr.getInt(2);
-                      carro = new GTH(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste, potenciaEletrica);
-                    } else carro = null;
-                  }
-                } else {
-                  carro = new GT(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste);
-                }
-              } else carro = null;
-            }
-          } else if (tipo.equals("SC")) {
-            scs.setString(1, modelo);
-            try(var scr = scs.executeQuery()) {
-              if (scr.next()) {
-                return new SC(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
-              } else carro = null;
+        if (tipo.equals("C1")) {
+          System.out.println("Tipo C1");
+          return this.getC1OrC2(c1s, c1hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+        } else if (tipo.equals("C2")) {
+          return this.getC1OrC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+        } else if (tipo.equals("GT")) {
+          gts.setString(1, modelo);
+          try (var gtr = gts.executeQuery()) {
+            if(!gtr.next()) return null;
+            var fatorDesgaste = gtr.getFloat(2);
+            var hibrido = gtr.getBoolean(3);
+            if (hibrido) {
+              gths.setString(1, modelo);
+              try(var gthr = gths.executeQuery()) {
+                if(!gthr.next()) return null;
+                var potenciaEletrica = gthr.getInt(2);
+                return new GTH(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste, potenciaEletrica);
+              }
+            } else {
+              return new GT(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste);
             }
           }
-          return carro;
-        }
+        } else if (tipo.equals("SC")) {
+          scs.setString(1, modelo);
+          try(var scr = scs.executeQuery()) {
+            if(!scr.next()) return null;
+            return new SC(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+          }
+          }
+          return null;
       }
-      return null;
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
@@ -186,29 +181,35 @@ public class CarrosDAO implements Map<String, Carro> {
         pt1.executeUpdate();
         //insert into C1, C2, GT, SC
         if(tipo.equals("C1")) {
-          var pt2 = conn.prepareStatement("INSERT INTO C1(modelo, afinacao) VALUES(?, ?)");
-          pt2.setString(1, modelo);
-          C1 c1 = (C1)value;
-          pt2.setFloat(2, c1.getAfinacao());
-          pt2.executeUpdate();
-          if(hibrido) {
-            var pt3 = conn.prepareStatement("INSERT INTO C1H(modelo, potencia_eletrica) VALUES(?, ?)");
-            pt3.setString(1, modelo);
-            pt3.setInt(2, ((C1H)value).getPotenciaEletrica());
-            pt3.executeUpdate();
+          try(var pt2 = conn.prepareStatement("INSERT INTO C1(modelo, afinacao, hibrido) VALUES(?, ?, ?)")) {
+            pt2.setString(1, modelo);
+            C1 c1 = (C1) value;
+            pt2.setFloat(2, c1.getAfinacao());
+            pt2.setBoolean(3, hibrido);
+            pt2.executeUpdate();
+            if (hibrido) {
+              try(var pt3 = conn.prepareStatement("INSERT INTO C1H(modelo, potencia_eletrica) VALUES(?, ?)")) {
+                pt3.setString(1, modelo);
+                pt3.setInt(2, ((C1H) value).getPotenciaEletrica());
+                pt3.executeUpdate();
+              }
+            }
           }
         }
         else if(tipo.equals("C2")) {
-          var pt2 = conn.prepareStatement("INSERT INTO C2(modelo, afinacao) VALUES(?, ?)");
-          pt2.setString(1, modelo);
-          C2 c2 = (C2)value;
-          pt2.setFloat(2, c2.getAfinacao());
-          pt2.executeUpdate();
-          if(hibrido) {
-            var pt3 = conn.prepareStatement("INSERT INTO C2H(modelo, potencia_eletrica) VALUES(?, ?)");
-            pt3.setString(1, modelo);
-            pt3.setInt(2, ((C2H)value).getPotenciaEletrica());
-            pt3.executeUpdate();
+          try(var pt2 = conn.prepareStatement("INSERT INTO C2(modelo, afinacao, hibrido) VALUES(?, ?, ?)")) {
+            pt2.setString(1, modelo);
+            C2 c2 = (C2) value;
+            pt2.setFloat(2, c2.getAfinacao());
+            pt2.setBoolean(3, hibrido);
+            pt2.executeUpdate();
+            if (hibrido) {
+              try(var pt3 = conn.prepareStatement("INSERT INTO C2H(modelo, potencia_eletrica) VALUES(?, ?)")) {
+                pt3.setString(1, modelo);
+                pt3.setInt(2, ((C2H) value).getPotenciaEletrica());
+                pt3.executeUpdate();
+              }
+            }
           }
         }
         else if(tipo.equals("GT")) {
@@ -218,16 +219,18 @@ public class CarrosDAO implements Map<String, Carro> {
           pt2.setBoolean(3, hibrido);
           pt2.executeUpdate();
           if(hibrido) {
-            var pt3 = conn.prepareStatement("INSERT INTO GTH(modelo, potencia_eletrica) VALUES(?, ?)");
-            pt3.setString(1, modelo);
-            pt3.setInt(2, ((GTH)value).getPotenciaEletrica());
-            pt3.executeUpdate();
+            try(var pt3 = conn.prepareStatement("INSERT INTO GTH(modelo, potencia_eletrica) VALUES(?, ?)")) {
+              pt3.setString(1, modelo);
+              pt3.setInt(2, ((GTH) value).getPotenciaEletrica());
+              pt3.executeUpdate();
+            }
           }
         }
         else if(tipo.equals("SC")) {
-          var pt2 = conn.prepareStatement("INSERT INTO SC(modelo) VALUES(?)");
-          pt2.setString(1, modelo);
-          pt2.executeUpdate();
+          try(var pt2 = conn.prepareStatement("INSERT INTO SC(modelo) VALUES(?)")) {
+            pt2.setString(1, modelo);
+            pt2.executeUpdate();
+          }
         }
       }
       else {
@@ -283,6 +286,7 @@ public class CarrosDAO implements Map<String, Carro> {
       }
       return carro;
     } catch (SQLException e) {
+      System.out.println(e.getMessage());
       throw new RuntimeException(); 
     }
   }

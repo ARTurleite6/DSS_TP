@@ -1,7 +1,8 @@
-package business.data;
+package data;
 
 import business.users.Admin;
 
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
@@ -44,12 +45,23 @@ public class AdminDAO implements Map<String, Admin> {
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        try(var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
+            var st = conn.prepareStatement("SELECT username FROM utilizador WHERE username = ?")
+        ) {
+            st.setString(1, (String)key);
+            try(var rs = st.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public boolean containsValue(Object value) {
-        return false;
+        Admin ad = (Admin)value;
+        var admin = this.get(ad.getUsername());
+        return admin != null && ad.equals(admin);
     }
 
     @Override
@@ -83,7 +95,7 @@ public class AdminDAO implements Map<String, Admin> {
         var admin = this.get(key);
         try(var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd)) {
             if(admin != null) {
-                try(var pt1 = conn.prepareStatement("UPDATE FROM Utilizador SET password = ?, autenticado = ? WHERE username = ?")) {
+                try(var pt1 = conn.prepareStatement("UPDATE Utilizador SET password = ?, autenticado = ? WHERE username = ?")) {
                     conn.setAutoCommit(false);
                     pt1.setString(1, value.getPassword());
                     pt1.setBoolean(2, value.estaAutenticado());
@@ -151,7 +163,9 @@ public class AdminDAO implements Map<String, Admin> {
 
     @Override
     public void putAll(Map<? extends String, ? extends Admin> m) {
-
+        for(var entry : m.entrySet()) {
+            this.put(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override

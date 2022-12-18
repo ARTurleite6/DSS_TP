@@ -1,6 +1,5 @@
 package data;
 
-import business.data.JogadorDAO;
 import org.junit.jupiter.api.Test;
 import business.users.JogadorAutenticavel;
 

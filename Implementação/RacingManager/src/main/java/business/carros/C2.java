@@ -2,7 +2,7 @@ package business.carros;
 
 public class C2 extends Carro implements Afinavel {
 
-    private int afinacao;
+    private float afinacao;
 
     @Override
     public float getAfinacao() {
@@ -10,7 +10,7 @@ public class C2 extends Carro implements Afinavel {
     }
 
     @Override
-    public void setAfinacao(int afinacao) {
+    public void setAfinacao(float afinacao) {
         this.afinacao = afinacao;
     }
 

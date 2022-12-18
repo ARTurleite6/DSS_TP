@@ -1,4 +1,4 @@
-package business.data;
+package data;
 
 import business.campeonatos.Lobby;
 import org.jetbrains.annotations.NotNull;
