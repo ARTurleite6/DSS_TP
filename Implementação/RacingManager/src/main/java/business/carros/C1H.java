@@ -10,18 +10,13 @@ public class C1H extends C1 implements Hibrido {
         this.potenciaEletrica = 0;
     }
 
-    public C1H(String modelo, String marca, int cilindrada, int potenciaCombustao, float afinacao, int potenciaEletrica) {
-        super(modelo, marca, cilindrada, potenciaCombustao, afinacao);
+    public C1H(String modelo, String marca, int potenciaCombustao, float afinacao, int potenciaEletrica) {
+        super(modelo, marca, potenciaCombustao, afinacao);
         this.potenciaEletrica = potenciaEletrica;
     }
 
-    public C1H(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float afinacao, int potenciaEletrica) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao);
-        this.potenciaEletrica = potenciaEletrica;
-    }
-
-    public C1H(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, int afinacao, int potenciaEletrica) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste, afinacao);
+    public C1H(String modelo, String marca, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, int afinacao, int potenciaEletrica) {
+        super(modelo, marca, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste, afinacao);
         this.potenciaEletrica = potenciaEletrica;
     }
 
@@ -62,5 +57,10 @@ public class C1H extends C1 implements Hibrido {
 
     public C1H clone() {
         return new C1H(this);
+    }
+
+    @Override
+    public int getFiabilidade() {
+        return super.getFiabilidade() - this.getPotenciaEletrica() - this.getModoMotor().getProbAvaria();
     }
 }

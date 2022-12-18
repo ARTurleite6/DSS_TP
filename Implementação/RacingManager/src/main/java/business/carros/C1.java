@@ -4,6 +4,8 @@ import business.campeonatos.Piloto;
 
 public class C1 extends Carro implements Afinavel {
 
+    private static int C1_CILINDRADA = 6000;
+
     private float afinacao;
 
     public C1() {
@@ -11,24 +13,25 @@ public class C1 extends Carro implements Afinavel {
         this.afinacao = 0;
     }
 
-    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float afinacao) {
-        super(modelo, marca, cilindrada, potenciaCombustao);
+
+    public C1(String modelo, String marca, int potenciaCombustao, float afinacao) {
+        super(modelo, marca, C1.C1_CILINDRADA, potenciaCombustao);
         this.afinacao = afinacao;
     }
 
-    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float afinacao) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
-        this.afinacao = afinacao;
-    }
-
-    public C1(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, int afinacao) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
+    public C1(String modelo, String marca, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, int afinacao) {
+        super(modelo, marca, C1.C1_CILINDRADA, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
         this.afinacao = afinacao;
     }
 
     public C1(C1 c) {
         super(c);
         this.afinacao = c.getAfinacao();
+    }
+
+    @Override
+    public int getFiabilidade() {
+        return (int)(95 - this.getAfinacao());
     }
 
     @Override

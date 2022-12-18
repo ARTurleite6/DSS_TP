@@ -1,6 +1,7 @@
 package data;
 
 import business.carros.*;
+import business.exceptions.CilindradaInvalidaException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,7 @@ public class CarrosDAO implements Map<String, Carro> {
   }
 
   private @Nullable Carro getC1OrC2(@NotNull PreparedStatement pt1, PreparedStatement pt1h, String modelo,
-                                    String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
+                                    String marca, int cilindrada, int potenciaCombustao) {
     try {
       pt1.setString(1, modelo);
       try(var rs2 = pt1.executeQuery()) {
@@ -69,11 +70,11 @@ public class CarrosDAO implements Map<String, Carro> {
             try(var rs3 = pt1h.executeQuery()) {
               if(!rs3.next()) return null;
               var potencia_eletrica = rs3.getInt(2);
-              return new C1H(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao, potencia_eletrica);
+              return new C1H(modelo, marca, potenciaCombustao, afinacao, potencia_eletrica);
             }
           } else {
             System.out.println("Não é Hibrido");
-            return new C1(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, afinacao);
+            return new C1(modelo, marca, potenciaCombustao, afinacao);
           }
       }
     } catch (SQLException e) {
@@ -103,14 +104,13 @@ public class CarrosDAO implements Map<String, Carro> {
         var marca = rs.getString(2);
         var cilindrada = rs.getInt(3);
         var potenciaCombustao = rs.getInt(4);
-        var fiabilidade = rs.getInt(5);
-        var tipo = rs.getString(6);
+        var tipo = rs.getString(5);
 
         if (tipo.equals("C1")) {
           System.out.println("Tipo C1");
-          return this.getC1OrC2(c1s, c1hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+          return this.getC1OrC2(c1s, c1hs, modelo, marca, cilindrada, potenciaCombustao);
         } else if (tipo.equals("C2")) {
-          return this.getC1OrC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+          return this.getC1OrC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao);
         } else if (tipo.equals("GT")) {
           gts.setString(1, modelo);
           try (var gtr = gts.executeQuery()) {
@@ -122,22 +122,26 @@ public class CarrosDAO implements Map<String, Carro> {
               try(var gthr = gths.executeQuery()) {
                 if(!gthr.next()) return null;
                 var potenciaEletrica = gthr.getInt(2);
-                return new GTH(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste, potenciaEletrica);
+                return new GTH(modelo, marca, cilindrada, potenciaCombustao, fatorDesgaste, potenciaEletrica);
               }
             } else {
-              return new GT(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste);
+              try {
+                return new GT(modelo, marca, cilindrada, potenciaCombustao, fatorDesgaste);
+              } catch (CilindradaInvalidaException e) {
+                throw new RuntimeException(e);
+              }
             }
           }
         } else if (tipo.equals("SC")) {
           scs.setString(1, modelo);
           try(var scr = scs.executeQuery()) {
             if(!scr.next()) return null;
-            return new SC(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+            return new SC(modelo, marca, potenciaCombustao);
           }
           }
           return null;
       }
-    } catch (SQLException e) {
+    } catch (SQLException | CilindradaInvalidaException e) {
       throw new RuntimeException(e);
     }
   }
@@ -148,7 +152,7 @@ public class CarrosDAO implements Map<String, Carro> {
 
     try (
     var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
-    var pt1 = conn.prepareStatement("INSERT INTO Carro(modelo, marca, cilindrada, potencia_combustao, fiabilidade, tipo) VALUES(?, ?, ?, ?, ?, ?)");
+    var pt1 = conn.prepareStatement("INSERT INTO Carro(modelo, marca, cilindrada, potencia_combustao, tipo) VALUES(?, ?, ?, ?, ?)");
   ) {
       if(carro == null) {
         //get all attributes from value
@@ -156,7 +160,6 @@ public class CarrosDAO implements Map<String, Carro> {
         var marca = value.getMarca();
         var cilindrada = value.getCilindrada();
         var potenciaCombustao = value.getPotenciaCombustao();
-        var fiabilidade = value.getFiabilidade();
         var tipo = value.getClass().getSimpleName();
         var hibrido = false;
         if(tipo.equals("C1H")) {
@@ -176,8 +179,7 @@ public class CarrosDAO implements Map<String, Carro> {
         pt1.setString(2, marca);
         pt1.setInt(3, cilindrada);
         pt1.setInt(4, potenciaCombustao);
-        pt1.setFloat(5, fiabilidade);
-        pt1.setString(6, tipo);
+        pt1.setString(5, tipo);
         pt1.executeUpdate();
         //insert into C1, C2, GT, SC
         if(tipo.equals("C1")) {
@@ -235,12 +237,11 @@ public class CarrosDAO implements Map<String, Carro> {
       }
       else {
         //update Carro
-        var pt2 = conn.prepareStatement("UPDATE Carro SET marca = ?, cilindrada = ?, potencia_combustao = ?, fiabilidade = ? WHERE modelo = ?");
+        var pt2 = conn.prepareStatement("UPDATE Carro SET marca = ?, cilindrada = ?, potencia_combustao = ?, WHERE modelo = ?");
         pt2.setString(1, value.getMarca());
         pt2.setInt(2, value.getCilindrada());
         pt2.setInt(3, value.getPotenciaCombustao());
-        pt2.setFloat(4, value.getFiabilidade());
-        pt2.setString(5, value.getModelo());
+        pt2.setString(4, value.getModelo());
         pt2.executeUpdate();
         //update C1, C2, GT, SC
         var tipo = value.getClass().getSimpleName();

@@ -2,8 +2,7 @@ import business.IRacingManagerLNFacade;
 import business.RacingManagerLNFacade;
 import business.campeonatos.Circuito;
 import business.campeonatos.GDU;
-import business.carros.C1;
-import business.carros.C1H;
+import business.carros.*;
 import business.exceptions.*;
 import business.users.Admin;
 import business.users.Autenticavel;
@@ -226,17 +225,16 @@ public class RacingManager {
             System.out.println(carro);
     }
 
-    private void handleAddC1(String marca, String modelo, int cilindrada, int potenciaCombustao) {
+    private void handleAddC1(String marca, String modelo, int potenciaCombustao) {
         System.out.println("Deseja que o carro seja hibrido?S/N");
         String choice = this.scanner.nextLine();
-        var potenciaEletrica = -1;
         if(choice.equals("S")) {
             System.out.println("Indique a potencia do motor eletrico do carro.");
-            potenciaEletrica = Integer.parseInt(this.scanner.nextLine());
+            int potenciaEletrica = Integer.parseInt(this.scanner.nextLine());
             System.out.println("Insira o valor do PAC(Perfil AeroDinâmico) do carro.(Valor entre 0  e 1)");
             float afinacao = Float.parseFloat(this.scanner.nextLine());
             try {
-                this.facade.addCarro(new C1H(modelo, marca, cilindrada, potenciaCombustao, afinacao, potenciaEletrica));
+                this.facade.addCarro(new C1H(modelo, marca, potenciaCombustao, afinacao, potenciaEletrica));
                 System.out.println("Carro adicionado com sucesso.");
             } catch (CarroJaExisteException e) {
                 System.out.println(e.getMessage());
@@ -245,7 +243,7 @@ public class RacingManager {
             System.out.println("Insira o valor do PAC(Perfil AeroDinâmico) do carro.(Valor entre 0  e 1)");
             float afinacao = Float.parseFloat(this.scanner.nextLine());
             try {
-                this.facade.addCarro(new C1(modelo, marca, cilindrada, potenciaCombustao, afinacao));
+                this.facade.addCarro(new C1(modelo, marca, potenciaCombustao, afinacao));
                 System.out.println("Carro adicionado com sucesso");
             } catch (CarroJaExisteException e) {
                 System.out.println(e.getMessage());
@@ -256,15 +254,68 @@ public class RacingManager {
     }
 
     private void handleAddC2(String marca, String modelo, int cilindrada, int potenciaCombustao) {
-
+        System.out.println("Deseja que o carro seja hibrido?S/N");
+        String choice = this.scanner.nextLine();
+        var potenciaEletrica = -1;
+        if(choice.equals("S")) {
+            System.out.println("Indique a potencia do motor eletrico do carro.");
+            potenciaEletrica = Integer.parseInt(this.scanner.nextLine());
+            System.out.println("Insira o valor do PAC(Perfil AeroDinâmico) do carro.(Valor entre 0  e 1)");
+            float afinacao = Float.parseFloat(this.scanner.nextLine());
+            try {
+                this.facade.addCarro(new C2H(modelo, marca, cilindrada, potenciaCombustao, afinacao, potenciaEletrica));
+                System.out.println("Carro adicionado com sucesso.");
+            } catch (CarroJaExisteException | CilindradaInvalidaException e) {
+                System.out.println(e.getMessage());
+            }
+        } else if(choice.equals("N")) {
+            System.out.println("Insira o valor do PAC(Perfil AeroDinâmico) do carro.(Valor entre 0  e 1)");
+            float afinacao = Float.parseFloat(this.scanner.nextLine());
+            try {
+                this.facade.addCarro(new C2(modelo, marca, cilindrada, potenciaCombustao, afinacao));
+                System.out.println("Carro adicionado com sucesso");
+            } catch (CarroJaExisteException e) {
+                System.out.println(e.getMessage());
+            } catch (CilindradaInvalidaException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("Opção inválida.");
+        }
     }
 
     private void handleAddGT(String marca, String modelo, int cilindrada, int potenciaCombustao) {
-
+        System.out.println("Deseja que o carro seja Híbrido? S/N");
+        String choice = this.scanner.nextLine();
+        if(choice.equals("S")) {
+            System.out.println("Indique a potencia do motor eletrico do carro");
+            var potenciaEletrica = Integer.parseInt(this.scanner.nextLine());
+            System.out.println("Insira o fator desgaste do carro. (Quanto o carro se irá desgastar no decorrer das voltas)(Valor entre 0 e 1)");
+            float fatorDesgaste = Float.parseFloat(this.scanner.nextLine());
+            try {
+                this.facade.addCarro(new GTH(marca, modelo, cilindrada, potenciaCombustao, fatorDesgaste, potenciaEletrica));
+            } catch (CarroJaExisteException | CilindradaInvalidaException e) {
+                System.out.println(e.getMessage());
+            }
+        } else if(choice.equals("N")) {
+            System.out.println("Insira o fator desgaste do carro. (Quanto o carro se irá desgastar no decorrer das voltas)(Valor entre 0 e 1)");
+            float fatorDesgaste = Float.parseFloat(this.scanner.nextLine());
+            try {
+                this.facade.addCarro(new GT(marca, modelo, cilindrada, potenciaCombustao, fatorDesgaste));
+            } catch (CarroJaExisteException | CilindradaInvalidaException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Opção inválida");
+        }
     }
 
-    private void handleAddSC(String marca, String modelo, int cilindrada, int potenciaCombustao) {
-
+    private void handleAddSC(String marca, String modelo, int potenciaCombustao) {
+        try {
+            this.facade.addCarro(new SC(marca, modelo, potenciaCombustao));
+        } catch (CarroJaExisteException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void handleAddCarro() {
@@ -283,15 +334,19 @@ public class RacingManager {
             var marca = this.scanner.nextLine();
             System.out.println("Indique a modelo do carro.");
             var modelo = this.scanner.nextLine();
-            System.out.println("Indique a cilindrada do carro.");
-            var cilindrada = Integer.parseInt(this.scanner.nextLine());
+            int cilindrada = -1;
+            if(choice != 1 && choice != 4) {
+                System.out.println("Indique a cilindrada do carro.");
+                cilindrada = Integer.parseInt(this.scanner.nextLine());
+            }
             System.out.println("Indique a potencia do motor de combustão do carro.");
             var potencia = Integer.parseInt(this.scanner.nextLine());
+            int finalCilindrada = cilindrada;
             List<Handler> handlers = List.of(
-                    () -> this.handleAddC1(marca, modelo, cilindrada, potencia),
-                    () -> this.handleAddC2(marca, modelo, cilindrada, potencia),
-                    () -> this.handleAddGT(marca, modelo, cilindrada, potencia),
-                    () -> this.handleAddSC(marca, modelo, cilindrada, potencia)
+                    () -> this.handleAddC1(marca, modelo, potencia),
+                    () -> this.handleAddC2(marca, modelo, finalCilindrada, potencia),
+                    () -> this.handleAddGT(marca, modelo, finalCilindrada, potencia),
+                    () -> this.handleAddSC(marca, modelo, potencia)
             );
             handlers.get(choice - 1).execute();
         } catch(NumberFormatException e) {

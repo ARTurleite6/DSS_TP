@@ -1,6 +1,7 @@
 package business.carros;
 
 import business.campeonatos.Piloto;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Carro {
 
@@ -8,7 +9,6 @@ public abstract class Carro {
     private String marca;
     private int cilindrada;
     private int potenciaCombustao;
-    private float fiabilidade;
     private int estadoPneu;
 
     private TipoPneu tipoPneu;
@@ -23,11 +23,7 @@ public abstract class Carro {
         this.marca = "";
         this.cilindrada = 0;
         this.potenciaCombustao = 0;
-        this.fiabilidade = 0;
-        this.estadoPneu = 0;
-        this.cilindrada = 0;
-        this.potenciaCombustao = 0;
-        this.fiabilidade = 0;
+
         this.estadoPneu = 0;
         this.tipoPneu = TipoPneu.Macio;
         this.modoMotor = ModoMotor.Base;
@@ -42,7 +38,6 @@ public abstract class Carro {
         this.marca = marca;
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
-        this.fiabilidade = 100;
 
         this.estadoPneu = 100;
         this.tipoPneu = TipoPneu.Macio;
@@ -58,7 +53,6 @@ public abstract class Carro {
         this.marca = marca;
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
-        this.fiabilidade = fiabilidade;
 
         this.estadoPneu = 100;
         this.tipoPneu = TipoPneu.Macio;
@@ -69,12 +63,11 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu,Piloto piloto, boolean dnf, int tempo, boolean despiste) {
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
         this.modelo = modelo;
         this.marca = marca;
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
-        this.fiabilidade = fiabilidade;
         this.estadoPneu = estadoPneu;
         this.modoMotor = modoMotor;
         this.tipoPneu = tipoPneu;
@@ -84,12 +77,11 @@ public abstract class Carro {
         this.despiste = despiste;
     }
 
-    public Carro(Carro c) {
+    public Carro(@NotNull Carro c) {
         this.modelo = c.getModelo();
         this.marca = c.getMarca();
         this.cilindrada = c.getCilindrada();
         this.potenciaCombustao = c.getPotenciaCombustao();
-        this.fiabilidade = c.getFiabilidade();
         this.estadoPneu = c.getEstadoPneu();
         this.piloto = c.getPiloto();
         this.dnf = c.isDnf();
@@ -113,9 +105,7 @@ public abstract class Carro {
         return potenciaCombustao;
     }
 
-    public float getFiabilidade() {
-        return fiabilidade;
-    }
+    public abstract int getFiabilidade();
 
     public int getEstadoPneu() {
         return estadoPneu;
@@ -178,7 +168,6 @@ public abstract class Carro {
 
         if (getCilindrada() != carro.getCilindrada()) return false;
         if (getPotenciaCombustao() != carro.getPotenciaCombustao()) return false;
-        if (Float.compare(carro.getFiabilidade(), getFiabilidade()) != 0) return false;
         if (getEstadoPneu() != carro.getEstadoPneu()) return false;
         if (isDnf() != carro.isDnf()) return false;
         if (getTempo() != carro.getTempo()) return false;
@@ -196,7 +185,6 @@ public abstract class Carro {
         result = 31 * result + getMarca().hashCode();
         result = 31 * result + getCilindrada();
         result = 31 * result + getPotenciaCombustao();
-        result = 31 * result + (getFiabilidade() != +0.0f ? Float.floatToIntBits(getFiabilidade()) : 0);
         result = 31 * result + getEstadoPneu();
         result = 31 * result + getTipoPneu().hashCode();
         result = 31 * result + getModoMotor().hashCode();

@@ -33,11 +33,11 @@ class JogadorDAOTest {
 
     @Test
     void put() {
-        JogadorAutenticavel jogador = new JogadorAutenticavel("Test1", "1234");
+        JogadorAutenticavel jogador = new JogadorAutenticavel("Test1", "1234", false);
         int antes = dao.size();
         assertNull(dao.put(jogador.getUsername(), jogador));
         assertEquals(antes + 1, dao.size());
-        var a = new JogadorAutenticavel("Test2", "1234");
+        var a = new JogadorAutenticavel("Test2", "1234", false);
         assertNull(dao.put(a.getUsername(), a));
         assertEquals(antes + 2, dao.size());
         dao.clear();
@@ -46,7 +46,7 @@ class JogadorDAOTest {
 
     @Test
     void remove() {
-        JogadorAutenticavel jogador = new JogadorAutenticavel("Teste1", "1234");
+        JogadorAutenticavel jogador = new JogadorAutenticavel("Teste1", "1234", false);
         dao.clear();
         var size = dao.size();
         assertEquals(0, size);
@@ -63,11 +63,11 @@ class JogadorDAOTest {
         dao.clear();
         assertEquals(0, dao.size());
         Map<String, JogadorAutenticavel> jogadores = Map.of(
-                "Teste1", new JogadorAutenticavel("Teste1", "1234"),
-                "Teste2", new JogadorAutenticavel("Teste2", "1234"),
-                "Teste3", new JogadorAutenticavel("Teste3", "1234"),
-                "Teste4", new JogadorAutenticavel("Teste4", "1234"),
-                "Teste5", new JogadorAutenticavel("Teste5", "1234")
+                "Teste1", new JogadorAutenticavel("Teste1", "1234", false),
+                "Teste2", new JogadorAutenticavel("Teste2", "1234", false),
+                "Teste3", new JogadorAutenticavel("Teste3", "1234", false),
+                "Teste4", new JogadorAutenticavel("Teste4", "1234", false),
+                "Teste5", new JogadorAutenticavel("Teste5", "1234", false)
         );
         dao.putAll(jogadores);
         assertEquals(jogadores.size(), dao.size());

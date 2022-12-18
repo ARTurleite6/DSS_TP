@@ -1,6 +1,7 @@
 package business.carros;
 
 import business.campeonatos.Piloto;
+import business.exceptions.CilindradaInvalidaException;
 
 public class GT extends Carro {
     private float fatorDesgaste;
@@ -10,13 +11,15 @@ public class GT extends Carro {
         this.fatorDesgaste = 0;
     }
 
-    public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float fatorDesgaste) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade);
+    public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, float fatorDesgaste) throws CilindradaInvalidaException {
+        super(modelo, marca, cilindrada, potenciaCombustao);
+        if(cilindrada < 2000 || cilindrada > 4000) throw new CilindradaInvalidaException("GTs apenas podem ter cilindradas num intervalo de 3000 e 5000");
         this.fatorDesgaste = fatorDesgaste;
     }
 
-    public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, float fatorDesgaste) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
+    public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, float fatorDesgaste) throws CilindradaInvalidaException {
+        super(modelo, marca, cilindrada, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
+        if(cilindrada < 2000 || cilindrada > 4000) throw new CilindradaInvalidaException("GTs apenas podem ter cilindradas num intervalo de 3000 e 5000");
         this.fatorDesgaste = fatorDesgaste;
     }
 
@@ -56,7 +59,12 @@ public class GT extends Carro {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getFatorDesgaste() != +0.0f ? Float.floatToIntBits(getFatorDesgaste()) : 0);
+        result = 31 * result + (getFatorDesgaste() != 0.0f ? Float.floatToIntBits(getFatorDesgaste()) : 0);
         return result;
+    }
+
+    @Override
+    public int getFiabilidade() {
+        return (int)(((100000 / this.getCilindrada()) * 1.7) - this.getModoMotor().getProbAvaria());
     }
 }

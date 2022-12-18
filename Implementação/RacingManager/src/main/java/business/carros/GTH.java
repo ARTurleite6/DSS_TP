@@ -1,6 +1,7 @@
 package business.carros;
 
 import business.campeonatos.Piloto;
+import business.exceptions.CilindradaInvalidaException;
 
 public class GTH extends GT implements Hibrido {
 
@@ -11,13 +12,13 @@ public class GTH extends GT implements Hibrido {
         this.potenciaEletrica = 0;
     }
 
-    public GTH(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, float fatorDesgaste, int potenciaEletrica) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, fatorDesgaste);
+    public GTH(String modelo, String marca, int cilindrada, int potenciaCombustao, float fatorDestaste, int potenciaEletrica) throws CilindradaInvalidaException {
+        super(modelo, marca, cilindrada, potenciaCombustao, fatorDestaste);
         this.potenciaEletrica = potenciaEletrica;
     }
 
-    public GTH(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, float fatorDesgaste, int potenciaEletrica) {
-        super(modelo, marca, cilindrada, potenciaCombustao, fiabilidade, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste, fatorDesgaste);
+    public GTH(String modelo, String marca, int cilindrada, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, float fatorDesgaste, int potenciaEletrica) throws CilindradaInvalidaException {
+        super(modelo, marca, cilindrada, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste, fatorDesgaste);
         this.potenciaEletrica = potenciaEletrica;
     }
 
@@ -60,5 +61,10 @@ public class GTH extends GT implements Hibrido {
 
     public GTH clone() {
         return new GTH(this);
+    }
+
+    @Override
+    public int getFiabilidade() {
+        return super.getFiabilidade() - this.potenciaEletrica;
     }
 }
