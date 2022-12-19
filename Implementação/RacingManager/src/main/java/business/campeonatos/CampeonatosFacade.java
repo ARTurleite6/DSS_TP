@@ -174,4 +174,27 @@ public class CampeonatosFacade implements IGestCampeonatos {
     public boolean lobbyAberto() {
         return this.lobbyAtivo != null && this.lobbyAtivo.isAberto();
     }
+
+    @Override
+    public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException {
+        var campeonato = this.getCampeonato(nomeCampeonato);
+        var circuitosCampeonato = campeonato.getCircuitos();
+        List<Circuito> res = new ArrayList<>(circuitos.size());
+        for(var circuitoNome : circuitosCampeonato) {
+            res.add(this.getCircuito(circuitoNome));
+        }
+        return res;
+    }
+
+    @Override
+    public void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
+        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento.");
+        this.lobbyAtivo.loginJogador(username, nomePiloto);
+    }
+
+    @Override
+    public Corrida getProxCorrida() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas {
+        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento");
+        return this.lobbyAtivo.getProxCorrida();
+    }
 }

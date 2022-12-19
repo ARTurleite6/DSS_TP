@@ -4,12 +4,13 @@ import business.exceptions.CarroInexistenteException;
 import business.exceptions.CarroJaExisteException;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IGestCarros {
     List<String> getCategorias();
     void addCarro(Carro carro) throws CarroJaExisteException;
     List<Carro> getCarros();
-    List<String> getModosMotor();
-    List<String> getTipoPneus();
+    Set<String> getModosMotor();
+    Set<String> getTipoPneus();
     Carro getCarro(String modelo) throws CarroInexistenteException;
 }

@@ -113,6 +113,7 @@ public class JogadorDAO implements Map<String, JogadorAutenticavel> {
         return jogador;
       } catch (SQLException e) {
         conn.rollback();
+        System.out.println(e.getMessage());
         throw new RuntimeException(e);
       }
     } catch (SQLException e) {

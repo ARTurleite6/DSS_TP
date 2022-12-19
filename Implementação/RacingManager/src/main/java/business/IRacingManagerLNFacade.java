@@ -28,8 +28,8 @@ public interface IRacingManagerLNFacade {
     List<String> getCategorias();
     void addCarro(Carro carro) throws CarroJaExisteException;
     List<Carro> getCarros();
-    List<String> getModosMotor();
-    List<String> getTiposPneus();
+    Set<String> getModosMotor();
+    Set<String> getTiposPneus();
     void addPiloto(String piloto, int cts, int sva) throws PilotoInexistenteException;
     List<Piloto> getPilotos();
     String getRankingGlobal();
@@ -40,4 +40,9 @@ public interface IRacingManagerLNFacade {
     Autenticavel autenticaUtilizador(String username, String password) throws UtilizadorNaoExisteException;
     boolean existeUsername(String username);
     void atualizaPontuacoes(Map<String, Integer> classificacoesJogador);
+
+    List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
+    void loginJogadorLobby(String username, String password, String nomePiloto) throws UtilizadorNaoExisteException, PilotoInexistenteException, LobbyAtivoInexistenteException;
+
+    Corrida getProxCorrida() throws NaoExistemMaisCorridas, LobbyAtivoInexistenteException;
 }

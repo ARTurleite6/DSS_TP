@@ -101,10 +101,18 @@ public class Corrida {
 
     }
 
+    public Circuito getCircuito() {
+        return this.circuito;
+    }
+
     private void lidaUltrapassagens(int carro, int volta, GDU seccao, boolean premium) {
     }
 
     Map<String, Integer> getPontuacoes() {
         return null;
+    }
+
+    public Corrida clone() {
+        return new Corrida(this);
     }
 }

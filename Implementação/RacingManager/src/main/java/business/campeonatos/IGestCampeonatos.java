@@ -32,4 +32,10 @@ public interface IGestCampeonatos {
     boolean existeLobbyAtivo();
     Piloto getPiloto(String nomePiloto) throws PilotoInexistenteException;
     boolean lobbyAberto();
+
+    public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
+
+    void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
+
+    Corrida getProxCorrida() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;
 }

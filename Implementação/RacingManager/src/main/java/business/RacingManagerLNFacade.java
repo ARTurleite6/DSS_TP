@@ -11,6 +11,7 @@ import business.users.UsersFacade;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     private final IGestCarros carrosFacade;
@@ -37,9 +38,8 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public void inscreveJogador(String username, String modeloCarro, String nomePiloto) throws NaoExisteLobbyAbertoException, UsernameInvalidoException, CarroInexistenteException, PilotoInexistenteException, LobbyAtivoInexistenteException {
+    public void inscreveJogador(String username, String modeloCarro, String nomePiloto) throws NaoExisteLobbyAbertoException, CarroInexistenteException, PilotoInexistenteException, LobbyAtivoInexistenteException {
         if(!this.campeonatosFacade.lobbyAberto()) throw new NaoExisteLobbyAbertoException("Não existe nenhum lobby aberto no momento");
-        if(this.usersFacade.existeJogador(username) && !this.usersFacade.jogadorAutenticado(username)) throw new UsernameInvalidoException("Não é permitido utilizar um username de um jogador registado a não ser que esteja autenticado");
 
         var carro = this.carrosFacade.getCarro(modeloCarro);
         this.campeonatosFacade.inscreveJogador(username, carro, nomePiloto);
@@ -124,12 +124,12 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public List<String> getModosMotor() {
+    public Set<String> getModosMotor() {
         return this.carrosFacade.getModosMotor();
     }
 
     @Override
-    public List<String> getTiposPneus() {
+    public Set<String> getTiposPneus() {
         return this.carrosFacade.getTipoPneus();
     }
 
@@ -173,6 +173,16 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
         return this.usersFacade.autenticaUtilizador(username, password);
     }
 
+    public void loginJogadorLobby(String username, String password, String nomePiloto) throws UtilizadorNaoExisteException, PilotoInexistenteException, LobbyAtivoInexistenteException {
+        this.usersFacade.autenticaUtilizador(username, password);
+        this.campeonatosFacade.loginJogador(username, nomePiloto);
+    }
+
+    @Override
+    public Corrida getProxCorrida() throws NaoExistemMaisCorridas, LobbyAtivoInexistenteException {
+        return this.campeonatosFacade.getProxCorrida();
+    }
+
     @Override
     public boolean existeUsername(String username) {
         return this.usersFacade.existeUtilizador(username);
@@ -181,5 +191,10 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     @Override
     public void atualizaPontuacoes(Map<String, Integer> classificacoesJogador) {
         this.usersFacade.atualizaPontuacoes(classificacoesJogador);
+    }
+
+    @Override
+    public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException {
+        return this.campeonatosFacade.getCircuitosCampeonato(nomeCampeonato);
     }
 }

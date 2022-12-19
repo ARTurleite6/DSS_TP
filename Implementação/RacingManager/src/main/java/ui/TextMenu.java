@@ -4,27 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Menu {
+public class TextMenu {
     private List<String> opcoes;
     private List<Handler> handlers;
     private List<PreCondition> preConditions;
     private Scanner scan;
 
-    public Menu(Scanner scan) {
+    public TextMenu(Scanner scan) {
         this.opcoes = new ArrayList<>();
         this.handlers = new ArrayList<>();
         this.preConditions = new ArrayList<>();
         this.scan = scan;
     }
 
-    public Menu(List<String> opcoes, List<Handler> handlers, List<PreCondition> preConditions, Scanner scan) {
+    public TextMenu(List<String> opcoes, List<Handler> handlers, List<PreCondition> preConditions, Scanner scan) {
         this.opcoes = new ArrayList<>(opcoes);
         this.handlers = new ArrayList<>(handlers);
         this.preConditions = new ArrayList<>(preConditions);
         this.scan = scan;
     }
 
-    public Menu(Menu m) {
+    public TextMenu(TextMenu m) {
         this.opcoes = new ArrayList<>(m.opcoes);
         this.handlers = new ArrayList<>(m.handlers);
         this.preConditions = new ArrayList<>(m.preConditions);

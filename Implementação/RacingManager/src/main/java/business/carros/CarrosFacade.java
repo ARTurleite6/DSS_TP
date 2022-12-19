@@ -6,9 +6,9 @@ import data.CarrosDAO;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CarrosFacade implements IGestCarros {
 
@@ -45,13 +45,13 @@ public class CarrosFacade implements IGestCarros {
     }
 
     @Override
-    public List<String> getModosMotor() {
-        return List.of("Conservador", "Agressivo", "Base");
+    public Set<String> getModosMotor() {
+        return Set.of("Conservador", "Agressivo", "Base");
     }
 
     @Override
-    public List<String> getTipoPneus() {
-        return List.of("Duro", "Macio", "Chuva");
+    public Set<String> getTipoPneus() {
+        return Set.of("Duro", "Macio", "Chuva");
     }
 
     @Override

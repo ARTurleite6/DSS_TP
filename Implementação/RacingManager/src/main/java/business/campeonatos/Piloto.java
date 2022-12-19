@@ -68,4 +68,8 @@ public class Piloto {
         if (getSva() != piloto.getSva()) return false;
         return getNome().equals(piloto.getNome());
     }
+
+    public String imprimePiloto() {
+        return "Piloto: Nome = " + this.getNome() + ", sva = " + this.getSva() + ", cts = " + this.getCts();
+    }
 }

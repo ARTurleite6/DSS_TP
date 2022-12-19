@@ -5,6 +5,7 @@ import business.exceptions.CarroNaoAfinavel;
 import business.exceptions.MaximoAfinacoesExceptions;
 import business.exceptions.NaoExistemMaisCorridas;
 import business.exceptions.PilotoInexistenteException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ public class Lobby {
         this.carros = new HashMap<>();
     }
 
-    public Lobby(String nomeCampeonato, Set<Circuito> circuitos, boolean premium) {
+    public Lobby(String nomeCampeonato, @NotNull Set<Circuito> circuitos, boolean premium) {
         this.codigo = 0;
         this.classificacoes = new HashMap<>();
         this.classificacoesH = new HashMap<>();
@@ -50,7 +51,7 @@ public class Lobby {
         this.carros = new HashMap<>();
     }
 
-    public Lobby(Lobby l) {
+    public Lobby(@NotNull Lobby l) {
         this.codigo = l.getCodigo();
         this.classificacoes = l.getClassificacoes();
         this.classificacoesH = l.getClassificacoesH();
@@ -225,7 +226,7 @@ public class Lobby {
         var carro = this.carros.get(nomePiloto);
         if(carro == null) throw new PilotoInexistenteException("Não existe nenhum piloto com o nome de " + nomePiloto + " no campeonato atual");
         var num_afinacoes = this.numAfinacoes.get(nomePiloto);
-        var totalAfinacoes = (this.corridas.size() * 2) / 3;
+        var totalAfinacoes = ((this.corridas.size() * 2) / 3);
         if(num_afinacoes == totalAfinacoes) throw new MaximoAfinacoesExceptions("O piloto com nome " + nomePiloto + " já atingiu o numero maximo de afinacoes");
         if(!(carro instanceof Afinavel afinavel)) throw new CarroNaoAfinavel("O piloto de nome " + nomePiloto + " não possui um carro afinavel");
         afinavel.setAfinacao(afinacao);
@@ -237,5 +238,15 @@ public class Lobby {
             if(username.equals(jogador)) return true;
         }
         return false;
+    }
+
+    public void loginJogador(String username, String nomePiloto) throws PilotoInexistenteException {
+        if(!this.jogadores.containsKey(nomePiloto)) throw new PilotoInexistenteException("Não existe nenhum piloto com nome " + nomePiloto + " no lobby atual");
+        this.jogadores.put(nomePiloto, username);
+    }
+
+    public Corrida getProxCorrida() throws NaoExistemMaisCorridas {
+        if(this.numCorrida >= this.corridas.size()) throw new NaoExistemMaisCorridas("Já se efetuaram todas as corridas disponiveis");
+        return this.corridas.get(this.numCorrida).clone();
     }
 }
