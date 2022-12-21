@@ -6,6 +6,7 @@ import business.exceptions.MaximoAfinacoesExceptions;
 import business.exceptions.NaoExistemMaisCorridas;
 import business.exceptions.PilotoInexistenteException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -192,11 +193,18 @@ public class Lobby {
         corrida.addCorredores(this.carros);
         var resultados = corrida.simulaCorrida(this.premium);
         this.atualizaClassificacoes(resultados);
+        this.numCorrida++;
         return corrida.printResultadosFinais();
     }
 
-    private void atualizaClassificacoes(Map<String, Integer> resultados) {
-
+    private void atualizaClassificacoes(@NotNull Map<String, Integer> resultados) {
+        for(var entry : resultados.entrySet()) {
+            if(this.carros.get(entry.getKey()) instanceof Hibrido) {
+                this.classificacoesH.put(entry.getKey(), entry.getValue());
+            } else {
+                this.classificacoes.put(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     public boolean existemMaisCorridas() {
@@ -245,8 +253,8 @@ public class Lobby {
         this.jogadores.put(nomePiloto, username);
     }
 
-    public Corrida getProxCorrida() throws NaoExistemMaisCorridas {
-        if(this.numCorrida >= this.corridas.size()) throw new NaoExistemMaisCorridas("Já se efetuaram todas as corridas disponiveis");
+    public @Nullable Corrida getProxCorrida() {
+        if(this.numCorrida >= this.corridas.size()) return null;
         return this.corridas.get(this.numCorrida).clone();
     }
 }

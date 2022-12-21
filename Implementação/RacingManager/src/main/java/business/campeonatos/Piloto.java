@@ -72,4 +72,20 @@ public class Piloto {
     public String imprimePiloto() {
         return "Piloto: Nome = " + this.getNome() + ", sva = " + this.getSva() + ", cts = " + this.getCts();
     }
+
+    public int getQualidadeTempoSeco() {
+        return this.cts;
+    }
+
+    public int getQualidadeChuva() {
+        return 10 - this.cts;
+    }
+
+    public int getAgressividade() {
+        return this.sva;
+    }
+
+    public int getSeguranca() {
+        return 10 - this.sva;
+    }
 }

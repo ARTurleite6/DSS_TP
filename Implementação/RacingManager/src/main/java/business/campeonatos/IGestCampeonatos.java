@@ -4,6 +4,7 @@ import business.carros.Carro;
 import business.carros.ModoMotor;
 import business.carros.TipoPneu;
 import business.exceptions.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
@@ -37,5 +38,5 @@ public interface IGestCampeonatos {
 
     void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
 
-    Corrida getProxCorrida() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;
+    @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException;
 }

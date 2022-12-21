@@ -7,6 +7,7 @@ import business.users.Autenticavel;
 import business.users.IGestUsers;
 import business.users.JogadorAutenticavel;
 import business.users.UsersFacade;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -179,7 +180,7 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public Corrida getProxCorrida() throws NaoExistemMaisCorridas, LobbyAtivoInexistenteException {
+    public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
         return this.campeonatosFacade.getProxCorrida();
     }
 

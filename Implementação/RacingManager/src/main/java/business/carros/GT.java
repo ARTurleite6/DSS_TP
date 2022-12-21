@@ -1,7 +1,10 @@
 package business.carros;
 
+import business.campeonatos.GDU;
 import business.campeonatos.Piloto;
 import business.exceptions.CilindradaInvalidaException;
+
+import java.util.Random;
 
 public class GT extends Carro {
     private float fatorDesgaste;
@@ -66,5 +69,23 @@ public class GT extends Carro {
     @Override
     public int getFiabilidade() {
         return (int)(((100000 / this.getCilindrada()) * 1.7) - this.getModoMotor().getProbAvaria());
+    }
+
+    @Override
+    public boolean dnf(int volta, boolean chuva) {
+        int motorH = 0;
+        if(this instanceof Hibrido h)
+            motorH = h.getPotenciaEletrica() / 20;
+
+        Random random = new Random();
+        int x = random.nextInt(100);
+        int motorAvaria = this.getModoMotor().getProbAvaria();
+        return x > (((100000) / this.getCilindrada()) * 1.7) - (volta * this.fatorDesgaste) - motorH - motorAvaria - (100 - this.getEstado());
+    }
+
+
+    @Override
+    protected int categoryCompare(String categoria) {
+        return 0;
     }
 }

@@ -1,6 +1,9 @@
 package business.carros;
 
+import business.campeonatos.GDU;
 import business.campeonatos.Piloto;
+
+import java.util.Random;
 
 public class SC extends Carro {
 
@@ -42,5 +45,31 @@ public class SC extends Carro {
     @Override
     public int getFiabilidade() {
         return (int)((this.getCilindrada() / 10) * 0.25);
+    }
+
+    @Override
+    public boolean dnf(int volta, boolean chuva) {
+
+        int motorAvaria = this.getModoMotor().getProbAvaria();
+
+        var random = new Random();
+        int x = random.nextInt(100);
+
+        int qualidadePiloto;
+        var piloto = this.getPiloto();
+        if(piloto == null) return true;
+        if(chuva) {
+            qualidadePiloto = piloto.getQualidadeChuva();
+        } else {
+            qualidadePiloto = piloto.getQualidadeTempoSeco();
+        }
+
+        int seguranca = piloto.getSeguranca();
+        return x > (((qualidadePiloto + seguranca) * 0.75) + (((double) this.getCilindrada()) / 10) * 0.25) - motorAvaria - (100 - this.getEstado());
+    }
+
+    @Override
+    protected int categoryCompare(String categoria) {
+        return 0;
     }
 }

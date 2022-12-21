@@ -26,4 +26,10 @@ public enum TipoPneu {
             }
         }
     }
+
+    public int getDesempenho(int volta) {
+        if(this == Chuva) return 0;
+        else if(this == Macio) return 2000 / volta;
+        else return 1000;
+    }
 }

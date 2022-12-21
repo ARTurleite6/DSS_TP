@@ -6,9 +6,9 @@ import org.jetbrains.annotations.Nullable;
 
 public enum ModoMotor {
     //TODO por definir valores associados à probabilidade de avaria
-    Conservador(100), Agressivo(100), Base(100);
+    Conservador(1), Agressivo(5), Base(2);
 
-    private int probAvaria;
+    private final int probAvaria;
 
     private ModoMotor(int probAvaria) {
         this.probAvaria = probAvaria;
@@ -34,5 +34,11 @@ public enum ModoMotor {
                 return null;
             }
         }
+    }
+
+    public int getDesempenhoAdicional() {
+        if(this == Conservador) return -500;
+        else if(this == Agressivo) return 1000;
+        else return 0;
     }
 }

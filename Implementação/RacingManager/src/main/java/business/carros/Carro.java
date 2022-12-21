@@ -1,7 +1,10 @@
 package business.carros;
 
+import business.campeonatos.GDU;
 import business.campeonatos.Piloto;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public abstract class Carro {
 
@@ -9,7 +12,7 @@ public abstract class Carro {
     private String marca;
     private int cilindrada;
     private int potenciaCombustao;
-    private int estadoPneu;
+    private int estado;
 
     private TipoPneu tipoPneu;
     private ModoMotor modoMotor;
@@ -24,7 +27,7 @@ public abstract class Carro {
         this.cilindrada = 0;
         this.potenciaCombustao = 0;
 
-        this.estadoPneu = 0;
+        this.estado = 0;
         this.tipoPneu = TipoPneu.Macio;
         this.modoMotor = ModoMotor.Base;
         this.piloto = null;
@@ -39,7 +42,7 @@ public abstract class Carro {
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
 
-        this.estadoPneu = 100;
+        this.estado = 100;
         this.tipoPneu = TipoPneu.Macio;
         this.modoMotor = ModoMotor.Base;
         this.piloto = null;
@@ -54,7 +57,7 @@ public abstract class Carro {
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
 
-        this.estadoPneu = 100;
+        this.estado = 100;
         this.tipoPneu = TipoPneu.Macio;
         this.modoMotor = ModoMotor.Base;
         this.piloto = null;
@@ -63,12 +66,12 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int estado, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
         this.modelo = modelo;
         this.marca = marca;
         this.cilindrada = cilindrada;
         this.potenciaCombustao = potenciaCombustao;
-        this.estadoPneu = estadoPneu;
+        this.estado = estado;
         this.modoMotor = modoMotor;
         this.tipoPneu = tipoPneu;
         this.piloto = piloto.clone();
@@ -82,11 +85,13 @@ public abstract class Carro {
         this.marca = c.getMarca();
         this.cilindrada = c.getCilindrada();
         this.potenciaCombustao = c.getPotenciaCombustao();
-        this.estadoPneu = c.getEstadoPneu();
+        this.estado = c.getEstado();
         this.piloto = c.getPiloto();
         this.dnf = c.isDnf();
-        this.tempo = 0;
+        this.tempo = c.getTempo();
         this.despiste = c.isDespiste();
+        this.tipoPneu = c.getTipoPneu();
+        this.modoMotor = c.getModoMotor();
     }
 
     public String getModelo() {
@@ -107,8 +112,8 @@ public abstract class Carro {
 
     public abstract int getFiabilidade();
 
-    public int getEstadoPneu() {
-        return estadoPneu;
+    public int getEstado() {
+        return estado;
     }
 
     public Piloto getPiloto() {
@@ -122,6 +127,8 @@ public abstract class Carro {
     public void setDnf(boolean dnf) {
         this.dnf = dnf;
     }
+
+    public abstract boolean dnf(int volta, boolean chuva);
 
     public int getTempo() {
         return tempo;
@@ -168,7 +175,7 @@ public abstract class Carro {
 
         if (getCilindrada() != carro.getCilindrada()) return false;
         if (getPotenciaCombustao() != carro.getPotenciaCombustao()) return false;
-        if (getEstadoPneu() != carro.getEstadoPneu()) return false;
+        if (getEstado() != carro.getEstado()) return false;
         if (isDnf() != carro.isDnf()) return false;
         if (getTempo() != carro.getTempo()) return false;
         if (isDespiste() != carro.isDespiste()) return false;
@@ -185,7 +192,7 @@ public abstract class Carro {
         result = 31 * result + getMarca().hashCode();
         result = 31 * result + getCilindrada();
         result = 31 * result + getPotenciaCombustao();
-        result = 31 * result + getEstadoPneu();
+        result = 31 * result + getEstado();
         result = 31 * result + getTipoPneu().hashCode();
         result = 31 * result + getModoMotor().hashCode();
         result = 31 * result + getPiloto().hashCode();
@@ -197,4 +204,108 @@ public abstract class Carro {
 
     public abstract Carro clone();
     public abstract String toString();
+
+    public boolean despiste(int volta, boolean chuva) {
+        if(!this.dnf(volta, chuva)) return false;
+        Random random = new Random();
+        this.estado -= random.nextInt(10);
+        return true;
+    }
+
+    public int tempoProxSeccao(@NotNull GDU seccao, boolean chuva, int volta) {
+        int tempoMedio = seccao.getTempoMedio();
+        int fatorPotenciaCilindrada = this.cilindrada / this.getPotencia() * 100;
+        int minimo = 0;
+        int maximo = 2000;
+        int fatorSorte = minimo + Double.valueOf(Math.random() * (maximo - minimo)).intValue();
+        int qualidadeTempoSeco = this.piloto.getQualidadeTempoSeco();
+
+        int tempoChuva = 0;
+        if(chuva) {
+            qualidadeTempoSeco = 0;
+            int maximoChuva = 2000;
+            int fatorPneuChuva = 0;
+            if(this.tipoPneu != TipoPneu.Chuva)
+                fatorPneuChuva = 3000;
+            int qualidadeChuva = this.piloto.getQualidadeChuva();
+            tempoChuva = 3000 - (minimo + Double.valueOf(Math.random() * (maximoChuva - minimo)).intValue() + qualidadeChuva - fatorPneuChuva);
+        }
+
+        int agressividade = this.piloto.getAgressividade() * 100;
+        int desempenhoPneu = this.tipoPneu.getDesempenho(volta);
+        int fatorMotor = this.modoMotor.getDesempenhoAdicional();
+
+        int tempoDespiste = 10000;
+        if(!this.despiste) {
+            tempoDespiste = 0;
+        }
+
+        System.out.println("tempo medio " + tempoMedio);
+        System.out.println("tempo despiste " + tempoDespiste);
+        System.out.println("tempo chuva " + tempoChuva);
+        System.out.println("tempo potenciaCilindrada " + fatorPotenciaCilindrada);
+        System.out.println("fator sorte " + fatorSorte);
+        System.out.println("agressividade " + agressividade);
+        System.out.println("desempenho pneu " + desempenhoPneu);
+        System.out.println("qualidadeTempoSeco " + qualidadeTempoSeco);
+
+        return tempoMedio + tempoDespiste + tempoChuva - fatorSorte + fatorPotenciaCilindrada - agressividade - desempenhoPneu - fatorMotor - qualidadeTempoSeco;
+    }
+
+    private int getPotencia() {
+        int potenciaEletrica = 0;
+        if(this instanceof Hibrido h) potenciaEletrica = h.getPotenciaEletrica();
+        return this.potenciaCombustao + potenciaEletrica;
+    }
+
+    public boolean podeUltrapassar(GDU seccao, int volta, boolean chuva, @NotNull Carro carFrente, int tempoAnteriorFrente) {
+        boolean dnf = carFrente.isDnf();
+        boolean despistou = carFrente.isDespiste();
+        if(dnf) return true;
+        if(!this.despiste && despistou) return true;
+        if(this.despiste && !despistou) return false;
+
+        int tempoRequerido = this.categoryCompare(carFrente.getClass().getSimpleName());
+        if(Math.abs(tempoAnteriorFrente - this.tempo) > tempoRequerido) return false;
+
+        int desempenho1 = this.getDesempenho(volta, chuva);
+        int desempenho2 = this.getDesempenho(volta, chuva);
+        int fatorDificuldade = seccao.getDificuldade();
+        return desempenho1 - fatorDificuldade > desempenho2;
+    }
+
+    public boolean podeUltrapassar(GDU seccao, int volta, boolean chuva, @NotNull Carro carFrente) {
+        boolean dnf = carFrente.isDnf();
+        boolean despistou = carFrente.isDespiste();
+        if(dnf) return true;
+        if(!this.despiste && despistou) return true;
+        if(this.despiste && !despistou) return false;
+
+        int desempenho1 = this.getDesempenho(volta, chuva);
+        int desempenho2 = this.getDesempenho(volta, chuva);
+        int fatorDificuldade = seccao.getDificuldade();
+        return desempenho1 - fatorDificuldade > desempenho2;
+    }
+
+    protected int getDesempenho(int volta, boolean chuva) {
+        int fatorPotenciaCilindrada = this.cilindrada / this.getPotencia();
+        int qualidadeTempoSeco = this.piloto.getQualidadeTempoSeco();
+
+        int fatorPneuChuva = 0;
+        int qualidadeChuva = 0;
+        if(chuva) {
+            qualidadeTempoSeco = 0;
+            if(this.tipoPneu != TipoPneu.Chuva)
+                fatorPneuChuva = 10;
+            qualidadeChuva = this.piloto.getQualidadeChuva();
+        }
+
+        int agressividade = this.piloto.getAgressividade();
+        int desempenhoPneu = this.tipoPneu.getDesempenho(volta);
+        int fatorMotor = this.modoMotor.getDesempenhoAdicional();
+
+        return fatorPotenciaCilindrada + agressividade + desempenhoPneu + fatorMotor + qualidadeTempoSeco + fatorPneuChuva + qualidadeChuva;
+    }
+
+    protected abstract int categoryCompare(String categoria);
 }

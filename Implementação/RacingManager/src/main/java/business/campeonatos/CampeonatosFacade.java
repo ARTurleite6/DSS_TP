@@ -7,6 +7,7 @@ import data.CampeonatoDAO;
 import data.CircuitoDAO;
 import data.PilotosDAO;
 import business.exceptions.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -193,7 +194,7 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     @Override
-    public Corrida getProxCorrida() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas {
+    public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento");
         return this.lobbyAtivo.getProxCorrida();
     }

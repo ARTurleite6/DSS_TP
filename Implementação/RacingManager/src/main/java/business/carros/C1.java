@@ -2,9 +2,11 @@ package business.carros;
 
 import business.campeonatos.Piloto;
 
+import java.util.Random;
+
 public class C1 extends Carro implements Afinavel {
 
-    private static int C1_CILINDRADA = 6000;
+    private static final int C1_CILINDRADA = 6000;
 
     private float afinacao;
 
@@ -63,7 +65,7 @@ public class C1 extends Carro implements Afinavel {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (getAfinacao() != +0.0f ? Float.floatToIntBits(getAfinacao()) : 0);
+        result = 31 * result + (getAfinacao() != 0.0f ? Float.floatToIntBits(getAfinacao()) : 0);
         return result;
     }
 
@@ -72,5 +74,22 @@ public class C1 extends Carro implements Afinavel {
         return "C1{" +
                 "afinacao=" + afinacao +
                 '}';
+    }
+
+    @Override
+    public boolean dnf(int volta, boolean chuva) {
+        var motorH = 0;
+        if(this instanceof Hibrido hibrido) {
+            motorH = hibrido.getPotenciaEletrica() / 20;
+        }
+        Random random = new Random();
+        int x = random.nextInt(100);
+        int motorAvaria = this.getModoMotor().getProbAvaria();
+        return x > 95 - motorH - motorAvaria - (100 - this.getEstado());
+    }
+
+    @Override
+    protected int categoryCompare(String categoria) {
+        return 0;
     }
 }

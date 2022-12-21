@@ -1,6 +1,8 @@
 package business.campeonatos;
 
 import business.carros.Carro;
+import business.carros.Hibrido;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -51,12 +53,11 @@ public class Corrida {
         this.temposTotais = c.getTempos();
         this.dnf = new HashMap<>(c.dnf);
         this.temposVolta = new ArrayList<>();
-        var temposPorVolta = c.temposVolta;
-        for(var tempoVolta : temposPorVolta) {
-            temposPorVolta.add(new HashMap<>(tempoVolta));
+        for(var tempo : c.temposVolta) {
+            this.temposVolta.add(new HashMap<>(tempo));
         }
-        this.chuva = c.chuva;
-        this.circuito = c.circuito;
+        this.chuva = c.estaChover();
+        this.circuito = c.getCircuito();
         this.carros = c.getCarros();
     }
 
@@ -78,15 +79,69 @@ public class Corrida {
     }
 
     public Map<String, Integer> simulaCorrida(boolean premium) {
-        return null;
+        int numeroCarros = this.carros.size();
+        int numeroVoltas = this.circuito.getNumeroVoltas();
+        List<GDU> seccoes = this.circuito.getSeccoes();
+        for(int volta = 0; volta < numeroVoltas; ++volta) {
+            for(GDU seccao : seccoes) {
+                for(int i = numeroCarros - 1; i >= 0; --i) {
+                    var carroAtual = this.carros.get(i);
+                    var nomePiloto = carroAtual.getPiloto().getNome();
+                    var acidentou = carroAtual.isDnf();
+                    carroAtual.setDespiste(false);
+                    if(!acidentou) {
+                        boolean is_dnf = carroAtual.dnf(volta, this.chuva);
+                        if(is_dnf) {
+                            carroAtual.setDnf(true);
+                            this.dnf.put(nomePiloto, volta);
+                        }
+                        else {
+                            var despiste = carroAtual.despiste(volta, this.chuva);
+                            if(despiste) carroAtual.setDespiste(true);
+                            if(i == numeroCarros - 1) {
+                                int anterior = carroAtual.getTempo();
+                                int tempo = carroAtual.tempoProxSeccao(seccao, this.chuva, volta);
+                                carroAtual.setTempo(anterior + tempo);
+                            }
+                            else {
+                                this.lidaUltrapassagens(i, volta, seccao, premium);
+                            }
+                        }
+                    }
+                }
+            }
+            this.atualizaClassificacoes();
+        }
+        return this.getPontuacoes();
     }
 
     public String printResultadosFinais() {
-        return null;
+        StringBuilder s = new StringBuilder(this.printResultados(this.temposTotais));
+        for(var entry : this.dnf.entrySet()) {
+            s.append("\nPiloto: ").append(entry.getKey()).append(", acidentou-se na volta = ").append(entry.getValue() + 1);
+        }
+        return s.toString();
     }
 
     public String printResultados(int volta) {
-        return null;
+        return this.printResultados(this.temposVolta.get(volta));
+    }
+
+    @Contract(pure = true)
+    private @NotNull String printResultados(Map<String, Integer> resultados) {
+        StringBuilder s = new StringBuilder("\n------------------Resultados-------------------");
+        var list_aux = new ArrayList<>(this.carros);
+        list_aux.sort((c1, c2) -> resultados.get(c1.getPiloto().getNome()) - resultados.get(c2.getPiloto().getNome()));
+
+        int lugar = 1;
+        for(var carro : list_aux) {
+            var piloto = carro.getPiloto();
+            String nomePiloto = piloto.getNome();
+            var tempo = resultados.get(nomePiloto);
+            s.append("\nPiloto: ").append(nomePiloto).append(", lugar = ").append(lugar).append(", com tempo de ").append(tempo).append(" milisegundos");
+        }
+        s.append("\n----------Carros Acidentados-----------");
+        return s.toString();
     }
 
     public List<Carro> getCarros() {
@@ -98,7 +153,12 @@ public class Corrida {
     }
 
     private void atualizaClassificacoes() {
-
+        this.carros.forEach(carro -> {
+            int tempo = carro.getTempo();
+            String nomePiloto = carro.getPiloto().getNome();
+            this.temposTotais.put(nomePiloto, tempo);
+        });
+        this.temposVolta.add(new HashMap<>(this.temposTotais));
     }
 
     public Circuito getCircuito() {
@@ -106,10 +166,74 @@ public class Corrida {
     }
 
     private void lidaUltrapassagens(int carro, int volta, GDU seccao, boolean premium) {
+        int numeroCarros = this.carros.size();
+        var car1 = this.carros.get(carro);
+        var piloto = car1.getPiloto().getNome();
+        int tempoAnterior = this.temposTotais.get(piloto);
+        ++carro;
+        int minimo = -1;
+        while(carro < numeroCarros - 1 || minimo == -1) {
+            Carro carFrente = this.carros.get(carro);
+            String pilotoFrente = carFrente.getPiloto().getNome();
+            int tempoAnteriorFrente = this.temposTotais.get(pilotoFrente);
+            boolean ultrapassa;
+            if(premium) {
+                ultrapassa = car1.podeUltrapassar(seccao, volta, this.chuva, carFrente, tempoAnteriorFrente);
+            } else {
+                ultrapassa = car1.podeUltrapassar(seccao, volta, this.chuva, carFrente);
+            }
+            if(!ultrapassa) {
+                minimo = carFrente.getTempo();
+            }
+            ++carro;
+        }
+
+        if(minimo != -1) {
+            int delta = car1.tempoProxSeccao(seccao, this.chuva, volta);
+            int tempoProx = tempoAnterior + delta;
+            if(tempoProx <= minimo)
+                tempoProx = minimo + 500;
+            car1.setTempo(tempoProx);
+        } else {
+            int tempoProx = car1.tempoProxSeccao(seccao, this.chuva, volta);
+            car1.setTempo(tempoAnterior + tempoProx);
+        }
+
+        this.carros.sort((c1, c2) -> c2.getTempo() - c1.getTempo());
     }
 
-    Map<String, Integer> getPontuacoes() {
-        return null;
+    private @NotNull Map<String, Integer> getPontuacoes() {
+
+        Map<Integer, Integer> pontuacaoPosicao = Map.of(
+                1, 12,
+                2, 10,
+                3, 8,
+                4, 7,
+                5, 6,
+                6, 5,
+                7, 4,
+                8, 3,
+                9, 2,
+                10, 1
+        );
+
+        Map<String, Integer> pontuacoes = new HashMap<>();
+        int posicaoHibrido = 1;
+        int posicaoCombustao = 1;
+        for(var carro : this.carros) {
+            if(carro instanceof Hibrido) {
+                Integer pontuacao = pontuacaoPosicao.get(posicaoHibrido);
+                if(pontuacao == null) pontuacao = 0;
+                pontuacoes.put(carro.getPiloto().getNome(), pontuacao);
+                ++posicaoHibrido;
+            } else {
+                Integer pontuacao = pontuacaoPosicao.get(posicaoCombustao);
+                if(pontuacao == null) pontuacao = 0;
+                pontuacoes.put(carro.getPiloto().getNome(), pontuacao);
+                ++posicaoCombustao;
+            }
+        }
+        return pontuacoes;
     }
 
     public Corrida clone() {

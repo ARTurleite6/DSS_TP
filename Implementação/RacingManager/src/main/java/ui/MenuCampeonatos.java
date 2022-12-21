@@ -151,10 +151,17 @@ public class MenuCampeonatos implements SubMenu {
             circuitosCampeonato.forEach(Circuito::imprimeCircuito);
             int numeroJogadores = this.inscreveJogadoresCampeonato(lobby);
             Corrida corrida = this.facade.getProxCorrida();
-            System.out.println("A corrida terá situacao meteorológica de " + (corrida.estaChover() ? "chuva" : "tempo seco"));
-            System.out.println(corrida.getCircuito().imprimeCircuito());
-            this.handleAfinacoesVeiculos(numeroJogadores);
-            this.handleConfiguracoesVeiculo(numeroJogadores);
+            while(corrida != null){
+                System.out.println("A corrida terá situacao meteorológica de " + (corrida.estaChover() ? "chuva" : "tempo seco"));
+                System.out.println(corrida.getCircuito().imprimeCircuito());
+                this.handleAfinacoesVeiculos(numeroJogadores);
+                this.handleConfiguracoesVeiculo(numeroJogadores);
+
+                String resultado = this.facade.startNextRace();
+                System.out.println(resultado);
+
+                corrida = this.facade.getProxCorrida();
+            }
         } catch (CampeonatoNaoExisteException | CircuitoNaoExisteException | UtilizadorNaoExisteException |
                  CriarLobbySemAutenticacaoException | NumberFormatException | LobbyAtivoInexistenteException |
                  NaoExistemMaisCorridas e) {

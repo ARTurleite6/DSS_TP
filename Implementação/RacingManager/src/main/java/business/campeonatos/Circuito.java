@@ -129,4 +129,11 @@ public class Circuito {
         sb.append("\n-----------------------------");
         return sb.toString();
     }
+
+    public List<GDU> getSeccoes() {
+        var res = new ArrayList<GDU>(this.retas);
+        res.addAll(this.chicanes);
+        res.addAll(this.curvas);
+        return res;
+    }
 }

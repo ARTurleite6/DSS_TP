@@ -6,6 +6,7 @@ import business.carros.ModoMotor;
 import business.carros.TipoPneu;
 import business.exceptions.*;
 import business.users.Autenticavel;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -44,5 +45,5 @@ public interface IRacingManagerLNFacade {
     List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
     void loginJogadorLobby(String username, String password, String nomePiloto) throws UtilizadorNaoExisteException, PilotoInexistenteException, LobbyAtivoInexistenteException;
 
-    Corrida getProxCorrida() throws NaoExistemMaisCorridas, LobbyAtivoInexistenteException;
+    @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException;
 }
