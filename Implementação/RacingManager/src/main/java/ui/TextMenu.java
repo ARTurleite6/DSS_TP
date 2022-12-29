@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TextMenu {
-    private List<String> opcoes;
-    private List<Handler> handlers;
-    private List<PreCondition> preConditions;
-    private Scanner scan;
+    private final List<String> opcoes;
+    private final List<Handler> handlers;
+    private final List<PreCondition> preConditions;
+    private final Scanner scan;
 
     public TextMenu(Scanner scan) {
         this.opcoes = new ArrayList<>();
@@ -17,36 +17,12 @@ public class TextMenu {
         this.scan = scan;
     }
 
-    public TextMenu(List<String> opcoes, List<Handler> handlers, List<PreCondition> preConditions, Scanner scan) {
-        this.opcoes = new ArrayList<>(opcoes);
-        this.handlers = new ArrayList<>(handlers);
-        this.preConditions = new ArrayList<>(preConditions);
-        this.scan = scan;
-    }
-
-    public TextMenu(TextMenu m) {
-        this.opcoes = new ArrayList<>(m.opcoes);
-        this.handlers = new ArrayList<>(m.handlers);
-        this.preConditions = new ArrayList<>(m.preConditions);
-        this.scan = m.scan;
-    }
-
     public void addOption(String option, Handler handler, PreCondition preCondition) {
         this.opcoes.add(option);
         if(handler != null) this.handlers.add(handler);
         else this.handlers.add(() -> System.out.println("Não foi implementado ainda"));
         if(preCondition == null) this.preConditions.add(() -> true);
         else this.preConditions.add(preCondition);
-    }
-
-    public void setHandler(int i, Handler handler) {
-        if(i < 0 || i >= this.opcoes.size()) throw new IndexOutOfBoundsException();
-        this.handlers.set(i, handler);
-    }
-
-    public void setPreCondition(int i, PreCondition preCondition) {
-        if(i < 0 || i >= this.opcoes.size()) throw new IndexOutOfBoundsException();
-        this.preConditions.set(i, preCondition);
     }
 
     public void imprimeOpcoes() {
@@ -78,6 +54,8 @@ public class TextMenu {
                 }
             } catch(NumberFormatException e) {
                 System.out.println("Formato inválido, insira um numero");
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
             }
         }
     }

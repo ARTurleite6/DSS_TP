@@ -10,13 +10,12 @@ import java.util.List;
 import java.util.Set;
 
 public interface IGestCampeonatos {
-    boolean existeCircuito(String nomeCircuito);
     void addCampeonato(String campeonato, Set<String> circuitos) throws CampeonatoJaExisteException, CircuitoNaoExisteException;
     List<Campeonato> getCampeonatos();
     Lobby criaLobby(String campeonato, boolean premium) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
     void inscreveJogador(String username, Carro carro, String piloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
     void comecaCampeonato() throws LobbyAtivoInexistenteException, LobbyAlreadyStartedException;
-    String getTabelaClassificativa();
+    String getTabelaClassificativa() throws LobbyAtivoInexistenteException;
     void terminaCampeonato();
     String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;
     void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
@@ -25,7 +24,7 @@ public interface IGestCampeonatos {
     void addCircuito(String nomeCircuito, int distancia, List<GDU> chicanes, List<GDU> curvas, List<GDU> retas, int numeroVoltas) throws CircuitoJaExistenteException;
     List<Circuito> getCircuitos();
     Lobby getLobby() throws LobbyAtivoInexistenteException;
-    Lobby getLobby(int numLobby);
+
     List<Piloto> getPilotos();
     void addPiloto(String nome, int cts, int sva) throws PilotoInexistenteException;
     Campeonato getCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException;
@@ -34,9 +33,11 @@ public interface IGestCampeonatos {
     Piloto getPiloto(String nomePiloto) throws PilotoInexistenteException;
     boolean lobbyAberto();
 
-    public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
+    List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
 
     void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
 
     @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException;
+
+    void autenticaJogadorEmLobby(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
 }

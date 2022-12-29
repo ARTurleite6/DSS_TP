@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     private final IGestCarros carrosFacade;
@@ -52,12 +51,6 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public void comecaCampeonato() throws LobbyAtivoInexistenteException, LobbyAlreadyStartedException {
-        if(!this.campeonatosFacade.existeLobbyAtivo()) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo neste momento.");
-        this.campeonatosFacade.comecaCampeonato();
-    }
-
-    @Override
     public String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas {
         if(!this.campeonatosFacade.existeLobbyAtivo()) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento.");
         return this.campeonatosFacade.startNextRace();
@@ -89,14 +82,8 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public String getTabelaClassificativa() {
+    public String getTabelaClassificativa() throws LobbyAtivoInexistenteException {
         return this.campeonatosFacade.getTabelaClassificativa();
-    }
-
-    @Override
-    public List<Lobby> getHistoricoParticipacoes(String username) throws UtilizadorNaoExisteException {
-        if(this.usersFacade.existeJogador(username)) throw new UtilizadorNaoExisteException("Não existe nenhum utilizador com username " + username);
-        return this.campeonatosFacade.getHistoricoParticipacoes(username);
     }
 
     @Override
@@ -107,11 +94,6 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     @Override
     public List<Circuito> getCircuitos() {
         return this.campeonatosFacade.getCircuitos();
-    }
-
-    @Override
-    public List<String> getCategorias() {
-        return this.carrosFacade.getCategorias();
     }
 
     @Override
@@ -145,23 +127,8 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
     }
 
     @Override
-    public String getRankingGlobal() {
-        return this.usersFacade.getRankingGlobal();
-    }
-
-    @Override
-    public void atualizaPassword(String username, String password) throws UtilizadorNaoExisteException {
-        this.usersFacade.atualizaPassword(username, password);
-    }
-
-    @Override
     public void logout(String username) throws UtilizadorNaoExisteException {
         this.usersFacade.logOut(username);
-    }
-
-    @Override
-    public List<String> getTiposConta() {
-        return this.usersFacade.getTiposConta();
     }
 
     @Override
@@ -174,19 +141,17 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
         return this.usersFacade.autenticaUtilizador(username, password);
     }
 
-    public void loginJogadorLobby(String username, String password, String nomePiloto) throws UtilizadorNaoExisteException, PilotoInexistenteException, LobbyAtivoInexistenteException {
-        this.usersFacade.autenticaUtilizador(username, password);
-        this.campeonatosFacade.loginJogador(username, nomePiloto);
-    }
-
     @Override
     public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
         return this.campeonatosFacade.getProxCorrida();
     }
 
     @Override
-    public boolean existeUsername(String username) {
-        return this.usersFacade.existeUtilizador(username);
+    public void autenticaJogadorEmLobby(String username, String password, String nomePiloto) throws UtilizadorNaoExisteException, LobbyAtivoInexistenteException, PilotoInexistenteException {
+        if(!this.usersFacade.existeJogador(username)) throw new UtilizadorNaoExisteException("Não existe nenhum jogador com username " + username);
+        var jogador = this.usersFacade.getJogador(username);
+        if(jogador.getPassword().equals(password))
+            this.campeonatosFacade.autenticaJogadorEmLobby(username, nomePiloto);
     }
 
     @Override

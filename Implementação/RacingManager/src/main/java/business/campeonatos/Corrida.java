@@ -5,28 +5,16 @@ import business.carros.Hibrido;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Corrida {
-    private Map<String, Integer> temposTotais;
-    private Map<String, Integer> dnf;
-    private List<Map<String, Integer>> temposVolta;
-    private boolean chuva;
-    private Circuito circuito;
-    private List<Carro> carros;
-
-    public Corrida() {
-        this.temposTotais = new HashMap<>();
-        this.dnf = new HashMap<>();
-        this.temposVolta = new ArrayList<>();
-        this.chuva = false;
-        this.circuito = new Circuito();
-        this.carros = new ArrayList<>();
-    }
+    private final Map<String, Integer> temposTotais;
+    private final Map<String, Integer> dnf;
+    private final List<Map<String, Integer>> temposVolta;
+    private final boolean chuva;
+    private final Circuito circuito;
+    private final List<Carro> carros;
 
     public Corrida(boolean chuva, Circuito circuito) {
         this.temposTotais = new HashMap<>();
@@ -35,18 +23,6 @@ public class Corrida {
         this.chuva = chuva;
         this.circuito = circuito;
         this.carros = new ArrayList<>();
-    }
-
-    public Corrida(Map<String, Integer> temposTotais, Map<String, Integer> dnf, @NotNull List<Map<String, Integer>> tempos_volta, boolean chuva, Circuito circuito, List<Carro> carros) {
-        this.temposTotais = new HashMap<>(temposTotais);
-        this.dnf = new HashMap<>(dnf);
-        this.temposVolta = new ArrayList<>();
-        for(var tempo : tempos_volta) {
-            this.temposVolta.add(new HashMap<>(tempo));
-        }
-        this.chuva = chuva;
-        this.circuito = circuito;
-        this.carros = carros.stream().map(Carro::clone).collect(Collectors.toList());
     }
 
     public Corrida(@NotNull Corrida c) {
@@ -82,31 +58,34 @@ public class Corrida {
         int numeroCarros = this.carros.size();
         int numeroVoltas = this.circuito.getNumeroVoltas();
         List<GDU> seccoes = this.circuito.getSeccoes();
-        for(int volta = 0; volta < numeroVoltas; ++volta) {
+        for(int volta = 1; volta <= numeroVoltas; ++volta) {
+            for(var carro : this.carros) {
+                var acidentou = carro.isDnf();
+                if(!acidentou) {
+                    boolean is_dnf = carro.dnf(volta, this.chuva);
+                    if(is_dnf) {
+                        carro.setDnf(true);
+                        this.dnf.put(carro.getPiloto().getNome(), volta);
+                    }
+                }
+            }
             for(GDU seccao : seccoes) {
                 for(int i = numeroCarros - 1; i >= 0; --i) {
                     var carroAtual = this.carros.get(i);
-                    var nomePiloto = carroAtual.getPiloto().getNome();
                     var acidentou = carroAtual.isDnf();
                     carroAtual.setDespiste(false);
                     if(!acidentou) {
-                        boolean is_dnf = carroAtual.dnf(volta, this.chuva);
-                        if(is_dnf) {
-                            carroAtual.setDnf(true);
-                            this.dnf.put(nomePiloto, volta);
+                        var despiste = carroAtual.despiste(volta, this.chuva);
+                        if(despiste) carroAtual.setDespiste(true);
+                        if(i == numeroCarros - 1) {
+                            int anterior = carroAtual.getTempo();
+                            int tempo = carroAtual.tempoProxSeccao(seccao, this.chuva, volta);
+                            carroAtual.setTempo(anterior + tempo);
                         }
                         else {
-                            var despiste = carroAtual.despiste(volta, this.chuva);
-                            if(despiste) carroAtual.setDespiste(true);
-                            if(i == numeroCarros - 1) {
-                                int anterior = carroAtual.getTempo();
-                                int tempo = carroAtual.tempoProxSeccao(seccao, this.chuva, volta);
-                                carroAtual.setTempo(anterior + tempo);
-                            }
-                            else {
-                                this.lidaUltrapassagens(i, volta, seccao, premium);
-                            }
+                            this.lidaUltrapassagens(i, volta, seccao, premium);
                         }
+                        //}
                     }
                 }
             }
@@ -118,7 +97,7 @@ public class Corrida {
     public String printResultadosFinais() {
         StringBuilder s = new StringBuilder(this.printResultados(this.temposTotais));
         for(var entry : this.dnf.entrySet()) {
-            s.append("\nPiloto: ").append(entry.getKey()).append(", acidentou-se na volta = ").append(entry.getValue() + 1);
+            s.append("\nPiloto: ").append(entry.getKey()).append(", acidentou-se na volta = ").append(entry.getValue());
         }
         return s.toString();
     }
@@ -131,7 +110,9 @@ public class Corrida {
     private @NotNull String printResultados(Map<String, Integer> resultados) {
         StringBuilder s = new StringBuilder("\n------------------Resultados-------------------");
         var list_aux = new ArrayList<>(this.carros);
-        list_aux.sort((c1, c2) -> resultados.get(c1.getPiloto().getNome()) - resultados.get(c2.getPiloto().getNome()));
+        list_aux.sort(Comparator.comparingInt(c -> resultados.get(c.getPiloto().getNome())));
+        list_aux.sort((c1, c2) -> Boolean.compare(c1.isDnf(), c2.isDnf()));
+
 
         int lugar = 1;
         for(var carro : list_aux) {
@@ -139,6 +120,7 @@ public class Corrida {
             String nomePiloto = piloto.getNome();
             var tempo = resultados.get(nomePiloto);
             s.append("\nPiloto: ").append(nomePiloto).append(", lugar = ").append(lugar).append(", com tempo de ").append(tempo).append(" milisegundos");
+            ++lugar;
         }
         s.append("\n----------Carros Acidentados-----------");
         return s.toString();
@@ -172,7 +154,7 @@ public class Corrida {
         int tempoAnterior = this.temposTotais.get(piloto);
         ++carro;
         int minimo = -1;
-        while(carro < numeroCarros - 1 || minimo == -1) {
+        while(carro < numeroCarros - 1 && minimo == -1) {
             Carro carFrente = this.carros.get(carro);
             String pilotoFrente = carFrente.getPiloto().getNome();
             int tempoAnteriorFrente = this.temposTotais.get(pilotoFrente);

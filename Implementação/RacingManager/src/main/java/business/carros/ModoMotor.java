@@ -38,7 +38,7 @@ public enum ModoMotor {
 
     public int getDesempenhoAdicional() {
         if(this == Conservador) return -500;
-        else if(this == Agressivo) return 1000;
+        else if(this == Agressivo) return 500;
         else return 0;
     }
 }

@@ -4,12 +4,10 @@ import data.AdminDAO;
 import data.JogadorDAO;
 import business.exceptions.UtilizadorJaExistenteException;
 import business.exceptions.UtilizadorNaoExisteException;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class UsersFacade implements IGestUsers {
 
@@ -19,27 +17,6 @@ public class UsersFacade implements IGestUsers {
     public UsersFacade() {
         this.jogadores = JogadorDAO.getInstance();
         this.admins = AdminDAO.getInstance();
-    }
-
-    public UsersFacade(@NotNull Map<String, JogadorAutenticavel> jogadores, @NotNull Map<String, Admin> administradores) {
-        this.jogadores = JogadorDAO.getInstance();
-        this.admins = AdminDAO.getInstance();
-        var jogadores_set = jogadores
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().clone()));
-        this.jogadores.putAll(jogadores_set);
-        var admins_set = administradores
-                .entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().clone()));
-        this.admins.putAll(admins_set);
-    }
-
-    @Contract(pure = true)
-    public UsersFacade(@NotNull UsersFacade usersFacade) {
-        this.jogadores = usersFacade.jogadores;
-        this.admins = usersFacade.admins;
     }
 
     @Override
@@ -99,14 +76,14 @@ public class UsersFacade implements IGestUsers {
             if(jogador.login(username, password)) {
                 System.out.println(jogador);
                 this.jogadores.put(username, jogador);
-                return jogador;
+                return jogador.clone();
             }
         } else {
             System.out.println("Admin = " + admin);
             if(admin.login(username, password)) {
                 System.out.println(admin);
                 this.admins.put(username, admin);
-                return admin;
+                return admin.clone();
             }
         }
         return null;
@@ -116,8 +93,9 @@ public class UsersFacade implements IGestUsers {
     public void atualizaPontuacoes(@NotNull Map<String, Integer> pontuacoesJogador) {
         for(var entries : pontuacoesJogador.entrySet()) {
             var jogador = this.jogadores.get(entries.getKey());
-            if(jogador != null && jogador.estaAutenticado()) {
+            if(jogador != null) {
                 jogador.addPontuacao(entries.getValue());
+                this.jogadores.put(jogador.getUsername(), jogador);
             }
         }
     }
@@ -128,22 +106,8 @@ public class UsersFacade implements IGestUsers {
     }
 
     @Override
-    public boolean isJogadorPremium(String username) throws UtilizadorNaoExisteException {
-        var user = this.jogadores.get(username);
-        if(user == null) throw new UtilizadorNaoExisteException("Não existe nenhum jogador com username de " + username);
-        return user.isPremium();
-    }
-
-    @Override
     public boolean existeJogador(String username) {
         return this.jogadores.containsKey(username);
-    }
-
-    @Override
-    public boolean jogadorAutenticado(String username) {
-        var jogador = this.jogadores.get(username);
-        if(jogador == null) return false;
-        return jogador.estaAutenticado();
     }
 
     public JogadorAutenticavel getJogador(String username) throws UtilizadorNaoExisteException {

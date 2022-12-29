@@ -3,32 +3,41 @@ package business.campeonatos;
 import business.carros.Carro;
 import business.carros.ModoMotor;
 import business.carros.TipoPneu;
+import business.exceptions.CampeonatoJaExisteException;
+import business.exceptions.CampeonatoNaoExisteException;
+import business.exceptions.CarroNaoAfinavel;
+import business.exceptions.CircuitoJaExistenteException;
+import business.exceptions.CircuitoNaoExisteException;
+import business.exceptions.LobbyAtivoInexistenteException;
+import business.exceptions.MaximoAfinacoesExceptions;
+import business.exceptions.NaoExistemMaisCorridas;
+import business.exceptions.PilotoInexistenteException;
 import data.CampeonatoDAO;
 import data.CircuitoDAO;
 import data.PilotosDAO;
-import business.exceptions.*;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+/**
+ *
+ */
 public class CampeonatosFacade implements IGestCampeonatos {
 
-    private Map<String, Campeonato> campeonatos;
-    private Map<String, Circuito> circuitos;
-    private Map<String, Piloto> pilotos;
+    /**
+     *
+     */
+    private final Map<String, Campeonato> campeonatos;
+    private final Map<String, Circuito> circuitos;
+    private final Map<String, Piloto> pilotos;
     private Lobby lobbyAtivo;
-    private Map<Integer, Lobby> lobbies;
+    private final Map<Integer, Lobby> lobbies;
 
     public CampeonatosFacade() {
         this.campeonatos = CampeonatoDAO.getInstance();
         this.circuitos = CircuitoDAO.getInstance();
         this.pilotos = PilotosDAO.getInstance();
         this.lobbies = new HashMap<>();
-    }
-
-    @Override
-    public boolean existeCircuito(String nomeCircuito) {
-        return this.circuitos.containsKey(nomeCircuito);
     }
 
     @Override
@@ -67,13 +76,14 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     @Override
-    public void comecaCampeonato() throws LobbyAtivoInexistenteException, LobbyAlreadyStartedException {
+    public void comecaCampeonato() {
         this.lobbyAtivo.fechaLobby();
     }
 
     @Override
-    public String getTabelaClassificativa() {
-        return null;
+    public String getTabelaClassificativa() throws LobbyAtivoInexistenteException {
+        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby no momento");
+        return this.lobbyAtivo.printTabelaClassificativa();
     }
 
     @Override
@@ -127,11 +137,6 @@ public class CampeonatosFacade implements IGestCampeonatos {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo");
         //TODO fazer o clone do lobby ativo
         return this.lobbyAtivo.clone();
-    }
-
-    @Override
-    public Lobby getLobby(int numLobby) {
-        return null;
     }
 
     @Override
@@ -197,5 +202,11 @@ public class CampeonatosFacade implements IGestCampeonatos {
     public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento");
         return this.lobbyAtivo.getProxCorrida();
+    }
+
+    @Override
+    public void autenticaJogadorEmLobby(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
+        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo de momento");
+        this.lobbyAtivo.autenticaJogador(username, nomePiloto);
     }
 }

@@ -11,31 +11,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class Lobby {
-    private int codigo;
-    private Map<String, Integer> classificacoes;
-    private Map<String, Integer> classificacoesH;
+    private final int codigo;
+    private final Map<String, Integer> classificacoes;
+    private final Map<String, Integer> classificacoesH;
     private int numCorrida;
-    private String nomeCampeonato;
+    private final String nomeCampeonato;
     private boolean aberto;
-    private boolean premium;
-    private Map<String, Integer> numAfinacoes;
-    private Map<String, String> jogadores;
-    private List<Corrida> corridas;
-    private Map<String, Carro> carros;
-
-    public Lobby() {
-        this.codigo = 0;
-        this.classificacoes = new HashMap<>();
-        this.classificacoesH = new HashMap<>();
-        this.numCorrida = 0;
-        this.nomeCampeonato = "";
-        this.aberto = true;
-        this.premium = false;
-        this.numAfinacoes = new HashMap<>();
-        this.jogadores = new HashMap<>();
-        this.corridas = new ArrayList<>();
-        this.carros = new HashMap<>();
-    }
+    private final boolean premium;
+    private final Map<String, Integer> numAfinacoes;
+    private final Map<String, String> jogadores;
+    private final List<Corrida> corridas;
+    private final Map<String, Carro> carros;
 
     public Lobby(String nomeCampeonato, @NotNull Set<Circuito> circuitos, boolean premium) {
         this.codigo = 0;
@@ -98,10 +84,6 @@ public class Lobby {
         return new HashMap<>(this.numAfinacoes);
     }
 
-    public Set<String> getJogadores() {
-        return new HashSet<>(this.jogadores.keySet());
-    }
-
     public List<Corrida> getCorridas() {
         return new ArrayList<>(corridas);
     }
@@ -154,20 +136,18 @@ public class Lobby {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Lobby{");
-        sb.append("codigo=").append(codigo);
-        sb.append(", classificacoes=").append(classificacoes);
-        sb.append(", classificacoesH=").append(classificacoesH);
-        sb.append(", numCorrida=").append(numCorrida);
-        sb.append(", nomeCampeonato='").append(nomeCampeonato).append('\'');
-        sb.append(", aberto=").append(aberto);
-        sb.append(", premium=").append(premium);
-        sb.append(", numAfinacoes=").append(numAfinacoes);
-        sb.append(", jogadores=").append(jogadores);
-        sb.append(", corridas=").append(corridas);
-        sb.append(", carros=").append(carros);
-        sb.append('}');
-        return sb.toString();
+        return "Lobby{" + "codigo=" + codigo +
+                ", classificacoes=" + classificacoes +
+                ", classificacoesH=" + classificacoesH +
+                ", numCorrida=" + numCorrida +
+                ", nomeCampeonato='" + nomeCampeonato + '\'' +
+                ", aberto=" + aberto +
+                ", premium=" + premium +
+                ", numAfinacoes=" + numAfinacoes +
+                ", jogadores=" + jogadores +
+                ", corridas=" + corridas +
+                ", carros=" + carros +
+                '}';
     }
 
     public void inscreveJogador(String username, Carro carro, Piloto piloto) {
@@ -212,15 +192,61 @@ public class Lobby {
     }
 
     public Map<String, Integer> getPontuacoesTotais() {
-        return null;
+        Map<String, Integer> classificacoes = new HashMap<>();
+
+        var classH = this.classificacoesH.entrySet()
+                .stream()
+                .map(entry -> new AbstractMap.SimpleEntry<>(this.jogadores.get(entry.getKey()), entry.getValue()))
+                .toList();
+
+        var classNH = this.classificacoes.entrySet()
+                .stream()
+                .map(entry -> new AbstractMap.SimpleEntry<>(this.jogadores.get(entry.getKey()), entry.getValue()))
+                .toList();
+
+        classH.forEach(e -> classificacoes.put(e.getKey(), e.getValue()));
+        classNH.forEach(e -> classificacoes.put(e.getKey(), e.getValue()));
+
+        return classificacoes;
     }
 
     public String printTabelaClassificativa() {
-        return "";
-    }
-
-    public String printTabelaClassificativa(int corrida) {
-        return "";
+        StringBuilder s = new StringBuilder("\n--------------------Classificacoes do momento-----------------------");
+        s.append("\n--------------------Classificacoes de Não Hibridos-----------------------");
+        var pontuacoes = this.classificacoes.entrySet()
+                .stream()
+                .sorted((c1, c2) -> c2.getValue() - c1.getValue())
+                .map(c1 -> new AbstractMap.SimpleEntry<>(this.jogadores.get(c1.getKey()), c1.getValue()))
+                .toList();
+        int i = 1;
+        for(var jogadorPontuacao : pontuacoes) {
+            s.append("\n")
+                    .append(i)
+                    .append(": ")
+                    .append(jogadorPontuacao.getKey())
+                    .append(": ")
+                    .append(jogadorPontuacao.getValue())
+                    .append("pontos");
+            ++i;
+        }
+        s.append("\n--------------------Classificacoes de Hibridos-----------------------");
+        var pontuacoesH = this.classificacoesH.entrySet()
+                .stream()
+                .sorted((c1, c2) -> c2.getValue() - c1.getValue())
+                .map(c1 -> new AbstractMap.SimpleEntry<>(this.jogadores.get(c1.getKey()), c1.getValue()))
+                .toList();
+        i = 1;
+        for(var jogadorPontuacao : pontuacoesH) {
+            s.append("\n")
+                    .append(i)
+                    .append(": ")
+                    .append(jogadorPontuacao.getKey())
+                    .append(": ")
+                    .append(jogadorPontuacao.getValue())
+                    .append(" pontos");
+            ++i;
+        }
+        return s.toString();
     }
 
     public void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws PilotoInexistenteException {
@@ -256,5 +282,10 @@ public class Lobby {
     public @Nullable Corrida getProxCorrida() {
         if(this.numCorrida >= this.corridas.size()) return null;
         return this.corridas.get(this.numCorrida).clone();
+    }
+
+    public void autenticaJogador(String username, String nomePiloto) throws PilotoInexistenteException {
+        if(!this.jogadores.containsKey(nomePiloto)) throw new PilotoInexistenteException("Não existe nenhum jogador com o piloto " + nomePiloto);
+        this.jogadores.put(nomePiloto, username);
     }
 }

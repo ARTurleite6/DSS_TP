@@ -75,17 +75,20 @@ public class GT extends Carro {
     public boolean dnf(int volta, boolean chuva) {
         int motorH = 0;
         if(this instanceof Hibrido h)
-            motorH = h.getPotenciaEletrica() / 20;
+            motorH = h.getPotenciaEletrica() / 50;
 
         Random random = new Random();
-        int x = random.nextInt(100);
-        int motorAvaria = this.getModoMotor().getProbAvaria();
+        int x = random.nextInt(85);
+        float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
+        System.out.println("DNF GT = " + ((((100000) / this.getCilindrada()) * 1.7) - (volta * this.fatorDesgaste) - motorH - motorAvaria - (100 - this.getEstado())));
         return x > (((100000) / this.getCilindrada()) * 1.7) - (volta * this.fatorDesgaste) - motorH - motorAvaria - (100 - this.getEstado());
     }
 
 
     @Override
     protected int categoryCompare(String categoria) {
-        return 0;
+        if(categoria.equals("GT") || categoria.equals("GTH")) return 1000;
+        else if(categoria.equals("SC")) return 2000;
+        else return 500;
     }
 }

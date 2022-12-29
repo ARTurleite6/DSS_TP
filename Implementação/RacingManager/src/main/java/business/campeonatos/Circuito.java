@@ -1,16 +1,18 @@
 package business.campeonatos;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Circuito {
-    private String nomeCircuito;
-    private int distancia;
-    private int numeroVoltas;
+    private final String nomeCircuito;
+    private final int distancia;
+    private final int numeroVoltas;
 
-    private List<GDU> retas;
-    private List<GDU> curvas;
-    private List<GDU> chicanes;
+    private final List<GDU> retas;
+    private final List<GDU> curvas;
+    private final List<GDU> chicanes;
 
     public Circuito() {
         this.nomeCircuito = "";
@@ -30,7 +32,7 @@ public class Circuito {
         this.chicanes = new ArrayList<>(chicanes);
     }
 
-    public Circuito(Circuito c) {
+    public Circuito(@NotNull Circuito c) {
         this.nomeCircuito = c.getNomeCircuito();
         this.distancia = c.getDistancia();
         this.numeroVoltas = c.getNumeroVoltas();
@@ -63,6 +65,7 @@ public class Circuito {
         return new ArrayList<>(this.curvas);
     }
 
+    @Override
     public Circuito clone() {
         return new Circuito(this);
     }
@@ -108,30 +111,30 @@ public class Circuito {
     public String imprimeCircuito() {
         StringBuilder sb = new StringBuilder();
         sb.append("-----------------------------");
-        sb.append("\nCircuito: Nome = " + this.nomeCircuito + ", distancia = " + this.getDistancia() + ", Numero de Voltas = " + this.getNumeroVoltas());
+        sb.append("\nCircuito: Nome = ").append(this.nomeCircuito).append(", distancia = ").append(this.getDistancia()).append(", Numero de Voltas = ").append(this.getNumeroVoltas());
         var retas = this.retas;
         var chicanes = this.chicanes;
         var curvas = this.curvas;
         sb.append("\n    Retas do Circuito: ");
         for(int i = 0; i < retas.size(); ++i) {
-            sb.append("\n        Reta " + (i + 1) + ": " + retas.get(i));
+            sb.append("\n        Reta ").append(i + 1).append(": ").append(retas.get(i));
         }
 
         sb.append("\n    Curvas do Circuito: ");
         for(int i = 0; i < curvas.size(); ++i) {
-            sb.append("\n        Curva " + (i + 1) + ": " + curvas.get(i));
+            sb.append("\n        Curva ").append(i + 1).append(": ").append(curvas.get(i));
         }
 
         sb.append("\n    Chicanes do Circuito: ");
         for(int i = 0; i < chicanes.size(); ++i) {
-            sb.append("\n        Chicane " + (i + 1) + ": " + chicanes.get(i));
+            sb.append("\n        Chicane ").append(i + 1).append(": ").append(chicanes.get(i));
         }
         sb.append("\n-----------------------------");
         return sb.toString();
     }
 
     public List<GDU> getSeccoes() {
-        var res = new ArrayList<GDU>(this.retas);
+        var res = new ArrayList<>(this.retas);
         res.addAll(this.chicanes);
         res.addAll(this.curvas);
         return res;

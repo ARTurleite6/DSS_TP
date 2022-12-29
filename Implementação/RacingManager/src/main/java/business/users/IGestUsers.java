@@ -15,8 +15,8 @@ public interface IGestUsers {
     Autenticavel autenticaUtilizador(String username, String password) throws UtilizadorNaoExisteException;
     void atualizaPontuacoes(Map<String, Integer> pontuacoesJogador);
     boolean existeUtilizador(String username);
-    boolean isJogadorPremium(String username) throws UtilizadorNaoExisteException;
+
     boolean existeJogador(String username);
-    boolean jogadorAutenticado(String username);
+
     JogadorAutenticavel getJogador(String username) throws UtilizadorNaoExisteException;
 }

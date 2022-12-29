@@ -43,16 +43,12 @@ public class MenuPrincipal {
         var password = this.scanner.nextLine();
         System.out.println("Deseja ser premium? S/N");
         var choice = this.scanner.nextLine();
-        boolean premium = false;
+        boolean premium;
         if(!choice.equals("S") && !choice.equals("N")) {
             System.out.println("Input inválido");
             return;
         }
-        if(choice.equals("S")) {
-            premium = true;
-        } else {
-            premium = false;
-        }
+        premium = choice.equals("S");
         try {
             this.facade.registaJogador(username, password, premium);
             System.out.println("User registado com sucesso");

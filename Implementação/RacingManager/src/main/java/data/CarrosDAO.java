@@ -25,8 +25,8 @@ public class CarrosDAO implements Map<String, Carro> {
   @Override
   public int size() {
     try (Connection conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
-    Statement s = conn.createStatement();
-  ) {
+         Statement s = conn.createStatement();
+    ) {
       String query = "SELECT COUNT(*) FROM CARRO";
       try(var result = s.executeQuery(query)) {
         if (result.next()) {
@@ -57,45 +57,71 @@ public class CarrosDAO implements Map<String, Carro> {
     return carro != null && carro.equals(value);
   }
 
-  private @Nullable Carro getC1OrC2(@NotNull PreparedStatement pt1, PreparedStatement pt1h, String modelo,
-                                    String marca, int cilindrada, int potenciaCombustao) {
+  private @Nullable Carro getC1(@NotNull PreparedStatement pt1, PreparedStatement pt1h, String modelo,
+                                    String marca, int potenciaCombustao) {
     try {
       pt1.setString(1, modelo);
       try(var rs2 = pt1.executeQuery()) {
         if(!rs2.next()) return null;
-          var afinacao = rs2.getFloat(2);
-          var hibrido = rs2.getBoolean(3);
-          if (hibrido) {
-            pt1h.setString(1, modelo);
-            try(var rs3 = pt1h.executeQuery()) {
-              if(!rs3.next()) return null;
-              var potencia_eletrica = rs3.getInt(2);
-              return new C1H(modelo, marca, potenciaCombustao, afinacao, potencia_eletrica);
-            }
-          } else {
-            System.out.println("Não é Hibrido");
-            return new C1(modelo, marca, potenciaCombustao, afinacao);
+        var afinacao = rs2.getFloat(2);
+        var hibrido = rs2.getBoolean(3);
+        if (hibrido) {
+          pt1h.setString(1, modelo);
+          try(var rs3 = pt1h.executeQuery()) {
+            if(!rs3.next()) return null;
+            var potencia_eletrica = rs3.getInt(2);
+            return new C1H(modelo, marca, potenciaCombustao, afinacao, potencia_eletrica);
           }
+        } else {
+          System.out.println("Não é Hibrido");
+          return new C1(modelo, marca, potenciaCombustao, afinacao);
+        }
       }
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
   }
 
+  private @Nullable Carro getC2(@NotNull PreparedStatement pt1, PreparedStatement pt1h, String modelo,
+                                    String marca, int cilindrada, int potenciaCombustao) {
+    try {
+      pt1.setString(1, modelo);
+      try(var rs2 = pt1.executeQuery()) {
+        if(!rs2.next()) return null;
+        var afinacao = rs2.getFloat(2);
+        var hibrido = rs2.getBoolean(3);
+        if (hibrido) {
+          pt1h.setString(1, modelo);
+          try(var rs3 = pt1h.executeQuery()) {
+            if(!rs3.next()) return null;
+            var potencia_eletrica = rs3.getInt(2);
+            return new C2H(modelo, marca,cilindrada, potenciaCombustao, afinacao, potencia_eletrica);
+          }
+        } else {
+          System.out.println("Não é Hibrido");
+          return new C2(modelo, marca, cilindrada, potenciaCombustao, afinacao);
+        }
+      }
+    } catch (SQLException | CilindradaInvalidaException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+
   @Override
   public Carro get(Object key) {
     var modelo = (String)key;
     try(
-    var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
-    var ps = conn.prepareStatement("SELECT * FROM Carro WHERE modelo = ?");
-    var c1s = conn.prepareStatement("SELECT * FROM C1 WHERE modelo = ?");
-    var c1hs = conn.prepareStatement("SELECT * FROM C1H WHERE modelo = ?");
-    var c2s = conn.prepareStatement("SELECT * FROM C2 WHERE modelo = ?");
-    var c2hs = conn.prepareStatement("SELECT * FROM C2H WHERE modelo = ?");
-    var gts = conn.prepareStatement("SELECT * FROM GT WHERE modelo = ?");
-    var gths = conn.prepareStatement("SELECT * FROM GTH WHERE modelo = ?");
-    var scs = conn.prepareStatement("SELECT * FROM SC WHERE modelo = ?");
-  ){
+            var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
+            var ps = conn.prepareStatement("SELECT * FROM Carro WHERE modelo = ?");
+            var c1s = conn.prepareStatement("SELECT * FROM C1 WHERE modelo = ?");
+            var c1hs = conn.prepareStatement("SELECT * FROM C1H WHERE modelo = ?");
+            var c2s = conn.prepareStatement("SELECT * FROM C2 WHERE modelo = ?");
+            var c2hs = conn.prepareStatement("SELECT * FROM C2H WHERE modelo = ?");
+            var gts = conn.prepareStatement("SELECT * FROM GT WHERE modelo = ?");
+            var gths = conn.prepareStatement("SELECT * FROM GTH WHERE modelo = ?");
+            var scs = conn.prepareStatement("SELECT * FROM SC WHERE modelo = ?");
+    ){
       ps.setString(1, (String)key);
       try(var rs = ps.executeQuery()) {
         if(!rs.next()) return null;
@@ -108,9 +134,10 @@ public class CarrosDAO implements Map<String, Carro> {
 
         if (tipo.equals("C1")) {
           System.out.println("Tipo C1");
-          return this.getC1OrC2(c1s, c1hs, modelo, marca, cilindrada, potenciaCombustao);
+          return this.getC1(c1s, c1hs, modelo, marca, potenciaCombustao);
         } else if (tipo.equals("C2")) {
-          return this.getC1OrC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao);
+          System.out.println("Tipo C2");
+          return this.getC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao);
         } else if (tipo.equals("GT")) {
           gts.setString(1, modelo);
           try (var gtr = gts.executeQuery()) {
@@ -138,8 +165,8 @@ public class CarrosDAO implements Map<String, Carro> {
             if(!scr.next()) return null;
             return new SC(modelo, marca, potenciaCombustao);
           }
-          }
-          return null;
+        }
+        return null;
       }
     } catch (SQLException | CilindradaInvalidaException e) {
       throw new RuntimeException(e);
@@ -151,9 +178,9 @@ public class CarrosDAO implements Map<String, Carro> {
     var carro = this.get(key);
 
     try (
-    var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
-    var pt1 = conn.prepareStatement("INSERT INTO Carro(modelo, marca, cilindrada, potencia_combustao, tipo) VALUES(?, ?, ?, ?, ?)");
-  ) {
+            var conn = DriverManager.getConnection(ConnectionData.getUrl(), ConnectionData.user, ConnectionData.pwd);
+            var pt1 = conn.prepareStatement("INSERT INTO Carro(modelo, marca, cilindrada, potencia_combustao, tipo) VALUES(?, ?, ?, ?, ?)");
+    ) {
       if(carro == null) {
         //get all attributes from value
         var modelo = value.getModelo();
@@ -288,7 +315,7 @@ public class CarrosDAO implements Map<String, Carro> {
       return carro;
     } catch (SQLException e) {
       System.out.println(e.getMessage());
-      throw new RuntimeException(); 
+      throw new RuntimeException();
     }
   }
 

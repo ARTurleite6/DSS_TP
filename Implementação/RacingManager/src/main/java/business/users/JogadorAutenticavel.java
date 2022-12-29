@@ -1,19 +1,11 @@
 package business.users;
 
 public class JogadorAutenticavel implements Autenticavel {
-  private String username;
+  private final String username;
   private String password;
   private int pontuacaoGlobal;
-  private boolean premium;
+  private final boolean premium;
   private boolean autenticado;
-
-  public JogadorAutenticavel() {
-    this.username = "";
-    this.password = "";
-    this.pontuacaoGlobal = 0;
-    this.premium = false;
-    this.autenticado = false;
-  }
 
   public JogadorAutenticavel(String username, String password, boolean premium) {
     this.username = username;
@@ -99,8 +91,7 @@ public class JogadorAutenticavel implements Autenticavel {
     if (isPremium() != that.isPremium()) return false;
     if (autenticado != that.autenticado) return false;
     if (!getUsername().equals(that.getUsername())) return false;
-    if (!getPassword().equals(that.getPassword())) return false;
-    return true;
+    return getPassword().equals(that.getPassword());
   }
 
   @Override

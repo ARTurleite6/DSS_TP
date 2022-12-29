@@ -1,5 +1,5 @@
 package ui;
 
 public interface Handler {
-    void execute();
+    void execute() throws InterruptedException;
 }

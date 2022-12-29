@@ -1,21 +1,11 @@
 package business.users;
 
+import org.jetbrains.annotations.NotNull;
+
 public class Admin implements Autenticavel {
-    private String username;
+    private final String username;
     private String password;
     private boolean autenticado;
-
-    public Admin() {
-        this.username = "";
-        this.password = "";
-        this.autenticado = false;
-    }
-
-    public Admin(String username, String password) {
-        this.username = username;
-        this.password = password;
-        this.autenticado = false;
-    }
 
     public Admin(String username, String password, boolean autenticado) {
         this.username = username;
@@ -23,7 +13,7 @@ public class Admin implements Autenticavel {
         this.autenticado = autenticado;
     }
 
-    public Admin(Admin a) {
+    public Admin(@NotNull Admin a) {
         this.username = a.getUsername();
         this.password = a.getPassword();
         this.autenticado = a.estaAutenticado();

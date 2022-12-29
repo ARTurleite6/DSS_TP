@@ -159,6 +159,8 @@ public class MenuCarros implements SubMenu {
             handlers.get(choice - 1).execute();
         } catch(NumberFormatException e) {
             System.out.println("Formato Inválido");
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
         }
     }
 

@@ -12,7 +12,7 @@ public abstract class Carro {
     private String marca;
     private int cilindrada;
     private int potenciaCombustao;
-    private int estado;
+    private float estado;
 
     private TipoPneu tipoPneu;
     private ModoMotor modoMotor;
@@ -112,7 +112,7 @@ public abstract class Carro {
 
     public abstract int getFiabilidade();
 
-    public int getEstado() {
+    public float getEstado() {
         return estado;
     }
 
@@ -154,7 +154,7 @@ public abstract class Carro {
         this.tipoPneu = tipoPneu;
     }
 
-    public void setPiloto(Piloto piloto) {
+    public void setPiloto(@NotNull Piloto piloto) {
         this.piloto = piloto.clone();
     }
 
@@ -192,7 +192,7 @@ public abstract class Carro {
         result = 31 * result + getMarca().hashCode();
         result = 31 * result + getCilindrada();
         result = 31 * result + getPotenciaCombustao();
-        result = 31 * result + getEstado();
+        result = 31 * result + Float.hashCode(getEstado());
         result = 31 * result + getTipoPneu().hashCode();
         result = 31 * result + getModoMotor().hashCode();
         result = 31 * result + getPiloto().hashCode();
@@ -208,7 +208,7 @@ public abstract class Carro {
     public boolean despiste(int volta, boolean chuva) {
         if(!this.dnf(volta, chuva)) return false;
         Random random = new Random();
-        this.estado -= random.nextInt(10);
+        this.estado -= random.nextFloat(1);
         return true;
     }
 
@@ -216,7 +216,7 @@ public abstract class Carro {
         int tempoMedio = seccao.getTempoMedio();
         int fatorPotenciaCilindrada = this.cilindrada / this.getPotencia() * 100;
         int minimo = 0;
-        int maximo = 2000;
+        int maximo = 1000;
         int fatorSorte = minimo + Double.valueOf(Math.random() * (maximo - minimo)).intValue();
         int qualidadeTempoSeco = this.piloto.getQualidadeTempoSeco();
 
@@ -226,12 +226,12 @@ public abstract class Carro {
             int maximoChuva = 2000;
             int fatorPneuChuva = 0;
             if(this.tipoPneu != TipoPneu.Chuva)
-                fatorPneuChuva = 3000;
+                fatorPneuChuva = 5000;
             int qualidadeChuva = this.piloto.getQualidadeChuva();
-            tempoChuva = 3000 - (minimo + Double.valueOf(Math.random() * (maximoChuva - minimo)).intValue() + qualidadeChuva - fatorPneuChuva);
+            tempoChuva = 9000 - (minimo + Double.valueOf(Math.random() * (maximoChuva - minimo)).intValue() + qualidadeChuva - fatorPneuChuva);
         }
 
-        int agressividade = this.piloto.getAgressividade() * 100;
+        int agressividade = this.piloto.getAgressividade() * 10;
         int desempenhoPneu = this.tipoPneu.getDesempenho(volta);
         int fatorMotor = this.modoMotor.getDesempenhoAdicional();
 

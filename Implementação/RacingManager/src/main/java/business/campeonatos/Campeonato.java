@@ -1,43 +1,67 @@
 package business.campeonatos;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ */
 public class Campeonato {
+
+    /**
+     *
+     */
     private final String nomeCampeonato;
+
+    /**
+     *
+     */
     private final Set<String> circuitos;
 
-    public Campeonato() {
-        this.nomeCampeonato = "";
-        this.circuitos = new HashSet<>();
-    }
-
-    public Campeonato(String nomeCampeonato) {
-        this.nomeCampeonato = nomeCampeonato;
-        this.circuitos = new HashSet<>();
-    }
+    /**
+     * @param nomeCampeonato
+     * @param circuitos
+     */
     public Campeonato(String nomeCampeonato, Set<String> circuitos) {
         this.nomeCampeonato = nomeCampeonato;
         this.circuitos = new HashSet<>(circuitos);
     }
 
-    public Campeonato(Campeonato c) {
+    /**
+     * @param c
+     */
+    public Campeonato(@NotNull Campeonato c) {
         this.nomeCampeonato = c.getNomeCampeonato();
         this.circuitos = c.getCircuitos();
     }
 
+    /**
+     * @return
+     */
     public String getNomeCampeonato() {
         return this.nomeCampeonato;
     }
 
+    /**
+     * @return
+     */
     public Set<String> getCircuitos() {
         return new HashSet<>(this.circuitos);
     }
 
+    /**
+     * @return
+     */
+    @Override
     public Campeonato clone() {
         return new Campeonato(this);
     }
 
+    /**
+     * @return
+     */
     @Override
     public String toString() {
         return "Campeonato{" +
@@ -46,6 +70,10 @@ public class Campeonato {
                 '}';
     }
 
+    /**
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,6 +85,9 @@ public class Campeonato {
         return getCircuitos().equals(that.getCircuitos());
     }
 
+    /**
+     * @return
+     */
     @Override
     public int hashCode() {
         int result = getNomeCampeonato().hashCode();
@@ -64,6 +95,9 @@ public class Campeonato {
         return result;
     }
 
+    /**
+     * @return
+     */
     public String imprimeCampeonato() {
         StringBuilder sb = new StringBuilder();
         sb.append("-----------------------------");

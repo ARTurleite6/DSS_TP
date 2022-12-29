@@ -60,7 +60,7 @@ public class MenuCircuitos implements SubMenu {
     private void populaArraySeccao(List<GDU> seccoes, int numeroSeccoes) {
         for (int i = 0; i < numeroSeccoes; i++) {
             System.out.println("Insira a dificuldade a seccao numero " + (i + 1) + ", 1(Possivel)/2(Impossivel)3/(Dificil)");
-            boolean valida = true;
+            boolean valida;
             do {
                 var escolha = Integer.parseInt(this.scanner.nextLine());
                 switch (escolha) {

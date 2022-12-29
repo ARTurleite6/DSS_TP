@@ -71,25 +71,29 @@ public class C1 extends Carro implements Afinavel {
 
     @Override
     public String toString() {
-        return "C1{" +
-                "afinacao=" + afinacao +
-                '}';
+        final StringBuilder sb = new StringBuilder("C1{");
+        sb.append("afinacao=").append(afinacao);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean dnf(int volta, boolean chuva) {
         var motorH = 0;
         if(this instanceof Hibrido hibrido) {
-            motorH = hibrido.getPotenciaEletrica() / 20;
+            motorH = hibrido.getPotenciaEletrica() / 50;
         }
+        System.out.println("Motor H " + motorH);
         Random random = new Random();
-        int x = random.nextInt(100);
-        int motorAvaria = this.getModoMotor().getProbAvaria();
+        int x = random.nextInt(95);
+        float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
+        System.out.println("Fator c1 = " + (95 - motorH - motorAvaria - (100 - this.getEstado())) );
         return x > 95 - motorH - motorAvaria - (100 - this.getEstado());
     }
 
     @Override
     protected int categoryCompare(String categoria) {
-        return 0;
+        if(categoria.equals("C1") || categoria.equals("C1H")) return 1000;
+        else return 2000;
     }
 }

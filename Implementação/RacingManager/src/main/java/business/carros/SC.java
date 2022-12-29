@@ -50,10 +50,10 @@ public class SC extends Carro {
     @Override
     public boolean dnf(int volta, boolean chuva) {
 
-        int motorAvaria = this.getModoMotor().getProbAvaria();
+        float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
 
         var random = new Random();
-        int x = random.nextInt(100);
+        int x = random.nextInt(80);
 
         int qualidadePiloto;
         var piloto = this.getPiloto();
@@ -63,13 +63,14 @@ public class SC extends Carro {
         } else {
             qualidadePiloto = piloto.getQualidadeTempoSeco();
         }
-
         int seguranca = piloto.getSeguranca();
+        System.out.println("DNF SC = " + ((((qualidadePiloto + seguranca) * 0.75) + (((double) this.getCilindrada()) / 10) * 0.25) - motorAvaria - (100 - this.getEstado())) );
+
         return x > (((qualidadePiloto + seguranca) * 0.75) + (((double) this.getCilindrada()) / 10) * 0.25) - motorAvaria - (100 - this.getEstado());
     }
 
     @Override
     protected int categoryCompare(String categoria) {
-        return 0;
+        return categoria.equals("SC") ? 1000 : 500;
     }
 }

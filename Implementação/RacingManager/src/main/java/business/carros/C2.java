@@ -54,24 +54,35 @@ public class C2 extends Carro implements Afinavel {
 
     @Override
     public String toString() {
-        return null;
+        final StringBuilder sb = new StringBuilder("C2{");
+        sb.append("afinacao=").append(afinacao);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
     public boolean dnf(int volta, boolean chuva) {
         int motorH = 0;
         if(this instanceof Hibrido h)
-            motorH = h.getPotenciaEletrica() / 20;
+            motorH = h.getPotenciaEletrica() / 50;
 
         Random random = new Random();
-        int x = random.nextInt(100);
-        int motorAvaria = this.getModoMotor().getProbAvaria();
+        int x = random.nextInt(80);
+        System.out.println("Valor random = " + x);
+        float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
+        System.out.println("Motor Hibrido C2 = " + motorH);
+        System.out.println("Motor Avaria C2 = " + motorAvaria);
+        System.out.println("Fator cilindrada C2 = " + this.getEstado() / 1200.0);
 
-        return x > 80 - motorH + (this.getCilindrada() / 1200) + (this.getAfinacao() / 10) - motorAvaria - (100 - this.getEstado());
+        System.out.println("Fator C2 = " + (80 - motorH - ((float)this.getCilindrada() / 1200.0) - (this.getAfinacao() / 10) - motorAvaria - (100 - this.getEstado())));
+
+        return x > 80 - motorH - ((float)this.getCilindrada() / 1200.0) + (this.getAfinacao() / 10) - motorAvaria - (100 - this.getEstado());
     }
 
     @Override
     protected int categoryCompare(String categoria) {
-        return 0;
+        if(categoria.equals("C2") || categoria.equals("C2H")) return 1000;
+        else if(categoria.equals("C1") || categoria.equals("C1H")) return 500;
+        else return 2000;
     }
 }
