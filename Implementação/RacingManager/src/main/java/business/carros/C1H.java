@@ -50,8 +50,12 @@ public class C1H extends C1 implements Hibrido {
 
     @Override
     public String toString() {
-        return "C1H{" +
-                "potenciaEletrica=" + potenciaEletrica +
+        return "C1H{" + "modelo='" + this.getModelo() + '\'' +
+                ", marca='" + this.getMarca() + '\'' +
+                ", cilindrada=" + this.getCilindrada() +
+                ", potenciaCombustao=" + this.getPotenciaCombustao() +
+                ", afinacao=" + this.getAfinacao() +
+                ", potenciaEletrica=" + potenciaEletrica +
                 '}';
     }
 

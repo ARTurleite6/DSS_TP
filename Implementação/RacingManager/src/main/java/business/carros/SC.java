@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class SC extends Carro {
 
-    private static int SC_CILINDRADA = 2500;
+    private static final int SC_CILINDRADA = 2500;
 
     public SC() {
         super();
@@ -37,9 +37,10 @@ public class SC extends Carro {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SC{");
-        sb.append('}');
-        return sb.toString();
+        return "SC{" + "modelo='" + this.getModelo() + '\'' +
+                ", marca='" + this.getMarca() + '\'' +
+                ", cilindrada=" + this.getCilindrada() +
+                ", potenciaCombustao=" + this.getPotenciaCombustao();
     }
 
     @Override

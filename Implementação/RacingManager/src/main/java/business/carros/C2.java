@@ -54,9 +54,13 @@ public class C2 extends Carro implements Afinavel {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("C2{");
+        final StringBuilder sb = new StringBuilder("Carro{");
+        sb.append("modelo='").append(this.getModelo()).append('\'');
+        sb.append(", marca='").append(this.getMarca()).append('\'');
+        sb.append(", cilindrada=").append(this.getCilindrada());
+        sb.append(", potenciaCombustao=").append(this.getPotenciaCombustao());
         sb.append("afinacao=").append(afinacao);
-        sb.append('}');
+        sb.append("}");
         return sb.toString();
     }
 

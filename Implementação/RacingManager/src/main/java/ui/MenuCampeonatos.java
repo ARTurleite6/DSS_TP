@@ -79,7 +79,7 @@ public class MenuCampeonatos implements SubMenu {
         System.out.println("Quantos jogadores irão jogar, incluindo o criador do lobby?");
         int numeroJogadores = Integer.parseInt(this.scanner.nextLine());
         var carrosDisponiveis = this.facade.getCarros();
-        var pilotos = this.facade.getPilotos();
+        var pilotos = this.facade.getPilotos().stream().map(Piloto::imprimePiloto).toList();
         int i = 0;
         Map<String, String> jogadorPiloto = new HashMap<>();
         while(i < numeroJogadores) {
@@ -91,7 +91,7 @@ public class MenuCampeonatos implements SubMenu {
                 carrosDisponiveis.forEach(System.out::println);
                 System.out.println("Que carro deseja utilizar na corrida");
                 var modelo = this.scanner.nextLine();
-                pilotos.forEach(piloto -> System.out.println(piloto.imprimePiloto()));
+                pilotos.forEach(System.out::println);
                 System.out.println("Que piloto deseja utilizar na corrida");
                 var pilotoEscolhido = this.scanner.nextLine();
                 this.facade.inscreveJogador(username, modelo, pilotoEscolhido);
@@ -139,16 +139,16 @@ public class MenuCampeonatos implements SubMenu {
     }
 
     private void handleJogarCampeonato() throws InterruptedException {
-        var campeonatos = this.facade.getCampeonatos();
-        campeonatos.forEach(campeonato -> System.out.println(campeonato.imprimeCampeonato()));
+        var campeonatos = this.facade.getCampeonatos().stream().map(Campeonato::imprimeCampeonato).toList();
+        campeonatos.forEach(System.out::println);
         System.out.println("Escolhe o campeonato que deseja jogar");
         String campeonatoEscolhido = this.scanner.nextLine();
         try {
             Lobby lobby = this.facade.criaLobby(campeonatoEscolhido, this.userAutenticado.getUsername());
             System.out.println(lobby);
             System.out.println("Lobby criado com sucesso");
-            var circuitosCampeonato = this.facade.getCircuitosCampeonato(campeonatoEscolhido);
-            circuitosCampeonato.forEach(Circuito::imprimeCircuito);
+            var circuitosCampeonato = this.facade.getCircuitosCampeonato(campeonatoEscolhido).stream().map(Circuito::imprimeCircuito).toList();
+            circuitosCampeonato.forEach(System.out::println);
             Map<String, String> jogadores = this.inscreveJogadoresCampeonato(lobby);
             Corrida corrida = this.facade.getProxCorrida();
             while(corrida != null){

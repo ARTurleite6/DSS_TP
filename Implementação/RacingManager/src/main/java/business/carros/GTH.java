@@ -5,7 +5,7 @@ import business.exceptions.CilindradaInvalidaException;
 
 public class GTH extends GT implements Hibrido {
 
-    private int potenciaEletrica;
+    private final int potenciaEletrica;
 
     public GTH() {
         super();
@@ -35,10 +35,13 @@ public class GTH extends GT implements Hibrido {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GTH{");
-        sb.append("potenciaEletrica=").append(potenciaEletrica);
-        sb.append('}');
-        return sb.toString();
+        return "GTH{" + "modelo='" + this.getModelo() + '\'' +
+                ", marca='" + this.getMarca() + '\'' +
+                ", cilindrada=" + this.getCilindrada() +
+                ", potenciaCombustao=" + this.getPotenciaCombustao() +
+                ", fatorDesgaste=" + this.getFatorDesgaste() +
+                ", potenciaEletrica=" + this.potenciaEletrica +
+                '}';
     }
 
     @Override

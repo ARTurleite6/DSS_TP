@@ -203,7 +203,24 @@ public abstract class Carro {
     }
 
     public abstract Carro clone();
+
+    @Override
     public abstract String toString();
+        /*
+        final StringBuilder sb = new StringBuilder("Carro{");
+        sb.append("modelo='").append(modelo).append('\'');
+        sb.append(", marca='").append(marca).append('\'');
+        sb.append(", cilindrada=").append(cilindrada);
+        sb.append(", potenciaCombustao=").append(potenciaCombustao);
+        sb.append(", estado=").append(estado);
+        sb.append(", tipoPneu=").append(tipoPneu);
+        sb.append(", modoMotor=").append(modoMotor);
+        sb.append(", piloto=").append(piloto);
+        sb.append(", dnf=").append(dnf);
+        sb.append(", tempo=").append(tempo);
+        sb.append(", despiste=").append(despiste);
+        return sb.toString();
+         */
 
     public boolean despiste(int volta, boolean chuva) {
         if(!this.dnf(volta, chuva)) return false;

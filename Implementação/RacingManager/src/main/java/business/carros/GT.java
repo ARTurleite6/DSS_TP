@@ -42,10 +42,12 @@ public class GT extends Carro {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GT{");
-        sb.append("fatorDesgaste=").append(fatorDesgaste);
-        sb.append('}');
-        return sb.toString();
+        return "GT{" + "modelo='" + this.getModelo() + '\'' +
+                ", marca='" + this.getMarca() + '\'' +
+                ", cilindrada=" + this.getCilindrada() +
+                ", potenciaCombustao=" + this.getPotenciaCombustao() +
+                ", fatorDesgaste=" + this.fatorDesgaste +
+                '}';
     }
 
     @Override

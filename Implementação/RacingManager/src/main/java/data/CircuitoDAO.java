@@ -76,20 +76,22 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         var dificuldade = rs2.getInt(3);
                         var tipo = rs2.getString(4);
                         if (dificuldade == GDU.Impossivel.getDificuldade()) {
-                            if (tipo.equals("curva")) curvas.add(GDU.Impossivel);
-                            else if (tipo.equals("reta")) retas.add(GDU.Impossivel);
+                            if (tipo.equals("Curva")) curvas.add(GDU.Impossivel);
+                            else if (tipo.equals("Reta")) retas.add(GDU.Impossivel);
                         } else if (dificuldade == GDU.Dificil.getDificuldade()) {
                             switch (tipo) {
-                                case "curva" -> curvas.add(GDU.Dificil);
-                                case "reta" -> retas.add(GDU.Dificil);
-                                case "chicane" -> chicanes.add(GDU.Dificil);
+                                case "Curva" -> curvas.add(GDU.Dificil);
+                                case "Reta" -> retas.add(GDU.Dificil);
+                                case "Chicane" -> chicanes.add(GDU.Dificil);
                             }
                         } else if (dificuldade == GDU.Possivel.getDificuldade()) {
-                            if (tipo.equals("curva")) curvas.add(GDU.Possivel);
-                            else if (tipo.equals("reta")) retas.add(GDU.Possivel);
+                            if (tipo.equals("Curva")) curvas.add(GDU.Possivel);
+                            else if (tipo.equals("Reta")) retas.add(GDU.Possivel);
                         }
                     }
-                    if (retas.size() == 0 && curvas.size() == 0 && chicanes.size() == 0) return null;
+                    if (retas.size() == 0 && curvas.size() == 0 && chicanes.size() == 0){
+                        return null;
+                    }
                     return new Circuito(nome, distancia, numeroVoltas, retas, curvas, chicanes);
                 }
             }
@@ -120,7 +122,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, retas.get(i).getDificuldade());
-                        pt2.setString(4, "reta");
+                        pt2.setString(4, "Reta");
                         pt2.addBatch();
                     }
                     var curvas = value.getCurvas();
@@ -128,7 +130,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, curvas.get(i).getDificuldade());
-                        pt2.setString(4, "curva");
+                        pt2.setString(4, "Curva");
                         pt2.addBatch();
                     }
                     var chicanes = value.getChicanes();
@@ -136,7 +138,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
                         pt2.setInt(3, chicanes.get(i).getDificuldade());
-                        pt2.setString(4, "chicane");
+                        pt2.setString(4, "Chicane");
                         pt2.addBatch();
                     }
                     pt2.executeBatch();
@@ -170,7 +172,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, i);
                         pt2.setString(2, key);
                         pt2.setInt(3, retas.get(i).getDificuldade());
-                        pt2.setString(4, "reta");
+                        pt2.setString(4, "Reta");
                         pt2.addBatch();
                     }
                     var curvas = value.getCurvas();
@@ -178,7 +180,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, i);
                         pt2.setString(2, key);
                         pt2.setInt(3, curvas.get(i).getDificuldade());
-                        pt2.setString(4, "curva");
+                        pt2.setString(4, "Curva");
                         pt2.addBatch();
                     }
                     var chicanes = value.getChicanes();
@@ -186,7 +188,7 @@ public class CircuitoDAO implements Map<String, Circuito> {
                         pt2.setInt(1, i);
                         pt2.setString(2, key);
                         pt2.setInt(3, chicanes.get(i).getDificuldade());
-                        pt2.setString(4, "chicane");
+                        pt2.setString(4, "Chicane");
                         pt2.addBatch();
                     }
                     pt2.executeBatch();
