@@ -191,7 +191,7 @@ public class CampeonatoDAO implements Map<String, Campeonato> {
 
     @Override
     public Set<Entry<String, Campeonato>> entrySet() {
-        Set<Entry<String, Campeonato>> res = new TreeSet<>();
+        Set<Entry<String, Campeonato>> res = new HashSet<>();
 
         for (var campeonato : this.values()) {
             res.add(new AbstractMap.SimpleEntry<>(campeonato.getNomeCampeonato(),

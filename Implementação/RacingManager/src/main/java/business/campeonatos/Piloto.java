@@ -35,6 +35,7 @@ public class Piloto {
         return sva;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public Piloto clone() {
         return new Piloto(this);
     }

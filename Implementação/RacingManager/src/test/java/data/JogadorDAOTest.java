@@ -9,27 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JogadorDAOTest {
 
-    private JogadorDAO dao = JogadorDAO.getInstance();
-
-    @Test
-    void size() {
-    }
-
-    @Test
-    void isEmpty() {
-    }
-
-    @Test
-    void containsKey() {
-    }
-
-    @Test
-    void containsValue() {
-    }
-
-    @Test
-    void get() {
-    }
+    private final JogadorDAO dao = JogadorDAO.getInstance();
 
     @Test
     void put() {

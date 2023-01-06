@@ -20,19 +20,35 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- *
+ * Classe que representa o facado dos campeonatos
  */
 public class CampeonatosFacade implements IGestCampeonatos {
 
     /**
-     *
+     * campeonatos disponiveis na app
      */
     private final Map<String, Campeonato> campeonatos;
+
+    /**
+     * circuitos disponiveis na app
+     */
     private final Map<String, Circuito> circuitos;
+    /**
+     * pilotos disponiveis na app
+     */
     private final Map<String, Piloto> pilotos;
+    /**
+     * Lobby ativo no momento
+     */
     private Lobby lobbyAtivo;
+    /**
+     * Lobbies realizados na app(Ainda nao esta a funcionar mas pronto)
+     */
     private final Map<Integer, Lobby> lobbies;
 
+    /**
+     * Construtor da classe CampeonatosFacade
+     */
     public CampeonatosFacade() {
         this.campeonatos = CampeonatoDAO.getInstance();
         this.circuitos = CircuitoDAO.getInstance();
@@ -40,6 +56,13 @@ public class CampeonatosFacade implements IGestCampeonatos {
         this.lobbies = new HashMap<>();
     }
 
+    /**
+     * Metodo que adiciona um campeonato
+     * @param campeonato Campeonato a adicionar
+     * @param circuitos Circuitos do campeonato
+     * @throws CampeonatoJaExisteException Caso o campeonato ja exista
+     * @throws CircuitoNaoExisteException Caso o circuito nao exista
+     */
     @Override
     public void addCampeonato(String campeonato, Set<String> circuitos) throws CampeonatoJaExisteException, CircuitoNaoExisteException {
         if(this.campeonatos.containsKey(campeonato)) throw new CampeonatoJaExisteException("Já existe campeonato com o nome de " + campeonato);
@@ -50,11 +73,23 @@ public class CampeonatosFacade implements IGestCampeonatos {
         this.campeonatos.put(c.getNomeCampeonato(), c);
     }
 
+    /**
+     * Metodo que retorna lista com campeonatos dispniveis no sistema
+     * @return
+     */
     @Override
     public List<Campeonato> getCampeonatos() {
         return this.campeonatos.values().stream().toList();
     }
 
+    /**
+     * Metodo que cria um lobby
+     * @param campeonato Campeonato do lobby
+     * @param premium Se o lobby é premium ou nao
+     * @return Lobby criado
+     * @throws CampeonatoNaoExisteException Caso o campeonato nao exista
+     * @throws CircuitoNaoExisteException Caso o circuito nao exista
+     */
     @Override
     public Lobby criaLobby(String campeonato, boolean premium) throws CampeonatoNaoExisteException, CircuitoNaoExisteException {
         var camp = this.campeonatos.get(campeonato);
@@ -66,32 +101,56 @@ public class CampeonatosFacade implements IGestCampeonatos {
         }
         var lobby = new Lobby(campeonato, listaCircuitos, premium);
         this.lobbyAtivo = lobby;
-        return lobby;
+        return lobby.clone();
     }
 
+    /**
+     * Metodo que inscreve um user no lobby ativo de momento
+     * @param username username do jogador
+     * @param carro carro do jogador a utilizar na corrida
+     * @param piloto piloto do jogador a utilizar na corrida
+     * @throws PilotoInexistenteException Caso o piloto nao exista
+     */
     @Override
     public void inscreveJogador(String username, Carro carro, String piloto) throws PilotoInexistenteException {
         var pil = this.getPiloto(piloto);
         this.lobbyAtivo.inscreveJogador(username, carro, pil);
     }
 
+    /**
+     * comeca lobby ativo de momento
+     */
     @Override
     public void comecaCampeonato() {
         this.lobbyAtivo.fechaLobby();
     }
 
+    /**
+     * Metodo que string que representa tabela classificativa do lobby
+     * @return
+     * @throws LobbyAtivoInexistenteException
+     */
     @Override
     public String getTabelaClassificativa() throws LobbyAtivoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby no momento");
         return this.lobbyAtivo.printTabelaClassificativa();
     }
 
+    /**
+     * Metodo que termina o lobby ativo no momento
+     */
     @Override
     public void terminaCampeonato() {
         this.lobbies.put(this.lobbyAtivo.getCodigo(), this.lobbyAtivo);
         this.lobbyAtivo = null;
     }
 
+    /**
+     * Metodo que comeca proxima corrida do lobby atual
+     * @return ‘String’ com a representacão das posicões de cada jogador
+     * @throws LobbyAtivoInexistenteException
+     * @throws NaoExistemMaisCorridas
+     */
     @Override
     public String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe lobby ativo neste momento.");
@@ -99,6 +158,14 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return this.lobbyAtivo.startNextRace();
     }
 
+    /**
+     * Metodo que adiciona configuracao do jogador para o lobby e proximas corridas
+     * @param nomePiloto nome do piloto do jogador a alterar
+     * @param modoMotor modo do motor do jogador a usar
+     * @param tipoPneu tipo de pneu do jogador a usar
+     * @throws LobbyAtivoInexistenteException Caso o lobby nao exista
+     * @throws PilotoInexistenteException Caso o piloto nao exista
+     */
     @Override
     public void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento");

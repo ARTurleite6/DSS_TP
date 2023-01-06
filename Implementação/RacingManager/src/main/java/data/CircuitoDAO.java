@@ -118,26 +118,26 @@ public class CircuitoDAO implements Map<String, Circuito> {
                     pt1.executeUpdate();
                     var retas = value.getRetas();
                     int numeroSeccao = 0;
-                    for(int i = 0; i < retas.size(); ++i) {
+                    for (GDU reta : retas) {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
-                        pt2.setInt(3, retas.get(i).getDificuldade());
+                        pt2.setInt(3, reta.getDificuldade());
                         pt2.setString(4, "Reta");
                         pt2.addBatch();
                     }
                     var curvas = value.getCurvas();
-                    for(int i = 0; i < curvas.size(); ++i) {
+                    for (GDU curva : curvas) {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
-                        pt2.setInt(3, curvas.get(i).getDificuldade());
+                        pt2.setInt(3, curva.getDificuldade());
                         pt2.setString(4, "Curva");
                         pt2.addBatch();
                     }
                     var chicanes = value.getChicanes();
-                    for(int i = 0; i < chicanes.size(); ++i) {
+                    for (GDU chicane : chicanes) {
                         pt2.setInt(1, numeroSeccao++);
                         pt2.setString(2, key);
-                        pt2.setInt(3, chicanes.get(i).getDificuldade());
+                        pt2.setInt(3, chicane.getDificuldade());
                         pt2.setString(4, "Chicane");
                         pt2.addBatch();
                     }

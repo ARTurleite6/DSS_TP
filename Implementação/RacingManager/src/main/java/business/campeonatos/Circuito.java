@@ -65,6 +65,7 @@ public class Circuito {
         return new ArrayList<>(this.curvas);
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Circuito clone() {
         return new Circuito(this);

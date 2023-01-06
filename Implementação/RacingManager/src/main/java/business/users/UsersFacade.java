@@ -6,7 +6,6 @@ import business.exceptions.UtilizadorJaExistenteException;
 import business.exceptions.UtilizadorNaoExisteException;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Map;
 
 public class UsersFacade implements IGestUsers {
@@ -17,26 +16,6 @@ public class UsersFacade implements IGestUsers {
     public UsersFacade() {
         this.jogadores = JogadorDAO.getInstance();
         this.admins = AdminDAO.getInstance();
-    }
-
-    @Override
-    public String getRankingGlobal() {
-        return null;
-    }
-
-    @Override
-    public void atualizaPassword(String username, String password) throws UtilizadorNaoExisteException {
-        //TODO verificar se password é válida ou não
-        var jogador = this.jogadores.get(username);
-        var admin = this.admins.get(username);
-        if(jogador == null && admin == null) throw new UtilizadorNaoExisteException("Não existe utilizador com username= " + username);
-        if(jogador != null && jogador.estaAutenticado()) {
-            jogador.setPassword(password);
-            this.jogadores.put(jogador.getUsername(), jogador);
-        } else {
-            admin.setPassword(password);
-            this.admins.put(admin.getUsername(), admin);
-        }
     }
 
     @Override
@@ -52,11 +31,6 @@ public class UsersFacade implements IGestUsers {
             admin.logOut();
             this.admins.put(username, admin);
         }
-    }
-
-    @Override
-    public List<String> getTiposConta() {
-        return List.of("Normal", "Premium");
     }
 
     @Override
@@ -98,11 +72,6 @@ public class UsersFacade implements IGestUsers {
                 this.jogadores.put(jogador.getUsername(), jogador);
             }
         }
-    }
-
-    @Override
-    public boolean existeUtilizador(String username) {
-        return this.jogadores.containsKey(username) && this.admins.containsKey(username);
     }
 
     @Override

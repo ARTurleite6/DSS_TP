@@ -15,7 +15,7 @@ import java.util.Set;
 public interface IRacingManagerLNFacade {
     Lobby criaLobby(String nomeCampeonato, String username) throws CampeonatoNaoExisteException, CircuitoNaoExisteException, UtilizadorNaoExisteException, CriarLobbySemAutenticacaoException;
     void addCampeonato(String nomeCampeonato, Set<String> circuitos) throws CampeonatoJaExisteException, CircuitoNaoExisteException;
-    void inscreveJogador(String username, String modeloCarro, String nomePiloto) throws NaoExisteLobbyAbertoException, UsernameInvalidoException, CarroInexistenteException, PilotoInexistenteException, LobbyAtivoInexistenteException;
+    void inscreveJogador(String username, String modeloCarro, String nomePiloto) throws NaoExisteLobbyAbertoException, CarroInexistenteException, PilotoInexistenteException, LobbyAtivoInexistenteException;
     List<Campeonato> getCampeonatos();
 
     String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;

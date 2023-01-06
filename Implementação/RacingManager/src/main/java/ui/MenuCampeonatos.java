@@ -98,7 +98,7 @@ public class MenuCampeonatos implements SubMenu {
                 jogadorPiloto.put(username, pilotoEscolhido);
                 ++i;
             } catch (NaoExisteLobbyAbertoException | PilotoInexistenteException | CarroInexistenteException |
-                     LobbyAtivoInexistenteException | UsernameInvalidoException e) {
+                     LobbyAtivoInexistenteException e) {
                 System.out.println(e.getMessage());
             }
             System.out.println("\n-----------------------------");

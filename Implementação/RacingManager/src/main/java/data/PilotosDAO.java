@@ -5,12 +5,7 @@ import business.campeonatos.Piloto;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class PilotosDAO implements Map<String, Piloto> {
   private static PilotosDAO dao = null;
@@ -181,7 +176,7 @@ public class PilotosDAO implements Map<String, Piloto> {
 
   @Override
   public Set<Entry<String, Piloto>> entrySet() {
-    Set<Entry<String, Piloto>> res = new TreeSet<>();
+    Set<Entry<String, Piloto>> res = new HashSet<>();
 
     for (var piloto : this.values()) {
       res.add(new AbstractMap.SimpleEntry<>(piloto.getNome(),

@@ -129,6 +129,7 @@ public class Lobby {
         return result;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Lobby clone() {
         return new Lobby(this);

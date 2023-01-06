@@ -11,18 +11,18 @@ import java.util.Set;
 public class Campeonato {
 
     /**
-     *
+     * Nome do Campeonato
      */
     private final String nomeCampeonato;
 
     /**
-     *
+     * Lista com os nomes dos circuitos do campeonato
      */
     private final Set<String> circuitos;
 
     /**
-     * @param nomeCampeonato
-     * @param circuitos
+     * @param nomeCampeonato nome a colocar no campeonato
+     * @param circuitos circuitos escolhidos para campeonato
      */
     public Campeonato(String nomeCampeonato, Set<String> circuitos) {
         this.nomeCampeonato = nomeCampeonato;
@@ -30,7 +30,7 @@ public class Campeonato {
     }
 
     /**
-     * @param c
+     * @param c campeonato que deseja copiar
      */
     public Campeonato(@NotNull Campeonato c) {
         this.nomeCampeonato = c.getNomeCampeonato();
@@ -38,29 +38,30 @@ public class Campeonato {
     }
 
     /**
-     * @return
+     * @return nome do campeonato
      */
     public String getNomeCampeonato() {
         return this.nomeCampeonato;
     }
 
     /**
-     * @return
+     * @return colecao de nomes dos circuitos
      */
     public Set<String> getCircuitos() {
         return new HashSet<>(this.circuitos);
     }
 
     /**
-     * @return
+     * @return copia do campeonato
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public Campeonato clone() {
         return new Campeonato(this);
     }
 
     /**
-     * @return
+     * @return representacao do campeonato em string
      */
     @Override
     public String toString() {
@@ -71,8 +72,8 @@ public class Campeonato {
     }
 
     /**
-     * @param o
-     * @return
+     * @param o objecto a comparar com a instancia campeonato
+     * @return comparacao do objeto, true se forem iguais, falso caso contrário
      */
     @Override
     public boolean equals(Object o) {
@@ -86,7 +87,7 @@ public class Campeonato {
     }
 
     /**
-     * @return
+     * @return codigo hash do campeonato
      */
     @Override
     public int hashCode() {
@@ -96,7 +97,7 @@ public class Campeonato {
     }
 
     /**
-     * @return
+     * @return Representacao do campeonato para ser apresentado no menu
      */
     public String imprimeCampeonato() {
         StringBuilder sb = new StringBuilder();

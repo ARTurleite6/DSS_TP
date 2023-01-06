@@ -45,7 +45,7 @@ public class JogadorDAO implements Map<String, JogadorAutenticavel> {
 
   @Override
   public boolean containsKey(Object key) {
-    return this.get((String)key) != null;
+    return this.get(key) != null;
   }
 
   @Override

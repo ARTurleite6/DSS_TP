@@ -8,10 +8,10 @@ import java.util.Random;
 
 public abstract class Carro {
 
-    private String modelo;
-    private String marca;
-    private int cilindrada;
-    private int potenciaCombustao;
+    private final String modelo;
+    private final String marca;
+    private final int cilindrada;
+    private final int potenciaCombustao;
     private float estado;
 
     private TipoPneu tipoPneu;
@@ -206,21 +206,6 @@ public abstract class Carro {
 
     @Override
     public abstract String toString();
-        /*
-        final StringBuilder sb = new StringBuilder("Carro{");
-        sb.append("modelo='").append(modelo).append('\'');
-        sb.append(", marca='").append(marca).append('\'');
-        sb.append(", cilindrada=").append(cilindrada);
-        sb.append(", potenciaCombustao=").append(potenciaCombustao);
-        sb.append(", estado=").append(estado);
-        sb.append(", tipoPneu=").append(tipoPneu);
-        sb.append(", modoMotor=").append(modoMotor);
-        sb.append(", piloto=").append(piloto);
-        sb.append(", dnf=").append(dnf);
-        sb.append(", tempo=").append(tempo);
-        sb.append(", despiste=").append(despiste);
-        return sb.toString();
-         */
 
     public boolean despiste(int volta, boolean chuva) {
         if(!this.dnf(volta, chuva)) return false;
@@ -256,15 +241,6 @@ public abstract class Carro {
         if(!this.despiste) {
             tempoDespiste = 0;
         }
-
-        System.out.println("tempo medio " + tempoMedio);
-        System.out.println("tempo despiste " + tempoDespiste);
-        System.out.println("tempo chuva " + tempoChuva);
-        System.out.println("tempo potenciaCilindrada " + fatorPotenciaCilindrada);
-        System.out.println("fator sorte " + fatorSorte);
-        System.out.println("agressividade " + agressividade);
-        System.out.println("desempenho pneu " + desempenhoPneu);
-        System.out.println("qualidadeTempoSeco " + qualidadeTempoSeco);
 
         return tempoMedio + tempoDespiste + tempoChuva - fatorSorte + fatorPotenciaCilindrada - agressividade - desempenhoPneu - fatorMotor - qualidadeTempoSeco;
     }

@@ -62,6 +62,7 @@ public class GTH extends GT implements Hibrido {
         return result;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public GTH clone() {
         return new GTH(this);
     }

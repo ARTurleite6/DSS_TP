@@ -1,36 +1,73 @@
 package business.carros;
 
-import business.campeonatos.GDU;
 import business.campeonatos.Piloto;
 import business.exceptions.CilindradaInvalidaException;
 
 import java.util.Random;
 
+/**
+ * Classe que representa um carro do tipo GT
+ */
 public class GT extends Carro {
+    /**
+     * Fator de desgaste do carro
+     */
     private float fatorDesgaste;
 
+    /**
+     * Construtor da classe GT
+     */
     public GT() {
         super();
         this.fatorDesgaste = 0;
     }
 
+    /**
+     * Construtor parametrizado da classe GT
+     * @param modelo Modelo do carro
+     * @param marca Marca do carro
+     * @param cilindrada Cilindrada do carro
+     * @param fatorDesgaste Fator de desgaste do carro
+     */
     public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, float fatorDesgaste) throws CilindradaInvalidaException {
         super(modelo, marca, cilindrada, potenciaCombustao);
         if(cilindrada < 2000 || cilindrada > 4000) throw new CilindradaInvalidaException("GTs apenas podem ter cilindradas num intervalo de 3000 e 5000");
         this.fatorDesgaste = fatorDesgaste;
     }
 
+    /**
+     * Construtor parametrizado da classe GT
+     * @param modelo Modelo do carro
+     * @param marca Marca do carro
+     * @param cilindrada Cilindrada do carro
+     * @param estadoPneu Estado do pneu do carro
+     * @param modoMotor Modo do motor do carro
+     * @param tipoPneu Tipo do pneu do carro
+     * @param piloto Piloto do carro
+     * @param dnf verifica se carro nao terminou a corrida
+     * @param tempo tempo do carro numa corrida decorrente
+     * @param despiste Despiste do carro
+     * @param fatorDesgaste Fator de desgaste do carro
+     */
     public GT(String modelo, String marca, int cilindrada, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste, float fatorDesgaste) throws CilindradaInvalidaException {
         super(modelo, marca, cilindrada, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
         if(cilindrada < 2000 || cilindrada > 4000) throw new CilindradaInvalidaException("GTs apenas podem ter cilindradas num intervalo de 3000 e 5000");
         this.fatorDesgaste = fatorDesgaste;
     }
 
+    /**
+     * Construtor de copia da classe GT
+     * @param c GT a copiar
+     */
     public GT(GT c) {
         super(c);
         this.fatorDesgaste = c.getFatorDesgaste();
     }
 
+    /**
+     * Devolve o fator de desgaste do carro
+     * @return Fator de desgaste do carro
+     */
     public float getFatorDesgaste() {
         return this.fatorDesgaste;
     }
@@ -68,6 +105,10 @@ public class GT extends Carro {
         return result;
     }
 
+    /**
+     * Metodo que calcula o tempo de um carro numa corrida
+     * @return Fiabilidade do carro
+     */
     @Override
     public int getFiabilidade() {
         return (int)(((100000 / this.getCilindrada()) * 1.7) - this.getModoMotor().getProbAvaria());
@@ -87,6 +128,10 @@ public class GT extends Carro {
     }
 
 
+    /**
+     * Metodo que calcula o tempo de um carro numa corrida
+     * @return Tempo do carro numa corrida
+     */
     @Override
     protected int categoryCompare(String categoria) {
         if(categoria.equals("GT") || categoria.equals("GTH")) return 1000;

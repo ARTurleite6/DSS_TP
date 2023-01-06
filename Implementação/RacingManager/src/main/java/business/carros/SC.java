@@ -1,6 +1,5 @@
 package business.carros;
 
-import business.campeonatos.GDU;
 import business.campeonatos.Piloto;
 
 import java.util.Random;

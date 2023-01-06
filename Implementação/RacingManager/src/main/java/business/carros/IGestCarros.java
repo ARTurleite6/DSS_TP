@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface IGestCarros {
-    List<String> getCategorias();
     void addCarro(Carro carro) throws CarroJaExisteException;
     List<Carro> getCarros();
     Set<String> getModosMotor();

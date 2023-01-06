@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("MethodDoesntCallSuperMethod")
 public class Corrida {
     private final Map<String, Integer> temposTotais;
     private final Map<String, Integer> dnf;
@@ -110,8 +111,14 @@ public class Corrida {
     private @NotNull String printResultados(Map<String, Integer> resultados) {
         StringBuilder s = new StringBuilder("\n------------------Resultados-------------------");
         var list_aux = new ArrayList<>(this.carros);
-        list_aux.sort(Comparator.comparingInt(c -> resultados.get(c.getPiloto().getNome())));
-        list_aux.sort((c1, c2) -> Boolean.compare(c1.isDnf(), c2.isDnf()));
+        Comparator<Carro> comp = (c1, c2) -> {
+            int r = Boolean.compare(c1.isDnf(), c2.isDnf());
+
+            if(r == 0) r = resultados.get(c1.getPiloto().getNome()) - resultados.get(c2.getPiloto().getNome());
+
+            return r;
+        };
+        list_aux.sort(comp);
 
 
         int lugar = 1;

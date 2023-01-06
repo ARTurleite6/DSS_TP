@@ -13,8 +13,8 @@ public interface IGestCampeonatos {
     void addCampeonato(String campeonato, Set<String> circuitos) throws CampeonatoJaExisteException, CircuitoNaoExisteException;
     List<Campeonato> getCampeonatos();
     Lobby criaLobby(String campeonato, boolean premium) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
-    void inscreveJogador(String username, Carro carro, String piloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
-    void comecaCampeonato() throws LobbyAtivoInexistenteException, LobbyAlreadyStartedException;
+    void inscreveJogador(String username, Carro carro, String piloto) throws PilotoInexistenteException;
+    void comecaCampeonato();
     String getTabelaClassificativa() throws LobbyAtivoInexistenteException;
     void terminaCampeonato();
     String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;
