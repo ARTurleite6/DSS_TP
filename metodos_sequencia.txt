@@ -1,2 +1,0 @@
-//Simula Carro SD
-public simulaCorrida(premium) : Map<String, Integer> // Corrida

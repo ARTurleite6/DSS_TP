@@ -1,8 +1,0 @@
-Influencia ultrapassagem:
-  SVA,
-  Pneus,
-  Motor,
-  CTS,
-  GDU,
-  Potencia,
-  Cilindrada
