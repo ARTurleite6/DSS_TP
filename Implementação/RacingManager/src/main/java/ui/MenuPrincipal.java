@@ -68,7 +68,6 @@ public class MenuPrincipal {
                 this.userAutenticado = user;
                 this.subMenus.forEach(menu -> menu.setUserAutenticado(user));
                 System.out.println("Login efetuado com sucesso");
-                System.out.println(this.userAutenticado);
             }
             else System.out.println("Login efetuado com insucesso");
         } catch (UtilizadorNaoExisteException e) {

@@ -123,7 +123,6 @@ public class GT extends Carro {
         Random random = new Random();
         int x = random.nextInt(85);
         float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
-        System.out.println("DNF GT = " + ((((100000) / this.getCilindrada()) * 1.7) - (volta * this.fatorDesgaste) - motorH - motorAvaria - (100 - this.getEstado())));
         return x > (((100000) / this.getCilindrada()) * 1.7) - (volta * this.fatorDesgaste) - motorH - motorAvaria - (100 - this.getEstado());
     }
 

@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RacingManager:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RacingManager_jar</output-path>
+    <root id="archive" name="RacingManager.jar">
+      <element id="module-output" name="RacingManager" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/23.1.0/annotations-23.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/mysql-connector-j-8.0.31/mysql-connector-j-8.0.31.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

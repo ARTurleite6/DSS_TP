@@ -140,7 +140,6 @@ public class C1 extends Carro implements Afinavel {
         if(this instanceof Hibrido hibrido) {
             motorH = hibrido.getPotenciaEletrica() / 50;
         }
-        System.out.println("Motor H " + motorH);
         Random random = new Random();
         int x = random.nextInt(95);
         float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;

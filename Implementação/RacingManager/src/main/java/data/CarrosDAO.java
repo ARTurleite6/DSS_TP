@@ -73,7 +73,6 @@ public class CarrosDAO implements Map<String, Carro> {
             return new C1H(modelo, marca, potenciaCombustao, afinacao, potencia_eletrica);
           }
         } else {
-          System.out.println("Não é Hibrido");
           return new C1(modelo, marca, potenciaCombustao, afinacao);
         }
       }
@@ -98,7 +97,6 @@ public class CarrosDAO implements Map<String, Carro> {
             return new C2H(modelo, marca,cilindrada, potenciaCombustao, afinacao, potencia_eletrica);
           }
         } else {
-          System.out.println("Não é Hibrido");
           return new C2(modelo, marca, cilindrada, potenciaCombustao, afinacao);
         }
       }
@@ -125,7 +123,6 @@ public class CarrosDAO implements Map<String, Carro> {
       ps.setString(1, (String)key);
       try(var rs = ps.executeQuery()) {
         if(!rs.next()) return null;
-        System.out.println("Carro encontrado");
         modelo = rs.getString(1);
         var marca = rs.getString(2);
         var cilindrada = rs.getInt(3);
@@ -134,11 +131,9 @@ public class CarrosDAO implements Map<String, Carro> {
 
         switch (tipo) {
           case "C1" -> {
-            System.out.println("Tipo C1");
             return this.getC1(c1s, c1hs, modelo, marca, potenciaCombustao);
           }
           case "C2" -> {
-            System.out.println("Tipo C2");
             return this.getC2(c2s, c2hs, modelo, marca, cilindrada, potenciaCombustao);
           }
           case "GT" -> {

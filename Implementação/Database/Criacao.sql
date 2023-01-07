@@ -5,22 +5,22 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema RacingManager
+-- Schema RaaingManager
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema RacingManager
+-- Schema racing_manager
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `RacingManager` DEFAULT CHARACTER SET utf8 ;
-USE `RacingManager` ;
+CREATE SCHEMA IF NOT EXISTS `racing_manager` DEFAULT CHARACTER SET utf8 ;
+USE `racing_manager` ;
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Utilizador`
+-- Table `racing_manager`.`Utilizador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Utilizador` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Utilizador` (
   `username` VARCHAR(50) NOT NULL,
   `password` VARCHAR(50) NOT NULL,
-  `autenticado` BIT(1) NOT NULL,
+  `autenticado` TINYINT NOT NULL,
   `tipo` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE)
@@ -28,46 +28,44 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Jogador`
+-- Table `racing_manager`.`Jogador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Jogador` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Jogador` (
   `username` VARCHAR(50) NOT NULL,
   `pontuacao_global` INT NOT NULL,
-  `premium` BIT(1) NOT NULL,
-  `autenticado` BIT(1) NOT NULL,
+  `premium` TINYINT NOT NULL,
   PRIMARY KEY (`username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   CONSTRAINT `username`
     FOREIGN KEY (`username`)
-    REFERENCES `RacingManager`.`Utilizador` (`username`)
+    REFERENCES `racing_manager`.`Utilizador` (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Administrador`
+-- Table `racing_manager`.`Administrador`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Administrador` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Administrador` (
   `username` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`username`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   CONSTRAINT `fk_Administrador_Utilizador1`
     FOREIGN KEY (`username`)
-    REFERENCES `RacingManager`.`Utilizador` (`username`)
+    REFERENCES `racing_manager`.`Utilizador` (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Carro`
+-- Table `racing_manager`.`Carro`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Carro` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Carro` (
   `modelo` VARCHAR(50) NOT NULL,
   `marca` VARCHAR(50) NOT NULL,
   `cilindrada` INT NOT NULL,
   `potencia_combustao` INT NOT NULL,
-  `fiabilidade` FLOAT NOT NULL,
   `tipo` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE)
@@ -75,107 +73,107 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`GT`
+-- Table `racing_manager`.`GT`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`GT` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`GT` (
   `modelo` VARCHAR(50) NOT NULL,
   `fator_desgaste` FLOAT NOT NULL,
-  `hibrido` BIT(1) NOT NULL,
+  `hibrido` TINYINT NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
   CONSTRAINT `fk_GT_Carro1`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`Carro` (`modelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`C2`
+-- Table `racing_manager`.`C2`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`C2` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`C2` (
   `modelo` VARCHAR(50) NOT NULL,
   `afinacao` FLOAT NOT NULL,
-  `hibrido` BIT(1) NOT NULL,
+  `hibrido` TINYINT NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
   CONSTRAINT `fk_C2_Carro1`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`Carro` (`modelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`C1`
+-- Table `racing_manager`.`C1`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`C1` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`C1` (
   `modelo` VARCHAR(50) NOT NULL,
   `afinacao` FLOAT NOT NULL,
-  `hibrido` BIT(1) NOT NULL,
+  `hibrido` TINYINT NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
   CONSTRAINT `fk_C1_Carro1`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`Carro` (`modelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`GTH`
+-- Table `racing_manager`.`GTH`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`GTH` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`GTH` (
   `modelo` VARCHAR(50) NOT NULL,
   `potencia_eletrica` INT NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
   CONSTRAINT `fk_GTH_GT1`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`GT` (`modelo`)
+    REFERENCES `racing_manager`.`GT` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`C2H`
+-- Table `racing_manager`.`C2H`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`C2H` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`C2H` (
   `modelo` VARCHAR(50) NOT NULL,
   `potencia_eletrica` INT NOT NULL,
   PRIMARY KEY (`modelo`),
   UNIQUE INDEX `modelo_UNIQUE` (`modelo` ASC) VISIBLE,
   CONSTRAINT `fk_C1H_C21`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`C2` (`modelo`)
+    REFERENCES `racing_manager`.`C2` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`C1H`
+-- Table `racing_manager`.`C1H`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`C1H` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`C1H` (
   `modelo` VARCHAR(50) NOT NULL,
   `potencia_eletrica` INT NOT NULL,
   PRIMARY KEY (`modelo`),
   CONSTRAINT `fk_C1H_C11`
     FOREIGN KEY (`modelo`)
-    REFERENCES `RacingManager`.`C1` (`modelo`)
+    REFERENCES `racing_manager`.`C1` (`modelo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Piloto`
+-- Table `racing_manager`.`Piloto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Piloto` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Piloto` (
   `nome` VARCHAR(50) NOT NULL,
   `cts` INT NOT NULL,
   `sva` INT NOT NULL,
@@ -185,18 +183,18 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Campeonato`
+-- Table `racing_manager`.`Campeonato`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Campeonato` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Campeonato` (
   `nome` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`nome`),
   UNIQUE INDEX `Nome_UNIQUE` (`nome` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Circuito`
+-- Table `racing_manager`.`Circuito`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Circuito` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Circuito` (
   `nome` VARCHAR(50) NOT NULL,
   `distancia` INT NOT NULL,
   `voltas` INT NOT NULL,
@@ -206,9 +204,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`CircuitoCampeonato`
+-- Table `racing_manager`.`CircuitoCampeonato`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`CircuitoCampeonato` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`CircuitoCampeonato` (
   `campeonato` VARCHAR(50) NOT NULL,
   `circuito` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`campeonato`, `circuito`),
@@ -216,76 +214,77 @@ CREATE TABLE IF NOT EXISTS `RacingManager`.`CircuitoCampeonato` (
   INDEX `fk_Campeonato_has_Circuito_Campeonato1_idx` (`campeonato` ASC) VISIBLE,
   CONSTRAINT `fk_Campeonato_has_Circuito_Campeonato1`
     FOREIGN KEY (`campeonato`)
-    REFERENCES `RacingManager`.`Campeonato` (`nome`)
+    REFERENCES `racing_manager`.`Campeonato` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Campeonato_has_Circuito_Circuito1`
     FOREIGN KEY (`circuito`)
-    REFERENCES `RacingManager`.`Circuito` (`nome`)
+    REFERENCES `racing_manager`.`Circuito` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Lobby`
+-- Table `racing_manager`.`Lobby`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Lobby` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Lobby` (
   `numero` INT NOT NULL AUTO_INCREMENT,
   `campeonato` VARCHAR(50) NOT NULL,
-  `premium` BIT(1) NOT NULL,
+  `premium` TINYINT NOT NULL,
   PRIMARY KEY (`numero`),
   UNIQUE INDEX `numero_UNIQUE` (`numero` ASC) VISIBLE,
   INDEX `fk_Lobby_Campeonato1_idx` (`campeonato` ASC) VISIBLE,
   CONSTRAINT `fk_Lobby_Campeonato1`
     FOREIGN KEY (`campeonato`)
-    REFERENCES `RacingManager`.`Campeonato` (`nome`)
+    REFERENCES `racing_manager`.`Campeonato` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`JogadorLobby`
+-- Table `racing_manager`.`JogadorLobby`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`JogadorLobby` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`JogadorLobby` (
   `jogador` VARCHAR(50) NOT NULL,
   `lobby` INT NOT NULL,
   `piloto` VARCHAR(50) NOT NULL,
   `carro` VARCHAR(50) NOT NULL,
   `pontuacao` INT NOT NULL,
-  PRIMARY KEY (`jogador`, `lobby`),
+  `recebeu_pontuacao` TINYINT NOT NULL,
+  PRIMARY KEY (`lobby`, `jogador`),
   INDEX `fk_Jogador_has_Lobby_Lobby1_idx` (`lobby` ASC) VISIBLE,
-  INDEX `fk_Jogador_has_Lobby_Jogador1_idx` (`jogador` ASC) VISIBLE,
   INDEX `fk_JogadorLobby_Piloto1_idx` (`piloto` ASC) VISIBLE,
   INDEX `fk_JogadorLobby_Carro1_idx` (`carro` ASC) VISIBLE,
-  CONSTRAINT `fk_Jogador_has_Lobby_Jogador1`
-    FOREIGN KEY (`jogador`)
-    REFERENCES `RacingManager`.`Jogador` (`username`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `jogador_idx` (`jogador` ASC) VISIBLE,
   CONSTRAINT `fk_Jogador_has_Lobby_Lobby1`
     FOREIGN KEY (`lobby`)
-    REFERENCES `RacingManager`.`Lobby` (`numero`)
+    REFERENCES `racing_manager`.`Lobby` (`numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_JogadorLobby_Piloto1`
     FOREIGN KEY (`piloto`)
-    REFERENCES `RacingManager`.`Piloto` (`nome`)
+    REFERENCES `racing_manager`.`Piloto` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_JogadorLobby_Carro1`
     FOREIGN KEY (`carro`)
-    REFERENCES `RacingManager`.`Carro` (`modelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `jogador`
+    FOREIGN KEY (`jogador`)
+    REFERENCES `racing_manager`.`Jogador` (`username`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Corrida`
+-- Table `racing_manager`.`Corrida`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Corrida` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Corrida` (
   `numero` INT NOT NULL AUTO_INCREMENT,
   `lobby` INT NOT NULL,
   `circuito` VARCHAR(50) NOT NULL,
@@ -296,21 +295,21 @@ CREATE TABLE IF NOT EXISTS `RacingManager`.`Corrida` (
   INDEX `fk_Corrida_Circuito1_idx` (`circuito` ASC) VISIBLE,
   CONSTRAINT `fk_Corrida_Lobby1`
     FOREIGN KEY (`lobby`)
-    REFERENCES `RacingManager`.`Lobby` (`numero`)
+    REFERENCES `racing_manager`.`Lobby` (`numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Corrida_Circuito1`
     FOREIGN KEY (`circuito`)
-    REFERENCES `RacingManager`.`Circuito` (`nome`)
+    REFERENCES `racing_manager`.`Circuito` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`Seccao`
+-- Table `racing_manager`.`Seccao`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`Seccao` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`Seccao` (
   `numero` INT NOT NULL,
   `circuito` VARCHAR(50) NOT NULL,
   `dificuldade` INT NOT NULL,
@@ -319,16 +318,16 @@ CREATE TABLE IF NOT EXISTS `RacingManager`.`Seccao` (
   INDEX `fk_Seccao_Circuito1_idx` (`circuito` ASC) VISIBLE,
   CONSTRAINT `fk_Seccao_Circuito1`
     FOREIGN KEY (`circuito`)
-    REFERENCES `RacingManager`.`Circuito` (`nome`)
+    REFERENCES `racing_manager`.`Circuito` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`CorridaPiloto`
+-- Table `racing_manager`.`CorridaPiloto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`CorridaPiloto` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`CorridaPiloto` (
   `corrida` INT NOT NULL,
   `piloto` VARCHAR(50) NOT NULL,
   `dnf` BIT(1) NOT NULL,
@@ -338,21 +337,21 @@ CREATE TABLE IF NOT EXISTS `RacingManager`.`CorridaPiloto` (
   INDEX `fk_Corrida_has_Piloto_Corrida1_idx` (`corrida` ASC) VISIBLE,
   CONSTRAINT `fk_Corrida_has_Piloto_Corrida1`
     FOREIGN KEY (`corrida`)
-    REFERENCES `RacingManager`.`Corrida` (`numero`)
+    REFERENCES `racing_manager`.`Corrida` (`numero`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Corrida_has_Piloto_Piloto1`
     FOREIGN KEY (`piloto`)
-    REFERENCES `RacingManager`.`Piloto` (`nome`)
+    REFERENCES `racing_manager`.`Piloto` (`nome`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `RacingManager`.`TempoVolta`
+-- Table `racing_manager`.`TempoVolta`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `RacingManager`.`TempoVolta` (
+CREATE TABLE IF NOT EXISTS `racing_manager`.`TempoVolta` (
   `volta` INT NOT NULL,
   `piloto` INT NOT NULL,
   `corrida` VARCHAR(50) NOT NULL,
@@ -360,11 +359,43 @@ CREATE TABLE IF NOT EXISTS `RacingManager`.`TempoVolta` (
   PRIMARY KEY (`volta`, `piloto`, `corrida`),
   CONSTRAINT `fk_TempoVolta_CorridaPiloto1`
     FOREIGN KEY (`piloto` , `corrida`)
-    REFERENCES `RacingManager`.`CorridaPiloto` (`corrida` , `piloto`)
+    REFERENCES `racing_manager`.`CorridaPiloto` (`corrida` , `piloto`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `racing_manager`.`SC`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `racing_manager`.`SC` (
+  `movelo` VARCHAR(50) NOT NULL,
+  INDEX `fk_SC_Carro1_idx` (`movelo` ASC) VISIBLE,
+  PRIMARY KEY (`movelo`),
+  CONSTRAINT `fk_SC_Carro1`
+    FOREIGN KEY (`movelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `racing_manager`.`SC`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `racing_manager`.`SC` (
+  `movelo` VARCHAR(50) NOT NULL,
+  INDEX `fk_SC_Carro1_idx` (`movelo` ASC) VISIBLE,
+  PRIMARY KEY (`movelo`),
+  CONSTRAINT `fk_SC_Carro1`
+    FOREIGN KEY (`movelo`)
+    REFERENCES `racing_manager`.`Carro` (`modelo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE USER IF NOT EXISTS 'dss_tp'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON racing_manager.* TO 'dss_tp'@'localhost';
+FLUSH PRIVILEGES;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

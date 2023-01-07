@@ -1,27 +1,13 @@
 package business.carros;
 
-import business.campeonatos.Piloto;
-
 import java.util.Random;
 
 public class SC extends Carro {
 
     private static final int SC_CILINDRADA = 2500;
 
-    public SC() {
-        super();
-    }
-
     public SC(String modelo, String marca, int potenciaCombustao) {
         super(modelo, marca, SC.SC_CILINDRADA, potenciaCombustao);
-    }
-
-    public SC(String modelo, String marca, int potenciaCombustao, float fiabilidade) {
-        super(modelo, marca, SC.SC_CILINDRADA, potenciaCombustao, fiabilidade);
-    }
-
-    public SC(String modelo, String marca, int potenciaCombustao, int estadoPneu, ModoMotor modoMotor, TipoPneu tipoPneu, Piloto piloto, boolean dnf, int tempo, boolean despiste) {
-        super(modelo, marca, SC.SC_CILINDRADA, potenciaCombustao, estadoPneu, modoMotor, tipoPneu, piloto, dnf, tempo, despiste);
     }
 
     public SC(Carro c) {
@@ -64,7 +50,6 @@ public class SC extends Carro {
             qualidadePiloto = piloto.getQualidadeTempoSeco();
         }
         int seguranca = piloto.getSeguranca();
-        System.out.println("DNF SC = " + ((((qualidadePiloto + seguranca) * 0.75) + (((double) this.getCilindrada()) / 10) * 0.25) - motorAvaria - (100 - this.getEstado())) );
 
         return x > (((qualidadePiloto + seguranca) * 0.75) + (((double) this.getCilindrada()) / 10) * 0.25) - motorAvaria - (100 - this.getEstado());
     }

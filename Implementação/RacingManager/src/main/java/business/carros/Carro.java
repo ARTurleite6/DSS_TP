@@ -8,19 +8,55 @@ import java.util.Random;
 
 public abstract class Carro {
 
+    /**
+     * Modelo do carro
+     */
     private final String modelo;
+    /**
+     * Marca do carro
+     */
     private final String marca;
+    /**
+     * Cilindrada do carro
+     */
     private final int cilindrada;
+    /**
+     * Potência de combustão do carro
+     */
     private final int potenciaCombustao;
+    /**
+     * Estado do carro
+     */
     private float estado;
 
+    /**
+     * Tipo de pneu que carro está a usar
+     */
     private TipoPneu tipoPneu;
+    /**
+     * Modo de motor que o carro está a usar
+     */
     private ModoMotor modoMotor;
+    /**
+     * Piloto que está a conduzir o carro
+     */
     private Piloto piloto;
+    /**
+     * Verifica se carro não terminou a corrida
+     */
     private boolean dnf;
+    /**
+     * Tempo do carro numa corrida decorrente
+     */
     private int tempo;
+    /**
+     * Verifica se carro despistou
+     */
     private boolean despiste;
 
+    /**
+     * Construtor default da classe Carro
+     */
     public Carro() {
         this.modelo = "";
         this.marca = "";
@@ -36,6 +72,13 @@ public abstract class Carro {
         this.despiste = false;
     }
 
+    /**
+     * Construtor parametrizado da classe Carro
+     * @param modelo Modelo do carro
+     * @param marca Marca do carro
+     * @param cilindrada Cilindrada do carro
+     * @param potenciaCombustao Potência de combustão do carro
+     */
     public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao) {
         this.modelo = modelo;
         this.marca = marca;
@@ -51,21 +94,20 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float fiabilidade) {
-        this.modelo = modelo;
-        this.marca = marca;
-        this.cilindrada = cilindrada;
-        this.potenciaCombustao = potenciaCombustao;
-
-        this.estado = 100;
-        this.tipoPneu = TipoPneu.Macio;
-        this.modoMotor = ModoMotor.Base;
-        this.piloto = null;
-        this.dnf = false;
-        this.tempo = 0;
-        this.despiste = false;
-    }
-
+    /**
+     * Construtor parametrizado da classe Carro
+     * @param modelo Modelo do carro
+     * @param marca Marca do carro
+     * @param cilindrada Cilindrada do carro
+     * @param potenciaCombustao Potência de combustão do carro
+     * @param estado Estado do carro
+     * @param modoMotor Modo de motor que o carro está a usar
+     * @param tipoPneu Tipo de pneu que carro está a usar
+     * @param piloto Piloto que está a conduzir o carro
+     * @param dnf Verifica se carro não terminou a corrida
+     * @param tempo Tempo do carro numa corrida decorrente
+     * @param despiste Verifica se carro despistou
+     */
     public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float estado, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
         this.modelo = modelo;
         this.marca = marca;
@@ -80,6 +122,10 @@ public abstract class Carro {
         this.despiste = despiste;
     }
 
+    /**
+     * Construtor de cópia da classe Carro
+     * @param c Carro a ser copiado
+     */
     public Carro(@NotNull Carro c) {
         this.modelo = c.getModelo();
         this.marca = c.getMarca();
@@ -94,74 +140,148 @@ public abstract class Carro {
         this.modoMotor = c.getModoMotor();
     }
 
+    /**
+     * Devolve o modelo do carro
+     * @return Modelo do carro
+     */
     public String getModelo() {
         return modelo;
     }
 
+    /**
+     * Devolve a marca do carro
+     * @return Marca do carro
+     */
     public String getMarca() {
         return marca;
     }
 
+    /**
+     * Devolve a cilindrada do carro
+     * @return Cilindrada do carro
+     */
     public int getCilindrada() {
         return cilindrada;
     }
 
+    /**
+     * Devolve a potência de combustão do carro
+     * @return Potência de combustão do carro
+     */
     public int getPotenciaCombustao() {
         return potenciaCombustao;
     }
 
+    /**
+     * Devolve a fiabilidade do carro
+     * @return Fiabilidade do carro
+     */
     public abstract int getFiabilidade();
 
     public float getEstado() {
         return estado;
     }
 
+    /**
+     * Devolve o piloto que está a conduzir o carro
+     * @return Piloto que está a conduzir o carro
+     */
     public Piloto getPiloto() {
         return piloto;
     }
 
+    /**
+     * Verifica se carro não terminou a corrida
+     * @return True se carro não terminou a corrida, false caso contrário
+     */
     public boolean isDnf() {
         return dnf;
     }
 
+    /**
+     * Atualiza o valor de dnf
+     * @param dnf Novo valor de dnf
+     */
     public void setDnf(boolean dnf) {
         this.dnf = dnf;
     }
 
+    /**
+     * Verifica se o carro vai conseguir terminar corrida
+     * @param volta Volta atual
+     * @param chuva Verifica se está a chover
+     * @return True se carro vai conseguir terminar corrida, false caso contrário
+     */
     public abstract boolean dnf(int volta, boolean chuva);
 
+    /**
+     * Devolve o tempo do carro numa corrida decorrente
+     * @return Tempo do carro numa corrida decorrente
+     */
     public int getTempo() {
         return tempo;
     }
 
+    /**
+     * Atualiza o valor de tempo
+     * @param tempo Novo valor de tempo
+     */
     public void setTempo(int tempo) {
         this.tempo = tempo;
     }
 
+    /**
+     * Verifica se carro despistou
+     * @return True se carro despistou, false caso contrário
+     */
     public boolean isDespiste() {
         return despiste;
     }
 
+    /**
+     * Devolve o tipo de pneu que carro está a usar
+     * @return Tipo de pneu que carro está a usar
+     */
     public TipoPneu getTipoPneu() {
         return tipoPneu;
     }
 
+    /**
+     * Devolve o modo de motor que o carro está a usar
+     * @return Modo de motor que o carro está a usar
+     */
     public ModoMotor getModoMotor() {
         return modoMotor;
     }
 
+    /**
+     * Atualiza o valor de tipo de pneu
+     * @param tipoPneu Novo valor de tipo de pneu
+     */
     public void setTipoPneu(TipoPneu tipoPneu) {
         this.tipoPneu = tipoPneu;
     }
 
+    /**
+     * Atualiza o piloto que se encontra a conduzir o carro
+     * @param piloto Novo piloto que se encontra a conduzir o carro
+     */
     public void setPiloto(@NotNull Piloto piloto) {
         this.piloto = piloto.clone();
     }
 
+    /**
+     * Atualiza o valor para despiste
+     * @param despiste Novo valor para despiste
+     */
     public void setDespiste(boolean despiste) {
         this.despiste = despiste;
     }
 
+    /**
+     * Atualiza o valor de modoMotor
+     * @param modoMotor Novo valor de modoMotor
+     */
     public void setModoMotor(ModoMotor modoMotor) {
         this.modoMotor = modoMotor;
     }
@@ -214,6 +334,13 @@ public abstract class Carro {
         return true;
     }
 
+    /**
+     * Devolve o tempo que o carro demora a fazer de uma seccao para a proxima
+     * @param seccao Secção da pista que o carro está a percorrer
+     * @param chuva Verifica se está a chover
+     * @param volta Volta atual
+     * @return Tempo que o carro demora a fazer de uma seccao para a proxima
+     */
     public int tempoProxSeccao(@NotNull GDU seccao, boolean chuva, int volta) {
         int tempoMedio = seccao.getTempoMedio();
         int fatorPotenciaCilindrada = this.cilindrada / this.getPotencia() * 100;
@@ -245,12 +372,25 @@ public abstract class Carro {
         return tempoMedio + tempoDespiste + tempoChuva - fatorSorte + fatorPotenciaCilindrada - agressividade - desempenhoPneu - fatorMotor - qualidadeTempoSeco;
     }
 
+    /**
+     * Devolve a potencia total do carro
+     * @return Potencia total do carro
+     */
     private int getPotencia() {
         int potenciaEletrica = 0;
         if(this instanceof Hibrido h) potenciaEletrica = h.getPotenciaEletrica();
         return this.potenciaCombustao + potenciaEletrica;
     }
 
+    /**
+     * Verifica se pode ultrapassar proximo carro
+     * @param seccao Secção da pista que o carro está a percorrer
+     * @param volta Volta atual
+     * @param chuva Verifica se está a chover
+     * @param carFrente Carro que está a frente
+     * @param tempoAnteriorFrente Tempo que o carro que está a frente demorou a fazer a seccao anterior
+     * @return True se pode ultrapassar o carro que está a frente, false caso contrario
+     */
     public boolean podeUltrapassar(GDU seccao, int volta, boolean chuva, @NotNull Carro carFrente, int tempoAnteriorFrente) {
         boolean dnf = carFrente.isDnf();
         boolean despistou = carFrente.isDespiste();
@@ -267,6 +407,14 @@ public abstract class Carro {
         return desempenho1 - fatorDificuldade > desempenho2;
     }
 
+    /**
+     * Verifica se pode ultrapassar proximo carro
+     * @param seccao Secção da pista que o carro está a percorrer
+     * @param volta Volta atual
+     * @param chuva Verifica se está a chover
+     * @param carFrente Carro que está a frente
+     * @return True se pode ultrapassar, false caso contrario
+     */
     public boolean podeUltrapassar(GDU seccao, int volta, boolean chuva, @NotNull Carro carFrente) {
         boolean dnf = carFrente.isDnf();
         boolean despistou = carFrente.isDespiste();
@@ -280,6 +428,12 @@ public abstract class Carro {
         return desempenho1 - fatorDificuldade > desempenho2;
     }
 
+    /**
+     * Devolve o desempenho total do carro, tendo em conta todos os fatores
+     * @param volta Volta atual
+     * @param chuva Verifica se está a chover
+     * @return Desempenho total do carro
+     */
     protected int getDesempenho(int volta, boolean chuva) {
         int fatorPotenciaCilindrada = this.cilindrada / this.getPotencia();
         int qualidadeTempoSeco = this.piloto.getQualidadeTempoSeco();
@@ -300,5 +454,10 @@ public abstract class Carro {
         return fatorPotenciaCilindrada + agressividade + desempenhoPneu + fatorMotor + qualidadeTempoSeco + fatorPneuChuva + qualidadeChuva;
     }
 
+    /**
+     * Metodo que calcula o tempo que terá de estar de diferença para o carro da frente para ultrapassar
+     * @param categoria Categoria do carro da frente
+     * @return Tempo que terá de estar de diferença para o carro da frente para ultrapassar
+     */
     protected abstract int categoryCompare(String categoria);
 }

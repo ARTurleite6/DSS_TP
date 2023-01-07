@@ -44,18 +44,14 @@ public class UsersFacade implements IGestUsers {
     public Autenticavel autenticaUtilizador(String username, String password) throws UtilizadorNaoExisteException {
         var jogador = this.jogadores.get(username);
         var admin = this.admins.get(username);
-        System.out.println("Jogador = " + jogador);
         if(jogador == null && admin == null) throw new UtilizadorNaoExisteException("Não existe utilizador com username " + username);
         if(jogador != null) {
             if(jogador.login(username, password)) {
-                System.out.println(jogador);
                 this.jogadores.put(username, jogador);
                 return jogador.clone();
             }
         } else {
-            System.out.println("Admin = " + admin);
             if(admin.login(username, password)) {
-                System.out.println(admin);
                 this.admins.put(username, admin);
                 return admin.clone();
             }
