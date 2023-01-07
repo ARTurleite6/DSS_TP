@@ -151,7 +151,7 @@ public class Lobby {
                 '}';
     }
 
-    public void inscreveJogador(String username, Carro carro, Piloto piloto) {
+    public void inscreveJogador(String username, @NotNull Carro carro, @NotNull Piloto piloto) {
         var nomePiloto = piloto.getNome();
         this.jogadores.put(nomePiloto, username);
         this.numAfinacoes.put(nomePiloto, 0);
@@ -266,18 +266,6 @@ public class Lobby {
         if(!(carro instanceof Afinavel afinavel)) throw new CarroNaoAfinavel("O piloto de nome " + nomePiloto + " não possui um carro afinavel");
         afinavel.setAfinacao(afinacao);
         this.numAfinacoes.put(nomePiloto, num_afinacoes + 1);
-    }
-
-    public boolean existeJogador(String username) {
-        for(var jogador : this.jogadores.values()) {
-            if(username.equals(jogador)) return true;
-        }
-        return false;
-    }
-
-    public void loginJogador(String username, String nomePiloto) throws PilotoInexistenteException {
-        if(!this.jogadores.containsKey(nomePiloto)) throw new PilotoInexistenteException("Não existe nenhum piloto com nome " + nomePiloto + " no lobby atual");
-        this.jogadores.put(nomePiloto, username);
     }
 
     public @Nullable Corrida getProxCorrida() {

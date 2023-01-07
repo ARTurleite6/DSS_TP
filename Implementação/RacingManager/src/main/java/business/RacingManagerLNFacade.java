@@ -73,11 +73,13 @@ public class RacingManagerLNFacade implements IRacingManagerLNFacade{
 
     @Override
     public void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
+        if(!this.campeonatosFacade.existeLobbyAtivo()) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento.");
         this.campeonatosFacade.addConfiguracao(nomePiloto, modoMotor, tipoPneu);
     }
 
     @Override
     public void alteraAfinacao(String nomePiloto, float afinacao) throws CarroNaoAfinavel, PilotoInexistenteException, LobbyAtivoInexistenteException, MaximoAfinacoesExceptions {
+        if(!this.campeonatosFacade.existeLobbyAtivo()) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento.");
         this.campeonatosFacade.alteraAfinacao(nomePiloto, afinacao);
     }
 

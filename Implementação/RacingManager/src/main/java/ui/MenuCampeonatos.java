@@ -195,6 +195,7 @@ public class MenuCampeonatos implements SubMenu {
             var resultados = this.facade.terminaCampeonato();
             System.out.println("----------------------Resultados Finais-----------------------");
             System.out.println(resultados);
+            this.facade.terminaCampeonato();
         } catch (CampeonatoNaoExisteException | CircuitoNaoExisteException | UtilizadorNaoExisteException |
                  CriarLobbySemAutenticacaoException | NumberFormatException | LobbyAtivoInexistenteException |
                  NaoExistemMaisCorridas | NonLobbyCurrentlyRunningException e) {

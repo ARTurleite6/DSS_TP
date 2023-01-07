@@ -103,10 +103,6 @@ public class Corrida {
         return s.toString();
     }
 
-    public String printResultados(int volta) {
-        return this.printResultados(this.temposVolta.get(volta));
-    }
-
     @Contract(pure = true)
     private @NotNull String printResultados(Map<String, Integer> resultados) {
         StringBuilder s = new StringBuilder("\n------------------Resultados-------------------");
@@ -135,10 +131,6 @@ public class Corrida {
 
     public List<Carro> getCarros() {
         return this.carros.stream().map(Carro::clone).collect(Collectors.toList());
-    }
-
-    public List<Piloto> getPilotos() {
-        return this.carros.stream().map(Carro::getPiloto).collect(Collectors.toList());
     }
 
     private void atualizaClassificacoes() {

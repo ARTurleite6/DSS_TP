@@ -144,7 +144,6 @@ public class C1 extends Carro implements Afinavel {
         Random random = new Random();
         int x = random.nextInt(95);
         float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
-        System.out.println("Fator c1 = " + (95 - motorH - motorAvaria - (100 - this.getEstado())) );
         return x > 95 - motorH - motorAvaria - (100 - this.getEstado());
     }
 

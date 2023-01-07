@@ -14,13 +14,12 @@ public interface IGestCampeonatos {
     List<Campeonato> getCampeonatos();
     Lobby criaLobby(String campeonato, boolean premium) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
     void inscreveJogador(String username, Carro carro, String piloto) throws PilotoInexistenteException;
-    void comecaCampeonato();
     String getTabelaClassificativa() throws LobbyAtivoInexistenteException;
     void terminaCampeonato();
     String startNextRace() throws LobbyAtivoInexistenteException, NaoExistemMaisCorridas;
     void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
     void alteraAfinacao(String nomePiloto, float afinacao) throws LobbyAtivoInexistenteException, PilotoInexistenteException, MaximoAfinacoesExceptions, CarroNaoAfinavel;
-    List<Lobby> getHistoricoParticipacoes(String username);
+
     void addCircuito(String nomeCircuito, int distancia, List<GDU> chicanes, List<GDU> curvas, List<GDU> retas, int numeroVoltas) throws CircuitoJaExistenteException;
     List<Circuito> getCircuitos();
     Lobby getLobby() throws LobbyAtivoInexistenteException;
@@ -34,8 +33,6 @@ public interface IGestCampeonatos {
     boolean lobbyAberto();
 
     List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException;
-
-    void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException;
 
     @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException;
 

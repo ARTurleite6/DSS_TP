@@ -98,13 +98,12 @@ public class C2 extends Carro implements Afinavel {
 
     @Override
     public String toString() {
-        String sb = "Carro{" + "modelo='" + this.getModelo() + '\'' +
+        return "Carro{" + "modelo='" + this.getModelo() + '\'' +
                 ", marca='" + this.getMarca() + '\'' +
                 ", cilindrada=" + this.getCilindrada() +
                 ", potenciaCombustao=" + this.getPotenciaCombustao() +
                 "afinacao=" + afinacao +
                 "}";
-        return sb;
     }
 
     /**
@@ -120,13 +119,7 @@ public class C2 extends Carro implements Afinavel {
 
         Random random = new Random();
         int x = random.nextInt(80);
-        System.out.println("Valor random = " + x);
         float motorAvaria = (float)this.getModoMotor().getProbAvaria() / 10;
-        System.out.println("Motor Hibrido C2 = " + motorH);
-        System.out.println("Motor Avaria C2 = " + motorAvaria);
-        System.out.println("Fator cilindrada C2 = " + this.getEstado() / 1200.0);
-
-        System.out.println("Fator C2 = " + (80 - motorH - ((float)this.getCilindrada() / 1200.0) - (this.getAfinacao() / 10) - motorAvaria - (100 - this.getEstado())));
 
         return x > 80 - motorH - ((float)this.getCilindrada() / 1200.0) + (this.getAfinacao() / 10) - motorAvaria - (100 - this.getEstado());
     }

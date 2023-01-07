@@ -25,16 +25,16 @@ import java.util.*;
 public class CampeonatosFacade implements IGestCampeonatos {
 
     /**
-     * campeonatos disponiveis na app
+     * Campeonatos disponiveis na app
      */
     private final Map<String, Campeonato> campeonatos;
 
     /**
-     * circuitos disponiveis na app
+     * Circuitos disponiveis na app
      */
     private final Map<String, Circuito> circuitos;
     /**
-     * pilotos disponiveis na app
+     * Pilotos disponiveis na app
      */
     private final Map<String, Piloto> pilotos;
     /**
@@ -118,14 +118,6 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     * comeca lobby ativo de momento
-     */
-    @Override
-    public void comecaCampeonato() {
-        this.lobbyAtivo.fechaLobby();
-    }
-
-    /**
      * Metodo que string que representa tabela classificativa do lobby
      * @return
      * @throws LobbyAtivoInexistenteException
@@ -163,30 +155,36 @@ public class CampeonatosFacade implements IGestCampeonatos {
      * @param nomePiloto nome do piloto do jogador a alterar
      * @param modoMotor modo do motor do jogador a usar
      * @param tipoPneu tipo de pneu do jogador a usar
-     * @throws LobbyAtivoInexistenteException Caso o lobby nao exista
      * @throws PilotoInexistenteException Caso o piloto nao exista
      */
     @Override
-    public void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
-        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento");
+    public void addConfiguracao(String nomePiloto, ModoMotor modoMotor, TipoPneu tipoPneu) throws PilotoInexistenteException {
         this.lobbyAtivo.addConfiguracao(nomePiloto, modoMotor, tipoPneu);
     }
 
+    /**
+     *
+     * @param nomePiloto
+     * @param afinacao
+     * @throws PilotoInexistenteException
+     * @throws MaximoAfinacoesExceptions
+     * @throws CarroNaoAfinavel
+     */
     @Override
-    public void alteraAfinacao(String nomePiloto, float afinacao) throws LobbyAtivoInexistenteException, PilotoInexistenteException, MaximoAfinacoesExceptions, CarroNaoAfinavel {
-        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo no momento.");
+    public void alteraAfinacao(String nomePiloto, float afinacao) throws PilotoInexistenteException, MaximoAfinacoesExceptions, CarroNaoAfinavel {
         this.lobbyAtivo.alteraAfinacao(nomePiloto, afinacao);
     }
 
-    @Override
-    public List<Lobby> getHistoricoParticipacoes(String username) {
-        List<Lobby> lobbies = new ArrayList<>();
-        for(var lobby : this.lobbies.values()) {
-            if(lobby.existeJogador(username)) lobbies.add(lobby.clone());
-        }
-        return lobbies;
-    }
-
+    /**
+     *
+     * @param nomeCircuito
+     * @param distancia
+     * @param chicanes
+     * @param curvas
+     * @param retas
+     * @param numeroVoltas
+     * @throws CircuitoJaExistenteException
+     */
     @Override
     public void addCircuito(String nomeCircuito, int distancia, List<GDU> chicanes, List<GDU> curvas, List<GDU> retas, int numeroVoltas) throws CircuitoJaExistenteException {
         if(this.circuitos.containsKey(nomeCircuito)) throw new CircuitoJaExistenteException("Já existe um circuito com o nome de " + nomeCircuito);
@@ -194,11 +192,20 @@ public class CampeonatosFacade implements IGestCampeonatos {
         this.circuitos.put(nomeCircuito, circuito);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Circuito> getCircuitos() {
         return new ArrayList<>(this.circuitos.values());
     }
 
+    /**
+     *
+     * @return
+     * @throws LobbyAtivoInexistenteException
+     */
     @Override
     public Lobby getLobby() throws LobbyAtivoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo");
@@ -206,17 +213,34 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return this.lobbyAtivo.clone();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public List<Piloto> getPilotos() {
         return new ArrayList<>(this.pilotos.values());
     }
 
+    /**
+     *
+     * @param nome
+     * @param cts
+     * @param sva
+     * @throws PilotoInexistenteException
+     */
     @Override
     public void addPiloto(String nome, int cts, int sva) throws PilotoInexistenteException {
         if(this.pilotos.containsKey(nome)) throw new PilotoInexistenteException("Não existe piloto com o nome de " + nome);
         this.pilotos.put(nome, new Piloto(nome, cts, sva));
     }
 
+    /**
+     *
+     * @param nomeCampeonato
+     * @return
+     * @throws CampeonatoNaoExisteException
+     */
     @Override
     public Campeonato getCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException {
         var campeonato = this.campeonatos.get(nomeCampeonato);
@@ -224,6 +248,12 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return campeonato;
     }
 
+    /**
+     *
+     * @param nomeCircuito
+     * @return
+     * @throws CircuitoNaoExisteException
+     */
     @Override
     public Circuito getCircuito(String nomeCircuito) throws CircuitoNaoExisteException {
         var circuito = this.circuitos.get(nomeCircuito);
@@ -231,11 +261,21 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return circuito;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean existeLobbyAtivo() {
         return this.lobbyAtivo != null;
     }
 
+    /**
+     *
+     * @param nomePiloto
+     * @return
+     * @throws PilotoInexistenteException
+     */
     @Override
     public Piloto getPiloto(String nomePiloto) throws PilotoInexistenteException {
         var piloto = this.pilotos.get(nomePiloto);
@@ -243,11 +283,22 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return piloto;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean lobbyAberto() {
         return this.lobbyAtivo != null && this.lobbyAtivo.isAberto();
     }
 
+    /**
+     *
+     * @param nomeCampeonato
+     * @return
+     * @throws CampeonatoNaoExisteException
+     * @throws CircuitoNaoExisteException
+     */
     @Override
     public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException {
         var campeonato = this.getCampeonato(nomeCampeonato);
@@ -259,18 +310,24 @@ public class CampeonatosFacade implements IGestCampeonatos {
         return res;
     }
 
-    @Override
-    public void loginJogador(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
-        if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento.");
-        this.lobbyAtivo.loginJogador(username, nomePiloto);
-    }
-
+    /**
+     *
+     * @return
+     * @throws LobbyAtivoInexistenteException
+     */
     @Override
     public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby em andamento de momento");
         return this.lobbyAtivo.getProxCorrida();
     }
 
+    /**
+     *
+     * @param username
+     * @param nomePiloto
+     * @throws LobbyAtivoInexistenteException
+     * @throws PilotoInexistenteException
+     */
     @Override
     public void autenticaJogadorEmLobby(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
         if(this.lobbyAtivo == null) throw new LobbyAtivoInexistenteException("Não existe nenhum lobby ativo de momento");

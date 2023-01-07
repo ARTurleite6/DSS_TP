@@ -14,15 +14,6 @@ public class Circuito {
     private final List<GDU> curvas;
     private final List<GDU> chicanes;
 
-    public Circuito() {
-        this.nomeCircuito = "";
-        this.distancia = 0;
-        this.numeroVoltas = 0;
-        this.retas = new ArrayList<>();
-        this.curvas = new ArrayList<>();
-        this.chicanes = new ArrayList<>();
-    }
-
     public Circuito(String nomeCircuito, int distancia, int numeroVoltas, List<GDU> retas, List<GDU> curvas, List<GDU> chicanes) {
         this.nomeCircuito = nomeCircuito;
         this.distancia = distancia;
@@ -63,6 +54,13 @@ public class Circuito {
 
     public List<GDU> getCurvas() {
         return new ArrayList<>(this.curvas);
+    }
+
+    public List<GDU> getSeccoes() {
+        var res = new ArrayList<>(this.retas);
+        res.addAll(this.chicanes);
+        res.addAll(this.curvas);
+        return res;
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")
@@ -134,10 +132,4 @@ public class Circuito {
         return sb.toString();
     }
 
-    public List<GDU> getSeccoes() {
-        var res = new ArrayList<>(this.retas);
-        res.addAll(this.chicanes);
-        res.addAll(this.curvas);
-        return res;
-    }
 }

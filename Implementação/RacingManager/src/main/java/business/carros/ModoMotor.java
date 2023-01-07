@@ -10,7 +10,7 @@ public enum ModoMotor {
 
     private final int probAvaria;
 
-    private ModoMotor(int probAvaria) {
+    ModoMotor(int probAvaria) {
         this.probAvaria = probAvaria;
     }
 

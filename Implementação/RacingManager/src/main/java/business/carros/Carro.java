@@ -66,7 +66,7 @@ public abstract class Carro {
         this.despiste = false;
     }
 
-    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, int estado, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
+    public Carro(String modelo, String marca, int cilindrada, int potenciaCombustao, float estado, ModoMotor modoMotor, TipoPneu tipoPneu, @NotNull Piloto piloto, boolean dnf, int tempo, boolean despiste) {
         this.modelo = modelo;
         this.marca = marca;
         this.cilindrada = cilindrada;

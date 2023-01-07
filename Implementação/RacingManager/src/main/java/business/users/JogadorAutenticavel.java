@@ -28,7 +28,7 @@ public class JogadorAutenticavel implements Autenticavel {
   /**
    * Contrutor parametrizavel do JogadorAutenticavel
    * @param username username escolhido para jogador
-   * @param password password escolhido para jogador
+   * @param password password escolhida para jogador
    * @param premium jogador é premium ou não
    */
   public JogadorAutenticavel(String username, String password, boolean premium) {
@@ -142,7 +142,7 @@ public class JogadorAutenticavel implements Autenticavel {
   public int getPontuacaoGlobal() { return this.pontuacaoGlobal; }
 
   /**
-   * Metodo que retorna se utilizador é premium na app
+   * Metodo que retorna se utilizador é premium na ‘app’
    * @return true se utilizador é premium, false caso contrario
    */
   public boolean isPremium() { return this.premium; }

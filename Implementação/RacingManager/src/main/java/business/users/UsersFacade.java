@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class UsersFacade implements IGestUsers {
 
-    private final JogadorDAO jogadores;
-    private final AdminDAO admins;
+    private final Map<String, JogadorAutenticavel> jogadores;
+    private final Map<String, Admin> admins;
 
     public UsersFacade() {
         this.jogadores = JogadorDAO.getInstance();
