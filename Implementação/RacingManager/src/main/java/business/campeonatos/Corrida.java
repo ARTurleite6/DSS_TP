@@ -8,15 +8,41 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Classe que representa uma corrida de um campeonato.
+ */
 @SuppressWarnings("MethodDoesntCallSuperMethod")
 public class Corrida {
+    /**
+     * Nome da corrida.
+     */
     private final Map<String, Integer> temposTotais;
+    /**
+     * Colecao de pilotos que não terminaram a corrida, de nome de piloto para volta em que se despistaram
+     */
     private final Map<String, Integer> dnf;
+    /**
+     * Lista com tempos dos pilotos em cada volta da corrida
+     */
     private final List<Map<String, Integer>> temposVolta;
+    /**
+     * Se vai chuver ou não
+     */
     private final boolean chuva;
+    /**
+     * Circuito onde a corrida se irá realizar
+     */
     private final Circuito circuito;
+    /**
+     * Lista de carros da corrida
+     */
     private final List<Carro> carros;
 
+    /**
+     * Construtor parametrizado de Corrida.
+     * @param circuito Circuito onde a corrida se irá realizar.
+     * @param chuva Se vai chover ou não.
+     */
     public Corrida(boolean chuva, Circuito circuito) {
         this.temposTotais = new HashMap<>();
         this.dnf = new HashMap<>();
@@ -26,6 +52,10 @@ public class Corrida {
         this.carros = new ArrayList<>();
     }
 
+    /**
+     * Construtor por cópia de Corrida.
+     * @param c Corrida a copiar.
+     */
     public Corrida(@NotNull Corrida c) {
         this.temposTotais = c.getTempos();
         this.dnf = new HashMap<>(c.dnf);
@@ -38,10 +68,18 @@ public class Corrida {
         this.carros = c.getCarros();
     }
 
+    /**
+     * Metodo que verifica se vai chover na corrida
+     * @return true se vai chover, false caso contrario
+     */
     public boolean estaChover() {
         return this.chuva;
     }
 
+    /**
+     * Metodo que adiciona corredores à corrida, com o nome de piloto e o carro respetivo a utilizar
+     * @param carros carros a utilizar mapeados por nome do piloto
+     */
     public void addCorredores(@NotNull Map<String, Carro> carros) {
         for(Map.Entry<String, Carro> carro: carros.entrySet()) {
             var nomePiloto = carro.getKey();
@@ -51,10 +89,19 @@ public class Corrida {
         }
     }
 
+    /**
+     * Metodo que retorna os tempos do jogadores na corrida
+     * @return Map com os tempos dos jogadores
+     */
     public Map<String, Integer> getTempos() {
         return new HashMap<>(this.temposTotais);
     }
 
+    /**
+     * Metodo que simula a corrida atual
+     * @param premium se o jogador que criou o lobby é premium ou não
+     * @return Map com as pontuacoes dos jogadores após realizar simulação da corrida
+     */
     public Map<String, Integer> simulaCorrida(boolean premium) {
         int numeroCarros = this.carros.size();
         int numeroVoltas = this.circuito.getNumeroVoltas();
@@ -95,6 +142,10 @@ public class Corrida {
         return this.getPontuacoes();
     }
 
+    /**
+     * Metodo que retorna uma string com a representacao dos tempos dos jogadores na corrida
+     * @return String com os tempos dos jogadores
+     */
     public String printResultadosFinais() {
         StringBuilder s = new StringBuilder(this.printResultados(this.temposTotais));
         for(var entry : this.dnf.entrySet()) {
@@ -103,6 +154,11 @@ public class Corrida {
         return s.toString();
     }
 
+    /**
+     * Metodo que retorna uma string com a representacao dos tempos dos jogadores na corrida
+     * @param resultados resultados que se deseja representar como uma string
+     * @return String com os tempos dos jogadores
+     */
     @Contract(pure = true)
     private @NotNull String printResultados(Map<String, Integer> resultados) {
         StringBuilder s = new StringBuilder("\n------------------Resultados-------------------");
@@ -129,10 +185,17 @@ public class Corrida {
         return s.toString();
     }
 
+    /**
+     * Metodo que retorna a lista de carros presentes na corrida
+     * @return lista de carros presentes na corrida
+     */
     public List<Carro> getCarros() {
         return this.carros.stream().map(Carro::clone).collect(Collectors.toList());
     }
 
+    /**
+     * Metodo que atualiza os tempos de cada carro ao longo da corrida
+     */
     private void atualizaClassificacoes() {
         this.carros.forEach(carro -> {
             int tempo = carro.getTempo();
@@ -142,10 +205,21 @@ public class Corrida {
         this.temposVolta.add(new HashMap<>(this.temposTotais));
     }
 
+    /**
+     * Metodo que retorna o circuito da corrida
+     * @return circuito da corrida
+     */
     public Circuito getCircuito() {
         return this.circuito;
     }
 
+    /**
+     * Metodo que lida com as ultrapassagens entre carros na corrida
+     * @param carro carro que se deseja verificar se ultrapassa outro
+     * @param volta volta atual da corrida
+     * @param seccao seccao atual da corrida
+     * @param premium se o jogador que criou o lobby é premium ou não
+     */
     private void lidaUltrapassagens(int carro, int volta, GDU seccao, boolean premium) {
         int numeroCarros = this.carros.size();
         var car1 = this.carros.get(carro);
@@ -183,6 +257,10 @@ public class Corrida {
         this.carros.sort((c1, c2) -> c2.getTempo() - c1.getTempo());
     }
 
+    /**
+     * Metodo que retorna a pontuacao de cada piloto na corrida
+     * @return pontuacao de cada piloto na corrida
+     */
     private @NotNull Map<String, Integer> getPontuacoes() {
 
         Map<Integer, Integer> pontuacaoPosicao = Map.of(

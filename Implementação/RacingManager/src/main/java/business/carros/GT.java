@@ -56,7 +56,7 @@ public class GT extends Carro {
     }
 
     /**
-     * Construtor de copia da classe GT
+     * Construtor de cópia da classe GT
      * @param c GT a copiar
      */
     public GT(GT c) {

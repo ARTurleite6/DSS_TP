@@ -21,6 +21,7 @@ public class Campeonato {
     private final Set<String> circuitos;
 
     /**
+     * Contrutor parametrizado do Campeonato
      * @param nomeCampeonato nome a colocar no campeonato
      * @param circuitos circuitos escolhidos para campeonato
      */
@@ -30,6 +31,7 @@ public class Campeonato {
     }
 
     /**
+     * Construtor de Copia do campeonato
      * @param c campeonato que deseja copiar
      */
     public Campeonato(@NotNull Campeonato c) {
@@ -38,6 +40,7 @@ public class Campeonato {
     }
 
     /**
+     * Metodo getter para o nome do campeonato
      * @return nome do campeonato
      */
     public String getNomeCampeonato() {
@@ -45,6 +48,7 @@ public class Campeonato {
     }
 
     /**
+     * Metodo getter para os circuitos do campeonato
      * @return colecao de nomes dos circuitos
      */
     public Set<String> getCircuitos() {
@@ -52,6 +56,7 @@ public class Campeonato {
     }
 
     /**
+     * Metodo que copia Campeonato
      * @return copia do campeonato
      */
     @SuppressWarnings("MethodDoesntCallSuperMethod")
@@ -72,7 +77,7 @@ public class Campeonato {
     }
 
     /**
-     * @param o objecto a comparar com a instancia campeonato
+     * @param o objecto a comparar com a instância campeonato
      * @return comparacao do objeto, true se forem iguais, falso caso contrário
      */
     @Override

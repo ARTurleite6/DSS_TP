@@ -5,15 +5,45 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa um circuito de um campeonato.
+ */
 public class Circuito {
+    /**
+     * Nome do circuito.
+     */
     private final String nomeCircuito;
+    /**
+     * distancia do circuito
+     */
     private final int distancia;
+    /**
+     * Numero de voltas do circuito
+     */
     private final int numeroVoltas;
 
+    /**
+     * Lista de retas do circuito.
+     */
     private final List<GDU> retas;
+    /**
+     * Lista de curvas do circuito.
+     */
     private final List<GDU> curvas;
+    /**
+     * Lista de rectas do circuito.
+     */
     private final List<GDU> chicanes;
 
+    /**
+     * Construtor parametrizado de Circuito.
+     * @param nomeCircuito Nome do circuito.
+     * @param distancia Distancia do circuito.
+     * @param numeroVoltas Numero de voltas do circuito.
+     * @param retas Lista de retas do circuito.
+     * @param curvas Lista de curvas do circuito.
+     * @param chicanes Lista de chicanes do circuito.
+     */
     public Circuito(String nomeCircuito, int distancia, int numeroVoltas, List<GDU> retas, List<GDU> curvas, List<GDU> chicanes) {
         this.nomeCircuito = nomeCircuito;
         this.distancia = distancia;
@@ -23,6 +53,10 @@ public class Circuito {
         this.chicanes = new ArrayList<>(chicanes);
     }
 
+    /**
+     * Construtor por cópia de Circuito.
+     * @param c Circuito a copiar.
+     */
     public Circuito(@NotNull Circuito c) {
         this.nomeCircuito = c.getNomeCircuito();
         this.distancia = c.getDistancia();
@@ -32,30 +66,58 @@ public class Circuito {
         this.chicanes = c.getChicanes();
     }
 
+    /**
+     * Devolve o nome do circuito.
+     * @return Nome do circuito.
+     */
     public String getNomeCircuito() {
         return nomeCircuito;
     }
 
+    /**
+     * Devolve a distancia do circuito.
+     * @return Distancia do circuito.
+     */
     public int getDistancia() {
         return distancia;
     }
 
+    /**
+     * Devolve o numero de voltas do circuito.
+     * @return Numero de voltas do circuito.
+     */
     public int getNumeroVoltas() {
         return numeroVoltas;
     }
 
+    /**
+     * Devolve a lista de retas do circuito.
+     * @return Lista de retas do circuito.
+     */
     public List<GDU> getRetas() {
         return new ArrayList<>(this.retas);
     }
 
+    /**
+     * Devolve a lista de chicanes do circuito.
+     * @return Lista de chicanes do circuito.
+     */
     public List<GDU> getChicanes() {
         return new ArrayList<>(this.chicanes);
     }
 
+    /**
+     * Devolve a lista de curvas do circuito.
+     * @return Lista de curvas do circuito.
+     */
     public List<GDU> getCurvas() {
         return new ArrayList<>(this.curvas);
     }
 
+    /**
+     * Metodo que retorna lista de todas as seccoes do circuito(retas, curvas e chicanes)
+     * @return Lista de todas as seccoes do circuito.
+     */
     public List<GDU> getSeccoes() {
         var res = new ArrayList<>(this.retas);
         res.addAll(this.chicanes);

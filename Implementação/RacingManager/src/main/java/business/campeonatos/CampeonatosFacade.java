@@ -119,8 +119,8 @@ public class CampeonatosFacade implements IGestCampeonatos {
 
     /**
      * Metodo que string que representa tabela classificativa do lobby
-     * @return
-     * @throws LobbyAtivoInexistenteException
+     * @return tabela classificativa do campeonato ativo de momento
+     * @throws LobbyAtivoInexistenteException caso não exista nenhum campeonato ativo no momento
      */
     @Override
     public String getTabelaClassificativa() throws LobbyAtivoInexistenteException {
@@ -163,12 +163,12 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomePiloto
-     * @param afinacao
-     * @throws PilotoInexistenteException
-     * @throws MaximoAfinacoesExceptions
-     * @throws CarroNaoAfinavel
+     * Metodo que altera afinacao do carro de um determinado piloto
+     * @param nomePiloto nome do piloto do carro escolhido no campeonato
+     * @param afinacao novo valor para afinacao do carro
+     * @throws PilotoInexistenteException caso nao exista nenhum piloto com o nome passado
+     * @throws MaximoAfinacoesExceptions caso tenha excedido o numero de afinacoes que poderá realizar
+     * @throws CarroNaoAfinavel Caso o piloto tenha um carro que não seja afinavel(C1/C1H ou C2/C2H)
      */
     @Override
     public void alteraAfinacao(String nomePiloto, float afinacao) throws PilotoInexistenteException, MaximoAfinacoesExceptions, CarroNaoAfinavel {
@@ -176,14 +176,14 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomeCircuito
-     * @param distancia
-     * @param chicanes
-     * @param curvas
-     * @param retas
-     * @param numeroVoltas
-     * @throws CircuitoJaExistenteException
+     * Metodo que adiciona um novo circuito ao sistema
+     * @param nomeCircuito nome do circuito a adicionar ao sistema
+     * @param distancia distancia do circuito
+     * @param chicanes lista de chicanes do circuito
+     * @param curvas lista de curvas do circuito
+     * @param retas lista de retas do circuito
+     * @param numeroVoltas numero de voltas do circuito
+     * @throws CircuitoJaExistenteException caso já exista um circuito com o nome passado
      */
     @Override
     public void addCircuito(String nomeCircuito, int distancia, List<GDU> chicanes, List<GDU> curvas, List<GDU> retas, int numeroVoltas) throws CircuitoJaExistenteException {
@@ -193,8 +193,8 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
+     * Metodo que retorna os circuitos registados no sistema
+     * @return lista de circuitos registados no sistema
      */
     @Override
     public List<Circuito> getCircuitos() {
@@ -202,9 +202,9 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
-     * @throws LobbyAtivoInexistenteException
+     * Metodo que retorna o lobby ativo de momento
+     * @return lobby ativo de momento
+     * @throws LobbyAtivoInexistenteException caso não exista nenhum lobby ativo no momento
      */
     @Override
     public Lobby getLobby() throws LobbyAtivoInexistenteException {
@@ -214,8 +214,8 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
+     * Metodo que retorna lista de pilotos no sistema
+     * @return Lista de pilotos no sistema
      */
     @Override
     public List<Piloto> getPilotos() {
@@ -223,11 +223,11 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nome
-     * @param cts
-     * @param sva
-     * @throws PilotoInexistenteException
+     * Metodo que adiciona um novo piloto ao sistema
+     * @param nome nome do piloto a adicionar
+     * @param cts cts do piloto a adicionar
+     * @param sva sva do piloto a adicionar
+     * @throws PilotoInexistenteException caso já exista um piloto com o nome passado
      */
     @Override
     public void addPiloto(String nome, int cts, int sva) throws PilotoInexistenteException {
@@ -236,10 +236,10 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomeCampeonato
-     * @return
-     * @throws CampeonatoNaoExisteException
+     * Metodo que retorna o campeonato ativo de momento
+     * @param nomeCampeonato nome do campeonato a retornar
+     * @return campeonato com o nome passado como argumento
+     * @throws CampeonatoNaoExisteException caso não exista nenhum campeonato com o nome passado
      */
     @Override
     public Campeonato getCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException {
@@ -249,10 +249,10 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomeCircuito
-     * @return
-     * @throws CircuitoNaoExisteException
+     * Metodo que retorna um circuito com um determinado nome
+     * @param nomeCircuito nome do circuito a retornar
+     * @return circuito com o nome passado como argumento
+     * @throws CircuitoNaoExisteException caso não exista nenhum circuito com o nome passado
      */
     @Override
     public Circuito getCircuito(String nomeCircuito) throws CircuitoNaoExisteException {
@@ -262,8 +262,8 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
+     * Metodo que verifica se existe algum lobby ativo no momento
+     * @return true se existir um lobby ativo, false caso contrario
      */
     @Override
     public boolean existeLobbyAtivo() {
@@ -271,10 +271,10 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomePiloto
-     * @return
-     * @throws PilotoInexistenteException
+     * Metodo que retorna o piloto com o nome passado como argumento
+     * @param nomePiloto nome do piloto a retornar
+     * @return piloto com o nome passado como argumento
+     * @throws PilotoInexistenteException caso não exista nenhum piloto com o nome passado
      */
     @Override
     public Piloto getPiloto(String nomePiloto) throws PilotoInexistenteException {
@@ -284,8 +284,8 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
+     * Metodo que verifica se existe algum lobby ativo no sistema e se ele ainda se encontra aberto
+     * @return true se existir um lobby ativo e este se encontrar aberto, false caso contrario
      */
     @Override
     public boolean lobbyAberto() {
@@ -293,11 +293,11 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param nomeCampeonato
-     * @return
-     * @throws CampeonatoNaoExisteException
-     * @throws CircuitoNaoExisteException
+     * Metodo que retorna a lista de circuitos de um determinado campeonato
+     * @param nomeCampeonato nome do campeonato a retornar a lista de circuitos
+     * @return lista de circuitos do campeonato com o nome passado como argumento
+     * @throws CampeonatoNaoExisteException caso não exista nenhum campeonato com o nome passado
+     * @throws CircuitoNaoExisteException caso algum dos circuitos do campeonato não exista
      */
     @Override
     public List<Circuito> getCircuitosCampeonato(String nomeCampeonato) throws CampeonatoNaoExisteException, CircuitoNaoExisteException {
@@ -311,9 +311,9 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @return
-     * @throws LobbyAtivoInexistenteException
+     * Metodo que retorna a proxima corrida do campeonato atual
+     * @return proxima corrida do campeonato atual
+     * @throws LobbyAtivoInexistenteException caso não exista nenhum lobby ativo no momento
      */
     @Override
     public @Nullable Corrida getProxCorrida() throws LobbyAtivoInexistenteException {
@@ -322,11 +322,11 @@ public class CampeonatosFacade implements IGestCampeonatos {
     }
 
     /**
-     *
-     * @param username
-     * @param nomePiloto
-     * @throws LobbyAtivoInexistenteException
-     * @throws PilotoInexistenteException
+     * Metodo que autentica utilizador no lobby, substituindo o seu username pelo username registado no sistema
+     * @param username username do utilizador a autenticar
+     * @param nomePiloto nome do piloto do utilizador que deseja autenticar-se
+     * @throws LobbyAtivoInexistenteException caso não exista nenhum lobby ativo no momento
+     * @throws PilotoInexistenteException caso não exista nenhum piloto com o nome passado no lobby ativo
      */
     @Override
     public void autenticaJogadorEmLobby(String username, String nomePiloto) throws LobbyAtivoInexistenteException, PilotoInexistenteException {
